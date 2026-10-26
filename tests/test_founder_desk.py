@@ -556,6 +556,8 @@ def test_the_hosts_real_facts_win_over_the_published_template(tmp_path, monkeypa
     assert main._permanent_facts() == "FACT-REAL: only on the host\n"
     monkeypatch.setattr(main, "_HOST_FACTS", tmp_path / "missing" / "PERMANENT_FACTS.md")   # empty mount
     assert "FACT-" in main._permanent_facts() and "FACT-REAL" not in main._permanent_facts()
+    monkeypatch.setattr(main, "_HOST_FACTS", tmp_path)                    # unreadable as a file: template, no 500
+    assert "FACT-" in main._permanent_facts()
 
 
 def test_assigning_an_owner_makes_a_ready_task_dispatchable():

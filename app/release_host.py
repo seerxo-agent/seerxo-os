@@ -66,6 +66,10 @@ def _release_dir_name(sha: str) -> str:
     return f"{sha}.{secrets.token_hex(4)}"
 
 
+# refs/replace/* in a clone could make git answer about other objects than the ones named: never honoured here.
+os.environ["GIT_NO_REPLACE_OBJECTS"] = "1"
+
+
 def _git(cfg: Config, *args: str, text=True):
     return subprocess.run(["git", "-C", str(cfg.clone), *args], check=True, capture_output=True, text=text).stdout
 
@@ -496,7 +500,7 @@ def rebase_statement(cfg: Config, old: Config, statement: Path, signature: Path,
                      observe=observe_production, machine_id=None) -> dict:
     """`rebase STATEMENT SIG OLD_CONFIG`: run after this config (and its new policy) names the new repository; the
     old config still names the old clone. Never run by a timer. Nothing is deployed."""
-    problem = untrusted_layout(cfg)
+    problem = untrusted_layout(cfg) or untrusted_path(old.clone) or untrusted_path(cfg.clone)
     if problem:
         raise rg.Refused(problem)
     if old.ledger != cfg.ledger:

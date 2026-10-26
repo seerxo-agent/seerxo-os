@@ -1314,7 +1314,8 @@ def test_the_host_rebases_onto_a_fresh_repository_and_then_releases_from_it(hw, 
                                 observe=hw.prod.observe, machine_id=host_id)
     assert out == {"outcome": "REBASE_DONE", "last_sha": hw.base, "chain_base": base}
     assert hw.runs == [] and hw.prod.observe() == Production(hw.base).observe()       # nothing deployed
-    assert json.loads(hw.hcfg.ledger.with_name("ledger.json.pre-rebase-6").read_text()) == json.loads(before)
+    copy, = hw.hcfg.ledger.parent.glob("ledger.json.pre-rebase-6-*")
+    assert json.loads(copy.read_text()) == json.loads(before)
 
     (work / "docs").mkdir(exist_ok=True)
     (work / "docs/HANDOFF.md").write_text("from the public repository\n")

@@ -263,8 +263,10 @@ _PERMANENT_FACTS = Path(__file__).resolve().parent.parent / "docs" / "PERMANENT_
 
 def _permanent_facts() -> str | None:
     for path in (_HOST_FACTS, _PERMANENT_FACTS):
-        if path.is_file():
+        try:
             return path.read_text()
+        except OSError:                  # absent or unreadable (e.g. a root-only file): the next source, never a 500
+            continue
     return None
 
 

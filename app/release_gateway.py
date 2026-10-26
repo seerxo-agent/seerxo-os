@@ -983,6 +983,10 @@ def recover(ledger: Path, statement: bytes, signature: str, *, founder_key: str,
         state = {"last_sequence": st["last_sequence"], "last_sha": st["last_sha"], "images": st["images"],
                  "configs": configs,
                  "min_policy_version": min_policy, "seen": [*seen, digest][-1000:]}
+        moved = [e for e in history if e.get("event") in ("applied", "rebase")]
+        if moved and moved[-1].get("event") == "rebase" and moved[-1].get("sha") == st["last_sha"] \
+                and isinstance(moved[-1].get("base_sha"), str) and SHA.fullmatch(moved[-1]["base_sha"]):
+            state["chain_base"] = moved[-1]["base_sha"]   # nothing applied since the rebase: keep its new chain
         _write_atomic(ledger, state)
         return state
 
@@ -1089,9 +1093,7 @@ def rebase(ledger: Path, statement: bytes, signature: str, *, founder_key: str, 
             raise Refused(f"base commit is not on {st['branch']} of {st['repository']}")
         if not (facts.get("base_tree") == st["base_tree"] == facts.get("old_tree")):
             raise Refused("base commit's tree is not exactly the running release's tree")
-        copy = ledger.with_name(f"{ledger.name}.pre-rebase-{state.get('last_sequence', 0)}")
-        if not copy.exists():
-            _write_atomic(copy, state)
+        _write_atomic(ledger.with_name(f"{ledger.name}.pre-rebase-{state.get('last_sequence', 0)}-{digest[:12]}"), state)
         _append_history(ledger, {"event": "rebase", "digest": digest, "sha": state["last_sha"],
                                  "sequence": state.get("last_sequence", 0), "old_repository": st["old_repository"],
                                  "repository": st["repository"], "branch": st["branch"], "base_sha": st["base_sha"],

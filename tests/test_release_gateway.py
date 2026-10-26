@@ -1211,7 +1211,8 @@ def test_a_rebase_moves_the_chain_without_deploying_and_the_next_release_continu
     state = do_rebase(keys, ledger, prod, rebase_statement(keys, ledger))
     assert state["last_sha"] == SHA and state["last_sequence"] == 1 and state["chain_base"] == BASE
     assert state["min_policy_version"] == 2 and set(before["seen"]) < set(state["seen"])
-    assert json.loads(ledger.with_name("ledger.json.pre-rebase-1").read_text()) == before
+    copy, = ledger.parent.glob("ledger.json.pre-rebase-1-*")
+    assert json.loads(copy.read_text()) == before
     assert [e["event"] for e in rg.read_history(ledger)] == ["bootstrap", "applied", "rebase"]
     assert prod.observe() == Production(SHA).observe()                                  # nothing deployed
 
@@ -1257,7 +1258,7 @@ def test_an_invalid_rebase_is_refused_and_writes_nothing(keys, tmp_path, make, w
     before, history = ledger.read_text(), rg.history_path(ledger).read_text()
     refused(why, do_rebase, keys, ledger, prod, make(keys, ledger))
     assert ledger.read_text() == before and rg.history_path(ledger).read_text() == history
-    assert not ledger.with_name("ledger.json.pre-rebase-1").exists()
+    assert not list(ledger.parent.glob("ledger.json.pre-rebase-*"))
 
 
 @pytest.mark.parametrize("facts_over, why", [
@@ -1314,3 +1315,22 @@ def test_a_failed_first_release_after_a_rebase_keeps_the_new_chain(keys, tmp_pat
     new = rg.reconcile(ledger, raw, rg.sign(raw, keys["founder"][0], rg.NS_RECONCILE), founder_key=keys["founder"][1],
                        policy_bytes=praw, policy_sig=psig, host_id=HOST, observe=prod.observe, now=NOW)
     assert new["chain_base"] == BASE and new["last_sha"] == SHA and new["last_sequence"] == 2
+
+
+def test_recovering_a_lost_ledger_right_after_a_rebase_keeps_the_new_chain(keys, tmp_path):
+    ledger, prod = applied_once(keys, tmp_path)
+    do_rebase(keys, ledger, prod, rebase_statement(keys, ledger))
+    ledger.unlink()
+    digest = __import__("hashlib").sha256(rg.history_path(ledger).read_bytes()).hexdigest()
+    raw, sig = statement(keys, "recovery", history_sha256=digest, last_sha=SHA, last_sequence=1, images=images(SHA),
+                         repository=NEW_REPO)
+    praw, psig = rebase_policy(keys)
+    state = rg.recover(ledger, raw, sig, founder_key=keys["founder"][1], policy_bytes=praw, policy_sig=psig,
+                       host_id=HOST, observe=prod.observe, now=NOW)
+    assert state["chain_base"] == BASE and state["last_sha"] == SHA and state["min_policy_version"] == 2
+
+
+def test_recovery_after_a_release_on_the_new_chain_has_no_chain_base(keys, tmp_path):
+    ledger, m, prod = lose_ledger_after_one_release(keys, tmp_path)
+    _, run = recovery(keys, ledger, prod)
+    assert "chain_base" not in run()
