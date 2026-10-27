@@ -196,11 +196,12 @@ def _tick(cfg: Config, *, now, clock, checks, review, fetch) -> dict:
                        capture_output=True)
     except subprocess.CalledProcessError:
         return _decide(cfg, state, sha, "REFUSED", "main does not descend from the applied release", now)
+    scope = rg.diff_scope(ledger)               # the host computes the same: from what runs, payload-only after a rebase
     try:
-        paths = rg.git_changed_paths(cfg.clone, parent, sha)
-        diff = rg.git_release_diff(cfg.clone, parent, sha)
+        paths = rg.git_changed_paths(cfg.clone, running, sha, scope)
+        diff = rg.git_release_diff(cfg.clone, running, sha, scope)
         digest = rg.payload_digest(rg.payload_listing(cfg.clone, sha))
-        nonregular = rg.git_nonregular_paths(cfg.clone, parent, sha)
+        nonregular = rg.git_nonregular_paths(cfg.clone, running, sha, scope)
     except subprocess.CalledProcessError:      # e.g. a submodule entry: counted, bounded, never silent
         return _infra(cfg, state, sha, attempts, "could not compute the release content", now)
     try:
@@ -257,10 +258,11 @@ def _tick(cfg: Config, *, now, clock, checks, review, fetch) -> dict:
             "sequence": ledger.get("last_sequence", 0) + 1, "issued_at": now.isoformat(),
             "expires_at": (now + MANIFEST_LIFETIME).isoformat(), "policy_version": policy["version"],
             "migration_to": ""}
-    if risk != "low" or migration or not policy["auto_release"] or reviewer_already_rejected:
+    if risk != "low" or migration or not policy["auto_release"] or reviewer_already_rejected or ledger.get("chain_base"):
         draft = {**base, "approver": "founder", "evidence": evidence}
         _write_json(cfg.founder_queue / f"{base['sequence']:06d}-{sha}.json", draft)
-        why = ("automatic release is off" if not policy["auto_release"] else
+        why = ("the first release after a rebase" if ledger.get("chain_base") else
+               "automatic release is off" if not policy["auto_release"] else
                "the reviewer rejected an earlier candidate on this release base" if reviewer_already_rejected
                else "high-risk change")
         return _decide(cfg, state, sha, "FOUNDER_REQUIRED", why, now, queued=True)

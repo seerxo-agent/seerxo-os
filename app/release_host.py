@@ -66,6 +66,10 @@ def _release_dir_name(sha: str) -> str:
     return f"{sha}.{secrets.token_hex(4)}"
 
 
+# refs/replace/* in a clone could make git answer about other objects than the ones named: never honoured here.
+os.environ["GIT_NO_REPLACE_OBJECTS"] = "1"
+
+
 def _git(cfg: Config, *args: str, text=True):
     return subprocess.run(["git", "-C", str(cfg.clone), *args], check=True, capture_output=True, text=text).stdout
 
@@ -173,6 +177,9 @@ def host_facts(cfg: Config, manifest: dict, ledger: dict) -> dict:
     last = rg.chain_parent(ledger)
     descends = bool(last) and subprocess.run(["git", "-C", str(cfg.clone), "merge-base", "--is-ancestor", last, sha],
                                              capture_output=True).returncode == 0
+    # What changes is computed from what RUNS (ledger last_sha), never from the manifest's word; after a rebase the
+    # running commit comes from the other history (fetched into this clone by the cutover) and only the payload counts.
+    running, scope = ledger.get("last_sha") or parent, rg.diff_scope(ledger)
     rg.release_archive(cfg.clone, sha)                 # shipped bytes == hashed bytes, refused BEFORE pending
     try:
         host_compose = hashlib.sha256(HOST_COMPOSE.read_bytes()).hexdigest()
@@ -184,13 +191,13 @@ def host_facts(cfg: Config, manifest: dict, ledger: dict) -> dict:
         holds = False
     return {"repository": cfg.repository if on_branch else None, "branch": cfg.branch if on_branch else None,
             "sha": sha, "payload_digest": rg.payload_digest(rg.payload_listing(cfg.clone, sha)),
-            "changed_paths": rg.git_changed_paths(cfg.clone, parent, sha), "ancestor_of_parent": descends,
-            "diff": rg.git_release_diff(cfg.clone, parent, sha),
-            "compose": {"host": host_compose, "parent": rg.git_blob_sha256(cfg.clone, parent, "docker-compose.yml"),
+            "changed_paths": rg.git_changed_paths(cfg.clone, running, sha, scope), "ancestor_of_parent": descends,
+            "diff": rg.git_release_diff(cfg.clone, running, sha, scope),
+            "compose": {"host": host_compose, "parent": rg.git_blob_sha256(cfg.clone, running, "docker-compose.yml"),
                         "release": rg.git_blob_sha256(cfg.clone, sha, "docker-compose.yml")},
             "migration_heads": sorted(rg.alembic_heads(cfg.clone, sha)),
-            "parent_migration_heads": sorted(rg.alembic_heads(cfg.clone, parent)),
-            "nonregular_paths": rg.git_nonregular_paths(cfg.clone, parent, sha), "driver_holds_images": holds}
+            "parent_migration_heads": sorted(rg.alembic_heads(cfg.clone, running)),
+            "nonregular_paths": rg.git_nonregular_paths(cfg.clone, running, sha, scope), "driver_holds_images": holds}
 
 
 def deploy_acknowledgements(manifest: dict, facts: dict) -> str:
@@ -472,7 +479,7 @@ def founder_statement(cfg: Config, kind: str, statement: Path, signature: Path, 
 
 def rebase_provenance(cfg: Config, old: Config):
     """The host's own git evidence for a rebase: the new clone (this config, freshly fetched) holds the base commit on
-    its branch; the old clone (the previous config) holds the running release. Trees are compared, never trusted."""
+    its branch and the running commit's objects; the old clone (the previous config) recomputes the running payload."""
     def facts(base_sha: str, old_sha: str) -> dict:
         try:
             _git(cfg, "fetch", "--no-tags", "--quiet", cfg.fetch_url,
@@ -480,15 +487,16 @@ def rebase_provenance(cfg: Config, old: Config):
         except (OSError, subprocess.CalledProcessError) as error:
             raise RetryLater(f"fetch failed: {type(error).__name__}") from None
 
-        def tree(c: Config, sha: str) -> str | None:
-            try:
-                return _git(c, "rev-parse", "--verify", "--quiet", f"{sha}^{{tree}}").strip() or None
-            except subprocess.CalledProcessError:
-                return None
         on_branch = subprocess.run(["git", "-C", str(cfg.clone), "merge-base", "--is-ancestor", base_sha,
                                     f"refs/remotes/origin/{cfg.branch}"], capture_output=True).returncode == 0
-        return {"old_repository": old.repository, "base_on_branch": on_branch, "base_tree": tree(cfg, base_sha),
-                "old_tree": tree(old, old_sha)}
+        old_in_new = subprocess.run(["git", "-C", str(cfg.clone), "cat-file", "-e", f"{old_sha}^{{commit}}"],
+                                    capture_output=True).returncode == 0
+        try:
+            old_payload = rg.payload_digest(rg.payload_listing(old.clone, old_sha))
+        except subprocess.CalledProcessError:
+            old_payload = None
+        return {"old_repository": old.repository, "base_on_branch": on_branch, "old_in_new": old_in_new,
+                "old_payload_digest": old_payload}
     return facts
 
 
@@ -496,7 +504,7 @@ def rebase_statement(cfg: Config, old: Config, statement: Path, signature: Path,
                      observe=observe_production, machine_id=None) -> dict:
     """`rebase STATEMENT SIG OLD_CONFIG`: run after this config (and its new policy) names the new repository; the
     old config still names the old clone. Never run by a timer. Nothing is deployed."""
-    problem = untrusted_layout(cfg)
+    problem = untrusted_layout(cfg) or untrusted_path(old.clone) or untrusted_path(cfg.clone)
     if problem:
         raise rg.Refused(problem)
     if old.ledger != cfg.ledger:

@@ -255,17 +255,26 @@ def desk_metric_series(source: str, subject: str, metric: str, window: str = "",
     return metrics_store.series(db, source=source, subject=subject, metric=metric, window=window, days=days)
 
 
-# The company's real facts live on the host (mounted read-only, docker-compose.yml) and never in the published source;
-# the repository's docs/PERMANENT_FACTS.md is only the template shown when the host has none.
+# The company's real facts live on the host, mounted read-only (docker-compose.yml). Where that mount exists (every
+# production container), only the host file counts: missing or unreadable is reported, never replaced by the
+# repository's docs/PERMANENT_FACTS.md, which may be a public example. Without the mount (local development, tests)
+# the repository file is shown.
 _HOST_FACTS = Path("/run/company-facts/PERMANENT_FACTS.md")
 _PERMANENT_FACTS = Path(__file__).resolve().parent.parent / "docs" / "PERMANENT_FACTS.md"
+FACTS_UNAVAILABLE = ("## Permanent facts unavailable\n\nThe host's facts file ({path}) is missing or unreadable. "
+                     "Nothing is shown rather than example facts; restore it on the host.\n")
 
 
 def _permanent_facts() -> str | None:
-    for path in (_HOST_FACTS, _PERMANENT_FACTS):
-        if path.is_file():
-            return path.read_text()
-    return None
+    if _HOST_FACTS.parent.is_dir():
+        try:
+            return _HOST_FACTS.read_text()
+        except OSError:
+            return FACTS_UNAVAILABLE.format(path=_HOST_FACTS)
+    try:
+        return _PERMANENT_FACTS.read_text()
+    except OSError:
+        return None
 
 
 @app.get("/desk/memory")

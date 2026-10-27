@@ -181,24 +181,32 @@ An applied reconcile retains the policy version verified before `pending`, in bo
 pending policy version refuses instead of allowing an older policy to be replayed after an interrupted release.
 
 **Rebase onto another repository (`seerxo-ledger-rebase`, founder only).** Moves the release chain to a repository
-with a different history (for example a fresh public copy) without deploying anything. The founder first points the
-host config at the new repository and a new policy that names it, then runs `release_host rebase <statement> <sig>
-<old config>`. The statement `{kind: rebase, host_id, repository, branch, old_repository, old_last_sha,
-old_last_sequence, history_sha256, base_sha, base_tree, policy_sha256, images, configs, nonce, issued_at,
-expires_at}` is checked against:
+with a different history (for example a sanitized public copy) without deploying anything and without changing the
+old repository: the histories need not share a commit or a tree. The founder points a new host config at the new
+repository and a new policy that names it, the running commit is fetched (pinned) into the new clones, then
+`release_host rebase <statement> <sig> <old config>` runs. The statement `{kind: rebase, host_id, repository, branch,
+old_repository, old_last_sha, old_last_sequence, old_payload_digest, history_sha256, base_sha, policy_sha256, images,
+configs, nonce, issued_at, expires_at}` is checked against:
 
-- the intact, settled ledger (no `pending`): its applied release and sequence, the exact history file and the
-  recorded image and configuration identity, which must also be what runs now;
+- the running release: the intact, settled ledger (no `pending`), its applied release and sequence, the exact history
+  file, the recorded image and configuration identity (which must also be what runs now), and `old_payload_digest`,
+  which must equal both the payload digest the host recorded when it applied that release and the host's own
+  recomputation from the old clone;
 - the new policy, whose version must be **above** every policy applied so far;
-- the host's own git evidence: `base_sha` is on the new repository's branch, and its tree equals both `base_tree`
-  and the tree of the running release in the old clone. The first release from the new repository is therefore
-  reviewed against exactly what production runs.
+- the new chain: `base_sha` is on the new repository's branch and the running commit is present in the new clone.
 
-The effect is append-only. A `ledger.json.pre-rebase-<sequence>` copy is kept, a `rebase` event is appended,
-`last_sha`, the sequence floor and `seen` stay, the policy floor rises, and `chain_base = base_sha` becomes the
-parent the next manifest must name. The next applied release replaces `chain_base`; a failed or abandoned reconcile
-keeps it. Going back before the first new release is a second rebase with a still newer policy. Recovery of a lost
-ledger does not restore `chain_base`: after a recovery the founder repeats the rebase.
+The effect is append-only: a `ledger.json.pre-rebase-<sequence>-<digest prefix>` copy, a `rebase` history event,
+`last_sha`, the sequence floor and `seen` kept, the policy floor raised, `chain_base = base_sha` as the parent the next
+manifest must name.
+
+**The first release after a rebase** is computed and reviewed from what **runs**, not from `base_sha`: the host and
+the gateway diff `last_sha` (the old history's running commit) against the candidate, restricted to the deployed
+payload (`DEPLOY_PATHS`; files outside it are never shipped). Every byte that changes in production is therefore in
+the reviewed diff, and the manifest still binds the candidate's full payload digest. Until it is applied, only the
+founder may sign (the gateway refuses to sign and the host refuses a gateway signature). Applying it replaces
+`chain_base`; a failed or abandoned reconcile keeps it; recovering a lost ledger restores it when the history's last
+move is that rebase. Going back before the first new release is a second rebase with a still newer policy, checked
+the same way. The diff is computed and reviewed on the host only; nothing from the old repository is published.
 
 **Identity report: the gateway reads, never repairs.** Each `release_host` step (and each bootstrap/recovery) writes
 `identity_report` (`{checked_at, ok, problem, last_sha, pending}`) atomically, root-owned, mode 0640 with the directory's group. The gateway

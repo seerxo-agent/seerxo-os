@@ -120,19 +120,27 @@ def release_archive(git_dir: Path, sha: str) -> bytes:
     return tar
 
 
-def git_changed_paths(git_dir: Path, parent: str, sha: str) -> list[str]:
+def diff_scope(state: dict) -> tuple[str, ...]:
+    """Pathspec for the release diff. Within one history: the whole tree. Across histories (after a rebase, until the
+    first new release): exactly the deployed payload, because files outside it (for example the private repository's
+    internal documents) are never shipped and are not part of what production runs."""
+    return ("--", *DEPLOY_PATHS) if state.get("chain_base") else ()
+
+
+def git_changed_paths(git_dir: Path, parent: str, sha: str, scope: tuple[str, ...] = ()) -> list[str]:
     """Every path a release changes, as git stores it: renames are a delete plus an add (both paths listed),
     and NUL separation means no C-quoting, so a strange name stays strange and is classified high risk."""
     out = subprocess.run(["git", "-C", str(git_dir), "-c", "core.quotePath=false", "diff", "--no-renames",
-                          "--no-ext-diff", "-z", "--name-only", parent, sha], check=True, capture_output=True).stdout
+                          "--no-ext-diff", "-z", "--name-only", parent, sha, *scope], check=True,
+                         capture_output=True).stdout
     return sorted({p.decode("utf-8", "surrogateescape") for p in out.split(b"\0") if p})
 
 
-def git_nonregular_paths(git_dir: Path, parent: str, sha: str) -> list[str]:
+def git_nonregular_paths(git_dir: Path, parent: str, sha: str, scope: tuple[str, ...] = ()) -> list[str]:
     """Changed paths whose old or new tree entry is not a regular file (symlink 120000, gitlink 160000):
     always HIGH, whatever their name."""
     out = subprocess.run(["git", "-C", str(git_dir), "-c", "core.quotePath=false", "diff", "--no-renames",
-                          "--no-ext-diff", "--raw", "-z", parent, sha], check=True, capture_output=True).stdout
+                          "--no-ext-diff", "--raw", "-z", parent, sha, *scope], check=True, capture_output=True).stdout
     fields, special = out.split(b"\0"), set()
     for meta, path in zip(fields[0::2], fields[1::2]):
         modes = meta.decode().lstrip(":").split()[:2]
@@ -141,11 +149,11 @@ def git_nonregular_paths(git_dir: Path, parent: str, sha: str) -> list[str]:
     return sorted(special)
 
 
-def git_release_diff(git_dir: Path, parent: str, sha: str) -> str:
+def git_release_diff(git_dir: Path, parent: str, sha: str, scope: tuple[str, ...] = ()) -> str:
     """The exact text the reviewer must see and the verifier re-hashes: no renames, no colour, full index."""
     out = subprocess.run(["git", "-C", str(git_dir), "-c", "core.quotePath=false", "-c", "core.hooksPath=/dev/null",
                           "diff", "--no-renames", "--no-ext-diff", "--no-textconv", "--no-color", "--binary",
-                          "--full-index", parent, sha],
+                          "--full-index", parent, sha, *scope],
                          check=True, capture_output=True).stdout
     return out.decode("utf-8", "surrogateescape")
 
@@ -641,6 +649,8 @@ def verify_release(manifest_bytes: bytes, signature: str, *, policy: dict, found
         raise Refused("host is not bootstrapped: a founder-signed bootstrap must establish the production baseline")
     if m["parent_sha"] != chain_parent(state):
         raise Refused("manifest does not continue from the release currently applied")
+    if state.get("chain_base") and m["approver"] != "founder":
+        raise Refused("the first release after a rebase needs the founder's signature")
     elif host_facts.get("ancestor_of_parent") is not True:
         raise Refused("commit does not descend from the release currently applied")
     if m["policy_version"] != policy["version"]:
@@ -983,6 +993,10 @@ def recover(ledger: Path, statement: bytes, signature: str, *, founder_key: str,
         state = {"last_sequence": st["last_sequence"], "last_sha": st["last_sha"], "images": st["images"],
                  "configs": configs,
                  "min_policy_version": min_policy, "seen": [*seen, digest][-1000:]}
+        moved = [e for e in history if e.get("event") in ("applied", "rebase")]
+        if moved and moved[-1].get("event") == "rebase" and moved[-1].get("sha") == st["last_sha"] \
+                and isinstance(moved[-1].get("base_sha"), str) and SHA.fullmatch(moved[-1]["base_sha"]):
+            state["chain_base"] = moved[-1]["base_sha"]   # nothing applied since the rebase: keep its new chain
         _write_atomic(ledger, state)
         return state
 
@@ -1043,20 +1057,24 @@ def reconcile(ledger: Path, statement: bytes, signature: str, *, founder_key: st
 
 
 REBASE_FIELDS = {"kind", "host_id", "repository", "branch", "old_repository", "old_last_sha", "old_last_sequence",
-                 "history_sha256", "base_sha", "base_tree", "policy_sha256", "images", "configs", "nonce",
+                 "old_payload_digest", "history_sha256", "base_sha", "policy_sha256", "images", "configs", "nonce",
                  "issued_at", "expires_at"}
 
 
 def rebase(ledger: Path, statement: bytes, signature: str, *, founder_key: str, policy_bytes: bytes,
            policy_sig: str, host_id: str, observe, provenance, now: datetime) -> dict:
     """Move the release chain to another repository without deploying anything (namespace seerxo-ledger-rebase).
-    The new policy names the new repository and must be newer than every policy applied so far. The statement is
-    bound to the intact, settled ledger and its exact history, to what production runs now, and to `base_sha`: a
-    commit on the new repository's branch whose tree is byte-identical to the running release's tree, so the first
-    release from the new repository is reviewed against exactly what production runs. `provenance(base_sha,
-    old_sha)` is the host's own git evidence: {"old_repository", "base_on_branch", "base_tree", "old_tree"}.
-    Append-only: the ledger keeps `last_sha` (what runs), the sequence floor and `seen`; it gains `chain_base`, which
-    the next applied release replaces. A pre-rebase copy of the ledger is kept beside it."""
+    The two histories need not share a commit or a tree: the old repository keeps every file. What is bound instead:
+    - the running release: the intact, settled ledger and its exact history, the running image and configuration
+      identity, `old_last_sha`, and `old_payload_digest`, which must equal both the payload digest the host recorded
+      when it applied that release and the host's own recomputation from the old clone;
+    - the new chain: `base_sha` on the new repository's branch, and the running commit present in the new clone, so
+      the next release's diff is computed by the host from what runs (payload only), not from `base_sha`;
+    - a policy naming the new repository whose version is above every policy applied so far.
+    Until a release from the new chain is applied, only the founder may sign (verify_release). `provenance(base_sha,
+    old_sha)` is the host's own git evidence: {"old_repository", "base_on_branch", "old_in_new", "old_payload_digest"}.
+    Append-only: the ledger keeps `last_sha` (what runs), the sequence floor and `seen`, and gains `chain_base`, which
+    the next applied release replaces. A copy of the ledger before the rebase is kept beside it."""
     with _locked(ledger):
         state = read_ledger(ledger)
         if not state.get("last_sha"):
@@ -1071,32 +1089,37 @@ def rebase(ledger: Path, statement: bytes, signature: str, *, founder_key: str, 
         if not _int(st["old_last_sequence"]) \
                 or (st["old_last_sha"], st["old_last_sequence"]) != (state["last_sha"], state.get("last_sequence", 0)):
             raise Refused("rebase statement was made for another applied release")
-        history = history_path(ledger)
-        if st["history_sha256"] != hashlib.sha256(history.read_bytes() if history.exists() else b"").hexdigest():
+        history = read_history(ledger)
+        raw_history = history_path(ledger).read_bytes() if history_path(ledger).exists() else b""
+        if st["history_sha256"] != hashlib.sha256(raw_history).hexdigest():
             raise Refused("rebase statement was made for a different release history")
-        if not all(isinstance(st[k], str) and SHA.fullmatch(st[k]) for k in ("base_sha", "base_tree")):
-            raise Refused("rebase statement must name a 40-hex base commit and tree")
+        if not isinstance(st["base_sha"], str) or not SHA.fullmatch(st["base_sha"]):
+            raise Refused("rebase statement must name a 40-hex base commit")
         digest = hashlib.sha256(statement).hexdigest()
         if digest in state.get("seen", []):
             raise Refused("replay: this rebase statement was already used")
         problem = identity_problem(observe(), state["last_sha"], st["images"], st["configs"])
         if problem or (st["images"], st["configs"]) != (state.get("images"), state.get("configs")):
             raise Refused(f"production does not match the rebase statement: {problem or 'recorded identity differs'}")
+        recorded = [e.get("payload_digest") for e in history
+                    if e.get("event") == "applied" and e.get("sha") == state["last_sha"]]
+        if not recorded or not isinstance(recorded[-1], str) or st["old_payload_digest"] != recorded[-1]:
+            raise Refused("rebase statement does not name the payload the host recorded for the running release")
         facts = provenance(st["base_sha"], state["last_sha"])
         if facts.get("old_repository") != st["old_repository"]:
             raise Refused("rebase statement names another old repository")
+        if facts.get("old_payload_digest") != st["old_payload_digest"]:
+            raise Refused("the old clone's payload for the running release differs from the recorded payload")
         if facts.get("base_on_branch") is not True:
             raise Refused(f"base commit is not on {st['branch']} of {st['repository']}")
-        if not (facts.get("base_tree") == st["base_tree"] == facts.get("old_tree")):
-            raise Refused("base commit's tree is not exactly the running release's tree")
-        copy = ledger.with_name(f"{ledger.name}.pre-rebase-{state.get('last_sequence', 0)}")
-        if not copy.exists():
-            _write_atomic(copy, state)
+        if facts.get("old_in_new") is not True:
+            raise Refused("the running release's commit is not in the new clone: the next diff could not start from it")
+        _write_atomic(ledger.with_name(f"{ledger.name}.pre-rebase-{state.get('last_sequence', 0)}-{digest[:12]}"), state)
         _append_history(ledger, {"event": "rebase", "digest": digest, "sha": state["last_sha"],
                                  "sequence": state.get("last_sequence", 0), "old_repository": st["old_repository"],
-                                 "repository": st["repository"], "branch": st["branch"], "base_sha": st["base_sha"],
-                                 "base_tree": st["base_tree"], "policy_version": policy["version"],
-                                 "at": now.isoformat()})
+                                 "old_payload_digest": st["old_payload_digest"], "repository": st["repository"],
+                                 "branch": st["branch"], "base_sha": st["base_sha"],
+                                 "policy_version": policy["version"], "at": now.isoformat()})
         new = {**state, "chain_base": st["base_sha"], "min_policy_version": policy["version"],
                "seen": [*state.get("seen", []), digest][-1000:]}
         _write_atomic(ledger, new)

@@ -549,13 +549,19 @@ def test_memory_view_reads_persistent_rows():
         assert "FACT-" in memory["permanent"]
 
 
-def test_the_hosts_real_facts_win_over_the_published_template(tmp_path, monkeypatch):
-    real = tmp_path / "PERMANENT_FACTS.md"
-    real.write_text("FACT-REAL: only on the host\n")
+def test_the_hosts_real_facts_win_and_are_never_replaced_by_the_repository_file(tmp_path, monkeypatch):
+    mount = tmp_path / "company-facts"
+    mount.mkdir()
+    real = mount / "PERMANENT_FACTS.md"
     monkeypatch.setattr(main, "_HOST_FACTS", real)
+    real.write_text("FACT-REAL: only on the host\n")
     assert main._permanent_facts() == "FACT-REAL: only on the host\n"
-    monkeypatch.setattr(main, "_HOST_FACTS", tmp_path / "missing" / "PERMANENT_FACTS.md")   # empty mount
-    assert "FACT-" in main._permanent_facts() and "FACT-REAL" not in main._permanent_facts()
+    real.unlink()                                                         # mount present, file missing
+    assert main._permanent_facts().startswith("## Permanent facts unavailable")
+    real.mkdir()                                                          # present but unreadable as a file
+    assert main._permanent_facts().startswith("## Permanent facts unavailable")
+    monkeypatch.setattr(main, "_HOST_FACTS", tmp_path / "no-mount" / "PERMANENT_FACTS.md")   # development: no mount
+    assert "FACT-" in main._permanent_facts()
 
 
 def test_assigning_an_owner_makes_a_ready_task_dispatchable():

@@ -1155,7 +1155,7 @@ def test_an_applied_release_records_its_payload_digest_for_later_rollbacks(keys,
 
 # --------------------------------------------------------------------------- founder rebase onto a new repository
 
-NEW_REPO, BASE, TREE_RUNNING = "seerxo/seerxo-os", "4" * 40, "5" * 40
+NEW_REPO, BASE = "seerxo/seerxo-os", "4" * 40
 
 
 def rebase_policy(keys, version=2, repository=NEW_REPO):
@@ -1166,21 +1166,21 @@ def applied_once(keys, tmp_path):
     ledger = tmp_path / "ledger.json"
     do_bootstrap(keys, ledger, statement(keys))
     prod = Production(PARENT)
-    transact(keys, ledger, manifest(sequence=1), prod=prod)       # production runs SHA, sequence 1
+    transact(keys, ledger, manifest(sequence=1), prod=prod)       # production runs SHA (payload DIGEST), sequence 1
     return ledger, prod
 
 
 def provenance(**over):
-    return lambda base, old: {"old_repository": "seerxo/os", "base_on_branch": True, "base_tree": TREE_RUNNING,
-                              "old_tree": TREE_RUNNING} | over
+    return lambda base, old: {"old_repository": "seerxo/os", "base_on_branch": True, "old_in_new": True,
+                              "old_payload_digest": DIGEST} | over
 
 
 def rebase_statement(keys, ledger, *, signer="founder", namespace=rg.NS_REBASE, policy=None, **over):
     praw = (policy or rebase_policy(keys))[0]
+    history = rg.history_path(ledger)
     body = {"kind": "rebase", "host_id": HOST, "repository": NEW_REPO, "branch": "main", "nonce": "ee" * 16,
-            "old_repository": "seerxo/os", "old_last_sha": SHA, "old_last_sequence": 1,
-            "history_sha256": __import__("hashlib").sha256(rg.history_path(ledger).read_bytes()).hexdigest(),
-            "base_sha": BASE, "base_tree": TREE_RUNNING,
+            "old_repository": "seerxo/os", "old_last_sha": SHA, "old_last_sequence": 1, "old_payload_digest": DIGEST,
+            "history_sha256": __import__("hashlib").sha256(history.read_bytes()).hexdigest(), "base_sha": BASE,
             "policy_sha256": __import__("hashlib").sha256(praw).hexdigest(),
             "images": images(SHA), "configs": configs(), "issued_at": NOW.isoformat(),
             "expires_at": (NOW + timedelta(hours=1)).isoformat()} | over
@@ -1195,41 +1195,41 @@ def do_rebase(keys, ledger, prod, raw_sig, *, policy=None, facts_over=None):
                      now=NOW)
 
 
-def new_repo_manifest(**over):
-    m = manifest(repository=NEW_REPO, parent_sha=BASE, sequence=2, policy_version=2)
-    packet = rg.review_packet(NEW_REPO, BASE, SHA, DIFF, NONCE)
-    out = {"verdict": "APPROVE", "fingerprint": packet["fingerprint"], "findings": []}
-    att = rg.attestation("codex", packet, out, NOW.isoformat())
-    m["evidence"]["review"] = {"nonce": NONCE, "attestation": att,
-                               "signature": rg.sign(rg.canonical(att), KEYS["reviewer"][0], rg.NS_REVIEW)}
-    return m | over
+def new_chain_manifest(keys, sha=OTHER, approver="founder"):
+    """A release from the new repository: its parent is the rebase base, its review covers the host's diff."""
+    packet = rg.review_packet(NEW_REPO, BASE, sha, DIFF, NONCE)
+    att = rg.attestation("codex", packet, {"verdict": "APPROVE", "fingerprint": packet["fingerprint"],
+                                           "findings": []}, NOW.isoformat())
+    m = manifest(repository=NEW_REPO, parent_sha=BASE, sha=sha, sequence=2, policy_version=2, approver=approver)
+    m["evidence"] = {"trusted_checks": {"runner": "gateway", "sha": sha, "payload_digest": DIGEST, "passed": True},
+                     "review": {"nonce": NONCE, "attestation": att,
+                                "signature": rg.sign(rg.canonical(att), keys["reviewer"][0], rg.NS_REVIEW)}}
+    return m
 
 
-def test_a_rebase_moves_the_chain_without_deploying_and_the_next_release_continues_from_the_base(keys, tmp_path):
+def test_a_rebase_moves_the_chain_without_deploying_and_only_the_founder_continues_it(keys, tmp_path):
     ledger, prod = applied_once(keys, tmp_path)
     before = json.loads(ledger.read_text())
     state = do_rebase(keys, ledger, prod, rebase_statement(keys, ledger))
     assert state["last_sha"] == SHA and state["last_sequence"] == 1 and state["chain_base"] == BASE
     assert state["min_policy_version"] == 2 and set(before["seen"]) < set(state["seen"])
-    assert json.loads(ledger.with_name("ledger.json.pre-rebase-1").read_text()) == before
-    assert [e["event"] for e in rg.read_history(ledger)] == ["bootstrap", "applied", "rebase"]
+    copy, = ledger.parent.glob("ledger.json.pre-rebase-1-*")
+    assert json.loads(copy.read_text()) == before
+    event = rg.read_history(ledger)[-1]
+    assert event["event"] == "rebase" and event["old_payload_digest"] == DIGEST and event["base_sha"] == BASE
     assert prod.observe() == Production(SHA).observe()                                  # nothing deployed
 
-    old = manifest(sequence=2, parent_sha=SHA, sha=OTHER)                              # the old chain is closed
-    refused("older than the newest", transact, keys, ledger, old, prod=prod)            # v1 policy is below the floor
-    refused("does not continue", transact, keys, ledger, old | {"repository": NEW_REPO, "policy_version": 2},
-            prod=prod, policy_over={"version": 2, "repository": NEW_REPO})
-    m = new_repo_manifest(sha=OTHER)
-    m["evidence"]["trusted_checks"]["sha"] = OTHER
+    v2 = {"version": 2, "repository": NEW_REPO}
+    old = manifest(sequence=2, parent_sha=SHA, sha=OTHER)
+    refused("older than the newest", transact, keys, ledger, old, prod=prod)            # old policy below the floor
+    refused("does not continue", transact, keys, ledger,
+            old | {"repository": NEW_REPO, "policy_version": 2, "approver": "founder"},
+            "founder", prod=prod, policy_over=v2)                                       # old chain closed
     host = facts(repository=NEW_REPO, sha=OTHER)
-    m["evidence"]["review"] = new_repo_manifest()["evidence"]["review"]
-    packet = rg.review_packet(NEW_REPO, BASE, OTHER, DIFF, NONCE)
-    att = rg.attestation("codex", packet, {"verdict": "APPROVE", "fingerprint": packet["fingerprint"],
-                                            "findings": []}, NOW.isoformat())
-    m["evidence"]["review"] = {"nonce": NONCE, "attestation": att,
-                               "signature": rg.sign(rg.canonical(att), keys["reviewer"][0], rg.NS_REVIEW)}
-    assert transact(keys, ledger, m, prod=prod, host=host,
-                    policy_over={"version": 2, "repository": NEW_REPO})["sha"] == OTHER
+    refused("needs the founder", transact, keys, ledger, new_chain_manifest(keys, approver="gateway"), prod=prod,
+            host=host, policy_over=v2)                                                  # no automatic first release
+    assert transact(keys, ledger, new_chain_manifest(keys), "founder", prod=prod, host=host,
+                    policy_over=v2)["sha"] == OTHER
     after = json.loads(ledger.read_text())
     assert after["last_sha"] == OTHER and "chain_base" not in after and after["last_sequence"] == 2
 
@@ -1237,8 +1237,10 @@ def test_a_rebase_moves_the_chain_without_deploying_and_the_next_release_continu
 @pytest.mark.parametrize("make, why", [
     (lambda k, l: rebase_statement(k, l, namespace=rg.NS_RECOVERY), "not signed by the pinned founder"),
     (lambda k, l: rebase_statement(k, l, namespace=rg.NS_RELEASE), "not signed by the pinned founder"),
+    (lambda k, l: rebase_statement(k, l, namespace=rg.NS_BOOTSTRAP), "not signed by the pinned founder"),
     (lambda k, l: rebase_statement(k, l, signer="gateway"), "not signed by the pinned founder"),
     (lambda k, l: rebase_statement(k, l, kind="recovery"), "wrong shape"),
+    (lambda k, l: rebase_statement(k, l, base_tree="5" * 40), "wrong shape"),             # no extra fields
     (lambda k, l: rebase_statement(k, l, repository="seerxo/os"), "another repository"),   # not the new policy's
     (lambda k, l: rebase_statement(k, l, policy_sha256="0" * 64), "different policy"),
     (lambda k, l: rebase_statement(k, l, old_last_sha=PARENT), "another applied release"),
@@ -1246,9 +1248,9 @@ def test_a_rebase_moves_the_chain_without_deploying_and_the_next_release_continu
     (lambda k, l: rebase_statement(k, l, old_last_sequence=True), "another applied release"),
     (lambda k, l: rebase_statement(k, l, history_sha256="0" * 64), "different release history"),
     (lambda k, l: rebase_statement(k, l, images=images(PARENT)), "does not match the rebase"),
+    (lambda k, l: rebase_statement(k, l, old_payload_digest="0" * 64), "payload the host recorded"),
     (lambda k, l: rebase_statement(k, l, old_repository="evil/os"), "another old repository"),
     (lambda k, l: rebase_statement(k, l, base_sha="main"), "40-hex"),
-    (lambda k, l: rebase_statement(k, l, base_tree="6" * 40), "tree is not exactly"),
     (lambda k, l: rebase_statement(k, l, expires_at=(NOW - timedelta(seconds=1)).isoformat()), "expired"),
     (lambda k, l: rebase_statement(k, l, host_id="ffff" * 8), "another host"),
 ])
@@ -1257,17 +1259,17 @@ def test_an_invalid_rebase_is_refused_and_writes_nothing(keys, tmp_path, make, w
     before, history = ledger.read_text(), rg.history_path(ledger).read_text()
     refused(why, do_rebase, keys, ledger, prod, make(keys, ledger))
     assert ledger.read_text() == before and rg.history_path(ledger).read_text() == history
-    assert not ledger.with_name("ledger.json.pre-rebase-1").exists()
+    assert not list(ledger.parent.glob("ledger.json.pre-rebase-*"))
 
 
 @pytest.mark.parametrize("facts_over, why", [
     ({"base_on_branch": False}, "not on main"),
-    ({"base_tree": "6" * 40}, "tree is not exactly"),                   # the base is not the reviewed source
-    ({"old_tree": "6" * 40}, "tree is not exactly"),                    # production runs another tree
-    ({"base_tree": None}, "tree is not exactly"),                       # unknown commit
+    ({"old_in_new": False}, "not in the new clone"),                     # the next diff could not start from it
+    ({"old_payload_digest": "0" * 64}, "old clone's payload"),           # old clone drifted from what was recorded
+    ({"old_payload_digest": None}, "old clone's payload"),
     ({"old_repository": "evil/os"}, "another old repository"),
 ])
-def test_the_host_git_evidence_must_prove_the_base_is_the_running_tree(keys, tmp_path, facts_over, why):
+def test_the_host_git_evidence_must_bind_the_running_release_and_the_new_chain(keys, tmp_path, facts_over, why):
     ledger, prod = applied_once(keys, tmp_path)
     refused(why, do_rebase, keys, ledger, prod, rebase_statement(keys, ledger), facts_over=facts_over)
     assert "chain_base" not in json.loads(ledger.read_text())
@@ -1288,16 +1290,25 @@ def test_a_rebase_needs_a_newer_policy_a_settled_ledger_and_matching_production(
     refused("pending", do_rebase, keys, ledger, prod, rebase_statement(keys, ledger))
 
 
+def test_a_rebase_needs_a_recorded_payload_for_the_running_release(keys, tmp_path):
+    ledger = tmp_path / "ledger.json"
+    do_bootstrap(keys, ledger, statement(keys))                              # a bootstrap records no payload digest
+    st = rebase_statement(keys, ledger, old_last_sha=PARENT, old_last_sequence=0, images=images(PARENT))
+    refused("payload the host recorded", do_rebase, keys, ledger, Production(PARENT), st)
+
+
 def test_a_rebase_statement_is_single_use_and_a_rebase_back_needs_a_still_newer_policy(keys, tmp_path):
     ledger, prod = applied_once(keys, tmp_path)
     st = rebase_statement(keys, ledger)
     do_rebase(keys, ledger, prod, st)
     refused("older than the newest|replay|different release history", do_rebase, keys, ledger, prod, st)
     v3 = rebase_policy(keys, version=3, repository="seerxo/os")
-    back = rebase_statement(keys, ledger, policy=v3, repository="seerxo/os", base_sha=SHA, nonce="ff" * 16)
-    state = do_rebase(keys, ledger, prod, back, policy=v3)
+    back = rebase_statement(keys, ledger, policy=v3, repository="seerxo/os", base_sha=SHA, nonce="ff" * 16,
+                            old_repository=NEW_REPO)
+    state = do_rebase(keys, ledger, prod, back, policy=v3, facts_over={"old_repository": NEW_REPO})
     assert state["chain_base"] == SHA and state["min_policy_version"] == 3
     assert [e["event"] for e in rg.read_history(ledger)][-2:] == ["rebase", "rebase"]
+    assert len(list(ledger.parent.glob("ledger.json.pre-rebase-1-*"))) == 2              # one copy per rebase
 
 
 def test_a_failed_first_release_after_a_rebase_keeps_the_new_chain(keys, tmp_path):
@@ -1314,3 +1325,27 @@ def test_a_failed_first_release_after_a_rebase_keeps_the_new_chain(keys, tmp_pat
     new = rg.reconcile(ledger, raw, rg.sign(raw, keys["founder"][0], rg.NS_RECONCILE), founder_key=keys["founder"][1],
                        policy_bytes=praw, policy_sig=psig, host_id=HOST, observe=prod.observe, now=NOW)
     assert new["chain_base"] == BASE and new["last_sha"] == SHA and new["last_sequence"] == 2
+
+
+def test_recovering_a_lost_ledger_right_after_a_rebase_keeps_the_new_chain(keys, tmp_path):
+    ledger, prod = applied_once(keys, tmp_path)
+    do_rebase(keys, ledger, prod, rebase_statement(keys, ledger))
+    ledger.unlink()
+    digest = __import__("hashlib").sha256(rg.history_path(ledger).read_bytes()).hexdigest()
+    raw, sig = statement(keys, "recovery", history_sha256=digest, last_sha=SHA, last_sequence=1, images=images(SHA),
+                         repository=NEW_REPO)
+    praw, psig = rebase_policy(keys)
+    state = rg.recover(ledger, raw, sig, founder_key=keys["founder"][1], policy_bytes=praw, policy_sig=psig,
+                       host_id=HOST, observe=prod.observe, now=NOW)
+    assert state["chain_base"] == BASE and state["last_sha"] == SHA and state["min_policy_version"] == 2
+
+
+def test_recovery_after_a_release_on_the_new_chain_has_no_chain_base(keys, tmp_path):
+    ledger, m, prod = lose_ledger_after_one_release(keys, tmp_path)
+    _, run = recovery(keys, ledger, prod)
+    assert "chain_base" not in run()
+
+
+def test_the_diff_scope_is_the_payload_only_across_histories():
+    assert rg.diff_scope({"last_sha": SHA}) == ()
+    assert rg.diff_scope({"last_sha": SHA, "chain_base": BASE}) == ("--", *rg.DEPLOY_PATHS)

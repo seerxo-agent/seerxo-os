@@ -289,7 +289,7 @@ dump_config() {
   local target=config
   local out="$BACKUP_LOCAL_DIR/${DAY}-${target}-${STAMP}.tar.gz"
   local paths=()
-  for p in /opt/youtube-auto /opt/company-os/.env /opt/company-os/docker-compose.yml \
+  for p in /opt/youtube-auto /opt/company-os/.env /opt/company-os/docker-compose.yml /opt/company-os/facts \
            /etc/cron.d/youtube-auto /etc/cron.d/company-os /root/.ssh/authorized_keys; do
     [ -e "$p" ] && paths+=("$p")
   done
