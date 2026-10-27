@@ -1427,3 +1427,21 @@ def test_a_history_restored_to_before_a_same_floor_recovery_blocks_releases(keys
     rg.history_path(ledger).write_bytes(before_recovery)
     refused("lost digests", transact, keys, ledger, manifest(sequence=2, parent_sha=SHA, sha=OTHER), prod=prod,
             host=facts(sha=OTHER))
+
+
+def test_a_reconcile_statement_already_in_history_is_refused_even_if_the_ledger_write_was_lost(keys, tmp_path):
+    ledger, prod = applied_once(keys, tmp_path)
+    state = json.loads(ledger.read_text())
+    pending = state | {"pending": "ab" * 32, "pending_sha": OTHER, "pending_sequence": 2, "pending_policy_version": 1}
+    ledger.write_text(json.dumps(pending))
+    praw, psig = signed_policy(keys)
+    body = {"kind": "reconcile", "host_id": HOST, "repository": "seerxo/os", "branch": "main", "nonce": "dd" * 16,
+            "pending_digest": "ab" * 32, "outcome": "failed", "release_sha": SHA, "images": images(SHA),
+            "configs": configs(), "issued_at": NOW.isoformat(), "expires_at": (NOW + timedelta(hours=1)).isoformat()}
+    raw = rg.canonical(body)
+    sig = rg.sign(raw, keys["founder"][0], rg.NS_RECONCILE)
+    args = dict(founder_key=keys["founder"][1], policy_bytes=praw, policy_sig=psig, host_id=HOST,
+                observe=prod.observe, now=NOW)
+    rg.reconcile(ledger, raw, sig, **args)
+    ledger.write_text(json.dumps(pending))                                # the ledger write "was lost"
+    refused("already in the release history", rg.reconcile, ledger, raw, sig, **args)

@@ -1422,7 +1422,8 @@ def test_after_a_release_from_the_new_repository_the_founder_can_rebase_back(hw,
 
 def test_a_ledger_left_behind_its_history_blocks_every_release(hw, tmp_path):
     """A crash between the rebase's history event and its ledger write (or a restored old ledger copy) must not let a
-    gateway-signed release through: the host blocks and reports it, and the gateway prepares nothing."""
+    gateway-signed release through: the host refuses to apply it and reports the problem, so the gateway, which reads
+    that report, prepares nothing further."""
     _, running, base, new, _, host_id = _rebase_setup(hw, tmp_path)
     before = hw.hcfg.ledger.read_text()
     _rebase(hw, tmp_path, new, host_id)

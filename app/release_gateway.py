@@ -1056,6 +1056,8 @@ def reconcile(ledger: Path, statement: bytes, signature: str, *, founder_key: st
                         policy, now)
         if st["pending_digest"] != pending:
             raise Refused("reconcile statement is about another pending release")
+        if hashlib.sha256(statement).hexdigest() in {e.get("digest") for e in read_history(ledger)}:
+            raise Refused("replay: this reconcile statement is already in the release history")
         if st["outcome"] not in RECONCILE_OUTCOMES:
             raise Refused(f"reconcile outcome must be one of {RECONCILE_OUTCOMES}")
         if not isinstance(st["release_sha"], str) or not SHA.fullmatch(st["release_sha"]):

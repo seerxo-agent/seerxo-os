@@ -7,6 +7,7 @@ plus a tunnel — not through an opened port.
 import hashlib
 import json
 import os
+import stat
 import logging
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -268,9 +269,13 @@ FACTS_UNAVAILABLE = ("## Permanent facts unavailable\n\nThe host's facts file ({
 def _permanent_facts() -> str | None:
     # A deployed container (the deploy sets COMPANY_OS_GIT_SHA) needs the host file even if the mount is missing.
     if _HOST_FACTS.parent.is_dir() or os.environ.get("COMPANY_OS_GIT_SHA"):
-        try:
-            return _HOST_FACTS.read_text()
-        except OSError:
+        try:                             # a regular file, never through a link (e.g. to the image's public template)
+            fd = os.open(_HOST_FACTS, os.O_RDONLY | os.O_NOFOLLOW)
+            with os.fdopen(fd, encoding="utf-8") as f:
+                if not stat.S_ISREG(os.fstat(f.fileno()).st_mode):
+                    raise OSError("not a regular file")
+                return f.read()
+        except (OSError, UnicodeDecodeError):
             return FACTS_UNAVAILABLE.format(path=_HOST_FACTS)
     try:
         return _PERMANENT_FACTS.read_text()

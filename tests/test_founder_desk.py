@@ -560,6 +560,9 @@ def test_the_hosts_real_facts_win_and_are_never_replaced_by_the_repository_file(
     assert main._permanent_facts().startswith("## Permanent facts unavailable")
     real.mkdir()                                                          # present but unreadable as a file
     assert main._permanent_facts().startswith("## Permanent facts unavailable")
+    real.rmdir()
+    real.symlink_to(main._PERMANENT_FACTS)                                # a link to the public template is not facts
+    assert main._permanent_facts().startswith("## Permanent facts unavailable")
     monkeypatch.setattr(main, "_HOST_FACTS", tmp_path / "no-mount" / "PERMANENT_FACTS.md")   # development: no mount
     monkeypatch.delenv("COMPANY_OS_GIT_SHA", raising=False)
     assert "FACT-" in main._permanent_facts()
