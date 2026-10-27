@@ -231,7 +231,7 @@ def _tick(cfg: Config, *, now, clock, checks, review, fetch) -> dict:
     if not passed:
         return _decide(cfg, state, sha, "CHECKS_FAILED", str((result or {}).get("summary", ""))[:200], now)
     nonce = secrets.token_hex(16)
-    packet = rg.review_packet(cfg.repository, parent, sha, diff, nonce)
+    packet = rg.review_packet(cfg.repository, running, sha, diff, nonce)   # the diff's own base: what runs
     try:
         answer = review(packet)
     except ReviewNotAsked as error:

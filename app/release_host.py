@@ -43,6 +43,16 @@ class RetryLater(RuntimeError):
     """Infrastructure, not the manifest: fetch, git, an unreadable policy. Nothing is moved; the next step retries."""
 
 
+# The fetch remote must be the configured (and policy-signed) repository on GitHub, so a config cannot name one
+# repository and fetch another (a fork with the same base). Tests use local repositories and switch this off.
+PIN_REMOTE = True
+
+
+def remote_is(fetch_url: str, repository: str) -> bool:
+    url, repo = fetch_url.lower().removesuffix("/"), repository.lower()
+    return url in (f"https://github.com/{repo}.git", f"https://github.com/{repo}", f"git@github.com:{repo}.git")
+
+
 class Config:
     def __init__(self, raw: dict):
         need = {"repository", "branch", "clone", "fetch_url", "policy", "policy_sig", "founder_key", "ledger",
@@ -59,6 +69,8 @@ class Config:
             raise rg.Refused(f"run_root must be {RUN_ROOT}: the deploy driver refuses any other RELEASE_DIR")
         if self.ledger != LEDGER:
             raise rg.Refused(f"ledger must be {LEDGER}: the deploy driver reads only that path to know the host is bootstrapped")
+        if PIN_REMOTE and not remote_is(self.fetch_url, self.repository):
+            raise rg.Refused(f"fetch_url must be the GitHub remote of {self.repository}")
 
 
 def _release_dir_name(sha: str) -> str:

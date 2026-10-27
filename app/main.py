@@ -257,8 +257,8 @@ def desk_metric_series(source: str, subject: str, metric: str, window: str = "",
 
 # The company's real facts live on the host, mounted read-only (docker-compose.yml). Where that mount exists (every
 # production container), only the host file counts: missing or unreadable is reported, never replaced by the
-# repository's docs/PERMANENT_FACTS.md, which may be a public example. Without the mount (local development, tests)
-# the repository file is shown.
+# repository's docs/PERMANENT_FACTS.md, which may be a public example. Only without the mount and outside a deployed
+# container (local development, tests) is the repository file shown.
 _HOST_FACTS = Path("/run/company-facts/PERMANENT_FACTS.md")
 _PERMANENT_FACTS = Path(__file__).resolve().parent.parent / "docs" / "PERMANENT_FACTS.md"
 FACTS_UNAVAILABLE = ("## Permanent facts unavailable\n\nThe host's facts file ({path}) is missing or unreadable. "
@@ -266,7 +266,8 @@ FACTS_UNAVAILABLE = ("## Permanent facts unavailable\n\nThe host's facts file ({
 
 
 def _permanent_facts() -> str | None:
-    if _HOST_FACTS.parent.is_dir():
+    # A deployed container (the deploy sets COMPANY_OS_GIT_SHA) needs the host file even if the mount is missing.
+    if _HOST_FACTS.parent.is_dir() or os.environ.get("COMPANY_OS_GIT_SHA"):
         try:
             return _HOST_FACTS.read_text()
         except OSError:

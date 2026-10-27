@@ -561,7 +561,10 @@ def test_the_hosts_real_facts_win_and_are_never_replaced_by_the_repository_file(
     real.mkdir()                                                          # present but unreadable as a file
     assert main._permanent_facts().startswith("## Permanent facts unavailable")
     monkeypatch.setattr(main, "_HOST_FACTS", tmp_path / "no-mount" / "PERMANENT_FACTS.md")   # development: no mount
+    monkeypatch.delenv("COMPANY_OS_GIT_SHA", raising=False)
     assert "FACT-" in main._permanent_facts()
+    monkeypatch.setenv("COMPANY_OS_GIT_SHA", "a" * 40)                   # deployed but the mount is missing
+    assert main._permanent_facts().startswith("## Permanent facts unavailable")
 
 
 def test_assigning_an_owner_makes_a_ready_task_dispatchable():

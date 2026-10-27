@@ -1197,7 +1197,7 @@ def do_rebase(keys, ledger, prod, raw_sig, *, policy=None, facts_over=None):
 
 def new_chain_manifest(keys, sha=OTHER, approver="founder"):
     """A release from the new repository: its parent is the rebase base, its review covers the host's diff."""
-    packet = rg.review_packet(NEW_REPO, BASE, sha, DIFF, NONCE)
+    packet = rg.review_packet(NEW_REPO, SHA, sha, DIFF, NONCE)            # the diff starts from what runs (SHA)
     att = rg.attestation("codex", packet, {"verdict": "APPROVE", "fingerprint": packet["fingerprint"],
                                            "findings": []}, NOW.isoformat())
     m = manifest(repository=NEW_REPO, parent_sha=BASE, sha=sha, sequence=2, policy_version=2, approver=approver)
@@ -1349,3 +1349,13 @@ def test_recovery_after_a_release_on_the_new_chain_has_no_chain_base(keys, tmp_p
 def test_the_diff_scope_is_the_payload_only_across_histories():
     assert rg.diff_scope({"last_sha": SHA}) == ()
     assert rg.diff_scope({"last_sha": SHA, "chain_base": BASE}) == ("--", *rg.DEPLOY_PATHS)
+
+
+def test_a_ledger_behind_its_own_history_cannot_be_rebased(keys, tmp_path):
+    ledger, prod = applied_once(keys, tmp_path)
+    state = json.loads(ledger.read_text())
+    history = rg.history_path(ledger)
+    events = rg.read_history(ledger)
+    history.write_bytes(b"".join(rg.canonical(e | {"policy_version": 5}) + b"\n" for e in events))   # e.g. an old copy
+    ledger.write_text(json.dumps(state))                                                            # restored over it
+    refused("behind its own history", do_rebase, keys, ledger, prod, rebase_statement(keys, ledger))

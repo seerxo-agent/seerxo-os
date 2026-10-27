@@ -45,6 +45,7 @@ def hw(tmp_path, monkeypatch):
     monkeypatch.setattr(host, "RUN_ROOT", tmp_path / "run")             # production pins /run/company-os-deploy
     monkeypatch.setattr(host, "HOST_COMPOSE", tmp_path / "opt-docker-compose.yml")  # production: /opt/company-os
     monkeypatch.setattr(host, "LEDGER", tmp_path / "ledger.json")         # production pins /var/lib/release-host/...
+    monkeypatch.setattr(host, "PIN_REMOTE", False)                         # local repositories, not GitHub remotes
     (tmp_path / "opt-docker-compose.yml").write_text("\n")                 # the base release's compose, untouched
     w = World(tmp_path)
     # The deploy driver ships with the code; the base release already contains it.
@@ -1393,3 +1394,58 @@ def test_the_host_refuses_a_rebase_when_the_old_clone_drifted_from_the_recorded_
     (tmp_path / "rebase.sig").write_text(rg.sign(raw, hw.keys["founder"][0], rg.NS_REBASE))
     with pytest.raises(rg.Refused, match="payload the host recorded"):
         _rebase(hw, tmp_path, new, host_id)
+
+
+def test_the_fetch_remote_must_be_the_configured_repository_on_github():
+    assert host.remote_is("git@github.com:Seerxo/os.git", "seerxo/os")                 # the live host config
+    assert host.remote_is("https://github.com/Seerxo/seerxo-os.git", "seerxo/seerxo-os")
+    for url in ("https://github.com/seerxo-agent/seerxo-os.git", "https://github.com/Seerxo/seerxo-os.git.evil",
+                "https://evil.example/Seerxo/seerxo-os.git", "/srv/fork.git"):
+        assert not host.remote_is(url, "seerxo/seerxo-os"), url
+
+
+def test_a_config_that_fetches_another_repository_is_refused(hw, monkeypatch):
+    monkeypatch.setattr(host, "PIN_REMOTE", True)
+    raw = {k: str(v) if isinstance(v, Path) else v for k, v in vars(hw.hcfg).items()} | {
+        "inboxes": [str(p) for p in hw.hcfg.inboxes], "repository": "seerxo/seerxo-os",
+        "fetch_url": "https://github.com/seerxo-agent/seerxo-os.git"}
+    with pytest.raises(rg.Refused, match="GitHub remote of seerxo/seerxo-os"):
+        host.Config(raw)
+    assert host.Config(raw | {"fetch_url": "https://github.com/Seerxo/seerxo-os.git"}).repository == "seerxo/seerxo-os"
+
+
+def test_a_founder_signed_first_release_off_the_rebase_base_is_refused(hw, tmp_path):
+    work, running, base, new, gateway, host_id = _rebase_setup(hw, tmp_path)
+    _rebase(hw, tmp_path, new, host_id)
+    (work / "docs/README.md").write_text("x\n")
+    sh(work, "git", "add", "-A")
+    sh(work, "git", "commit", "-qm", "on the base")
+    sh(work, "git", "push", "-q", "origin", "main")
+    hw.cfg = gateway
+    assert hw.tick()["outcome"] == "FOUNDER_REQUIRED"
+    draft = _draft(hw)
+    sh(work, "git", "checkout", "-q", "--orphan", "other")                 # a history that skips the signed base
+    sh(work, "git", "commit", "-qm", "orphan")
+    orphan = sh(work, "git", "rev-parse", "HEAD")
+    sh(work, "git", "checkout", "-q", "main")
+    sh(work, "git", "merge", "-q", "--allow-unrelated-histories", "-s", "ours", "-m", "join", orphan)
+    sh(work, "git", "push", "-q", "origin", "main")
+    _founder_inbox(hw, draft | {"approver": "founder", "sha": orphan}, name=orphan)   # on main, but not after base
+    hw.hcfg = new
+    out = step(hw)
+    assert out["outcome"] == "REJECTED" and "does not descend" in out["reason"], out
+
+
+def test_the_review_packet_names_the_running_commit_the_diff_starts_from(hw, tmp_path):
+    work, running, base, new, gateway, host_id = _rebase_setup(hw, tmp_path)
+    _rebase(hw, tmp_path, new, host_id)
+    (work / "docs/README.md").write_text("x\n")
+    sh(work, "git", "add", "-A")
+    sh(work, "git", "commit", "-qm", "docs")
+    sh(work, "git", "push", "-q", "origin", "main")
+    hw.cfg = gateway
+    packets = []
+    review = hw.review
+    hw.review = lambda packet: packets.append(packet) or review(packet)
+    hw.tick()
+    assert packets[-1]["base"] == running != base

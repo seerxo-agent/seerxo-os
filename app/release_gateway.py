@@ -530,7 +530,7 @@ def verify_review(review, packet: dict, policy: dict, now: datetime) -> dict:
     return att
 
 
-def _check_evidence(m: dict, policy: dict, diff, now: datetime) -> None:
+def _check_evidence(m: dict, policy: dict, diff, now: datetime, base: str | None = None) -> None:
     """Evidence must be about THIS commit and payload: the gateway's own checks, and a signed independent review of
     the exact diff from the applied release (`diff` is computed by whoever verifies, never taken from the manifest).
     CI results from repository workflows and review rows in the agents' database are not accepted here."""
@@ -545,7 +545,9 @@ def _check_evidence(m: dict, policy: dict, diff, now: datetime) -> None:
         raise Refused("independent review missing")
     if not isinstance(diff, str):
         raise Refused("the verifier could not compute the release diff")
-    verify_review(review, review_packet(m["repository"], m["parent_sha"], m["sha"], diff, nonce), policy, now)
+    # The packet names the commit the diff starts from: what runs (ledger last_sha). Within one history that is the
+    # manifest's parent; after a rebase it is the running commit of the other history, not chain_base.
+    verify_review(review, review_packet(m["repository"], base or m["parent_sha"], m["sha"], diff, nonce), policy, now)
 
 
 def _check_time(m: dict, now: datetime) -> None:
@@ -573,7 +575,7 @@ def gateway_approve(manifest: dict, policy: dict, *, now: datetime, diff: str) -
     if classify(manifest["changed_paths"], policy) != "low":
         raise Refused("high-risk change: needs the founder's signature")
     _check_time(manifest, now)
-    _check_evidence(manifest, policy, diff, now)
+    _check_evidence(manifest, policy, diff, now)      # the gateway never signs after a rebase: parent is what runs
 
 
 # --------------------------------------------------------------------------- host verifier
@@ -649,10 +651,10 @@ def verify_release(manifest_bytes: bytes, signature: str, *, policy: dict, found
         raise Refused("host is not bootstrapped: a founder-signed bootstrap must establish the production baseline")
     if m["parent_sha"] != chain_parent(state):
         raise Refused("manifest does not continue from the release currently applied")
+    if host_facts.get("ancestor_of_parent") is not True:
+        raise Refused("commit does not descend from the release currently applied")
     if state.get("chain_base") and m["approver"] != "founder":
         raise Refused("the first release after a rebase needs the founder's signature")
-    elif host_facts.get("ancestor_of_parent") is not True:
-        raise Refused("commit does not descend from the release currently applied")
     if m["policy_version"] != policy["version"]:
         raise Refused("manifest was approved under a different policy version")
     if (m["repository"], m["branch"]) != (policy["repository"], policy["branch"]):
@@ -666,7 +668,7 @@ def verify_release(manifest_bytes: bytes, signature: str, *, policy: dict, found
     if sorted(host_facts.get("changed_paths") or []) != sorted(m["changed_paths"]):
         raise Refused("changed paths differ from the host's own diff")
     _check_time(m, now)
-    _check_evidence(m, policy, host_facts.get("diff"), now)
+    _check_evidence(m, policy, host_facts.get("diff"), now, state["last_sha"])
     if ROLLBACK_FIELD in m:
         _check_rollback(m, host_facts, state, history)
     if m["approver"] == "gateway":
@@ -1101,6 +1103,9 @@ def rebase(ledger: Path, statement: bytes, signature: str, *, founder_key: str, 
         problem = identity_problem(observe(), state["last_sha"], st["images"], st["configs"])
         if problem or (st["images"], st["configs"]) != (state.get("images"), state.get("configs")):
             raise Refused(f"production does not match the rebase statement: {problem or 'recorded identity differs'}")
+        if state.get("min_policy_version", 1) < max((e.get("policy_version", 1) for e in history), default=1) \
+                or state.get("last_sequence", 0) < max((e.get("sequence", 0) for e in history), default=0):
+            raise Refused("the ledger is behind its own history (policy or sequence floor): the founder must recover it")
         recorded = [e.get("payload_digest") for e in history
                     if e.get("event") == "applied" and e.get("sha") == state["last_sha"]]
         if not recorded or not isinstance(recorded[-1], str) or st["old_payload_digest"] != recorded[-1]:
