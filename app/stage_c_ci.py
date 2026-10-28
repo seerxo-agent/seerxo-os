@@ -117,7 +117,8 @@ def repairs_used(task: models.Task) -> int:
 
 def pr_number(url_or_number) -> int | None:
     m = re.search(r"(\d+)$", str(url_or_number or ""))
-    return int(m.group(1)) if m else None
+    # Bounded before int(): a very long digit run raises ValueError and would abort reconcile() for every task.
+    return int(m.group(1)) if m and len(m.group(1)) <= 10 else None
 
 
 def _block(db: Session, task: models.Task, why: str, after: dict) -> None:
