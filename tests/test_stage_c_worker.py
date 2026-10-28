@@ -1,6 +1,7 @@
 """Worker admission and the existing Stage C pipeline; external boundaries use local doubles."""
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 import json
 import subprocess
 import sys
@@ -2092,3 +2093,44 @@ def test_current_public_pr_number_is_accepted():
     db = _db()
     task = _published_task_for_merge_reconciliation(db)
     assert stage_c_worker.published_pr_number(task) == 81
+
+
+@pytest.mark.parametrize("bad", [
+    {"improvement": ["bad"]},
+    {"improvement": {"stage": "PR_OPEN", "history": "bad"}},
+    {"improvement": {"stage": "PR_OPEN", "history": [{"stage": "PR_OPEN"}]}},
+    {"improvement": {"stage": "PR_OPEN", "history": [{"stage": "PR_OPEN", "evidence": {"commit": "a" * 40}}]}},
+])
+def test_unreadable_publication_fails_closed(bad):
+    # A PR_OPEN row without a PR URL, or an unreadable envelope, is never "unpublished".
+    task = SimpleNamespace(context=bad)
+    assert stage_c_worker.published_pr(task) == {"pr": None, "unreadable_history": True}
+    assert stage_c_worker.published_pr_number(task) is None
+
+
+def test_malformed_envelope_on_blocked_task_does_not_abort_reconcile():
+    db = _db()
+    task = _published_task_for_merge_reconciliation(db)
+    task.status, task.error, task.context = enums.TaskStatus.BLOCKED, "RUNTIME_ERROR", {"improvement": ["bad"]}
+    db.commit()
+    assert stage_c_worker.blocked_repair(db, task) is False
+    stage_c_worker.reconcile(db)  # must not raise
+
+
+def test_b3_old_repository_pr_is_refused_before_github_lookup(monkeypatch):
+    # The founder's B3 probe (artifacts/v1-closeout-2026-10-28/b3_identity_probe.py), kept as a regression.
+    db = _db()
+    task = _published_task_for_merge_reconciliation(db)
+    improvement = task.context["improvement"]
+    history = [dict(row) for row in improvement["history"]]
+    history[-1] = {**history[-1], "evidence": {**history[-1]["evidence"],
+                                              "pr": "https://github.com/seerxo/os/pull/81"}}
+    task.context = {**task.context, "improvement": {**improvement, "history": history}}
+    db.commit()
+    calls = []
+    monkeypatch.setattr(stage_c_ci, "gh_facts", lambda *a, **k: calls.append(a) or {"state": "open"})
+    assert stage_c_worker.published_guard(db, task) == "pr_identity_unverified" and not calls
+    before = task.context
+    out = stage_c_ci.ingest(db, task, {"state": "closed", "merged": False, "head_sha": "b" * 40},
+                            repository=stage_c_worker.REPOSITORY, tracked_branch="main", required_statuses=())
+    assert out["outcome"] == "WAITING" and task.status == enums.TaskStatus.REVIEW and task.context == before

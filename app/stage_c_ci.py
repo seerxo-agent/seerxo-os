@@ -231,6 +231,15 @@ def ingest(db: Session, task: models.Task, facts: dict, max_repairs: int = MAX_R
     commit, number = published.get("commit"), pr_number(published.get("pr"))
     base = {"pr_number": number, "commit": commit}
 
+    # B3: a PR number is only an identity together with its repository and published head. Facts about
+    # another repository's PR, or a closed PR whose head is not the one this task published, change nothing.
+    if repository is not None and (number is None
+                                   or published.get("pr") != f"https://github.com/{repository}/pull/{number}"):
+        return {"outcome": "WAITING", "reason": "pr_identity_mismatch"}
+    if (facts.get("state") == "closed" and not facts.get("merged")
+            and facts.get("head_sha") is not None and facts.get("head_sha") != commit):
+        return {"outcome": "WAITING", "reason": "closed_pr_head_mismatch"}
+
     if task.status == enums.TaskStatus.BLOCKED and not recovering:
         return {"outcome": "SKIPPED", "reason": "blocked; waiting for the founder"}
     if recovering and not facts.get("merged"):

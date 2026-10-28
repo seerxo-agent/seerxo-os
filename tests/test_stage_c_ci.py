@@ -89,7 +89,6 @@ def test_green_ci_on_the_published_commit_is_ready_to_merge():
     ("published_mismatch", REPOSITORY, None),
     ("forged_audit_id", REPOSITORY, None),
     ("mismatched_audit_record", REPOSITORY, None),
-    ("wrong_repository", "other/repo", None),
     ("github_commented_is_not_approval", REPOSITORY, [{"state": "COMMENTED", "login": "chatgpt-codex-connector"}]),
 ])
 def test_green_ci_does_not_advance_without_exact_independent_approval(case, repository, external_review):
@@ -119,6 +118,24 @@ def test_green_ci_does_not_advance_without_exact_independent_approval(case, repo
     assert stage(task) == "CI"
     entry = db.scalar(select(models.AuditLog).where(models.AuditLog.action == "improvement.blocked"))
     assert entry.after["merge_eligibility"] == "refused" and entry.after["reasons"]
+
+
+def test_facts_for_another_repository_change_nothing():
+    # B3: green facts asked about another repository's PR never touch the task (was: blocked it).
+    db, task = _task()
+    before, status = deepcopy(task.context), task.status
+    out = _ingest(db, task, facts(OK), repository="other/repo")
+    assert out == {"outcome": "WAITING", "reason": "pr_identity_mismatch"}
+    assert task.status == status and task.context == before
+
+
+def test_closed_pr_with_another_head_does_not_abandon():
+    db, task = _task()
+    before = deepcopy(task.context)
+    out = _ingest(db, task, {**facts(OK), "state": "closed", "merged": False, "head_sha": "b" * 40},
+                  repository=REPOSITORY)
+    assert out == {"outcome": "WAITING", "reason": "closed_pr_head_mismatch"}
+    assert task.context == before
 
 
 def test_green_ci_without_repository_and_target_identity_fails_closed():
