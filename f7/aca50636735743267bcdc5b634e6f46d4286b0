@@ -1,0 +1,19 @@
+tests/test_trust_boundary.py
+  s_07d53edd702b05::t_4b97777152f0c5 113,118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f7aca50636735743267bcdc5b634e6f46d4286b0",
+  "prompts": {},
+  "sessions": {
+    "s_07d53edd702b05": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18e28-c85a-7833-8833-f2639310dc4b",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}
