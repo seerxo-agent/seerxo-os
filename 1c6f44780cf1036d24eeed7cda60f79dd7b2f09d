@@ -1,0 +1,21 @@
+app/static/desk.html
+  s_7236fe8a19f823::t_d3d54354bed55f 121
+desk/src/shadcn-tailwind.css
+  s_7236fe8a19f823::t_06f6e36529d4bf 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1c6f44780cf1036d24eeed7cda60f79dd7b2f09d",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+tests/test_release_recovery_docker.py
+  s_7236fe8a19f823::t_f57aef41a8edcf 201-202,204-206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2491fd4fe677c5fefe97a3604ef5f589997fd0a2",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

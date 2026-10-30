@@ -1,0 +1,21 @@
+docs/operations/ACTIVE_WORK.md
+  s_8a75dc5299d15b::t_30b10a410ff319 5,9,11
+  s_8a75dc5299d15b::t_df594f3bb2932c 7,10
+  s_8a75dc5299d15b::t_c1ed40f57c71a1 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b5bac2ea5de16f5a8293c12ce08b6c118889c67f",
+  "prompts": {},
+  "sessions": {
+    "s_8a75dc5299d15b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18cd9-c538-77b3-ab87-b428bb03fd69",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

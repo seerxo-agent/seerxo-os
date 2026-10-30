@@ -1,0 +1,21 @@
+app/static/desk.html
+  s_7236fe8a19f823::t_95706e2faf7839 24,31-32,72-73,76,79,106,108,117
+desk/package-lock.json
+  s_7236fe8a19f823::t_06c6b0d78703e0 129-131,1993-1995,2009-2011,2025-2027,2041-2043,2057-2059,2073-2075,2089-2091,2105-2107,2121-2123,2137-2139,2153-2155,2169-2171,2185-2187,2201-2203,2217-2219,3433-3435,3452,3709-3711,3714,3724-3738,3937-3939,3944-3945,3962
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a55a8fc29c2f7b8893c6c4c03ae576d6ac3b3700",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

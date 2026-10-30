@@ -1,0 +1,21 @@
+tests/test_stage_c_verify.py
+  s_7236fe8a19f823::t_5a06b761fa8f6d 73-116
+app/stage_c_verify.py
+  s_7236fe8a19f823::t_6ea355494a9187 16-18,34,46-59,95-96,99,103
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a625fd775ae184759af5e5e1d359b1e46f50880",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

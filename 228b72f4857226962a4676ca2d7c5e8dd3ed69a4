@@ -1,0 +1,22 @@
+scripts/compose-bound.sh
+  s_7236fe8a19f823::t_f772d2a9ffe486 62-74
+tests/test_compose_bound.py
+  s_7236fe8a19f823::t_2e615630e30ced 63-65,74,205-214
+  s_7236fe8a19f823::t_e545ff1c7386a0 215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "228b72f4857226962a4676ca2d7c5e8dd3ed69a4",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

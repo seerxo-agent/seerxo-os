@@ -1,0 +1,21 @@
+requirements.in
+  s_072f15968f3fe4::t_b665239cd49049 1-17
+requirements.txt
+  s_072f15968f3fe4::t_f6a54be9b68401 1-2,4-31,33,35-36,39-40,42-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "287d59f82f8f9dde00abec66cb9eb9978d1cdb91",
+  "prompts": {},
+  "sessions": {
+    "s_072f15968f3fe4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2750bcba-4463-4218-b788-8c695cf0863a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Seerxo <noreply@seerxo.invalid>"
+    }
+  }
+}

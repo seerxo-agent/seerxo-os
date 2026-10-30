@@ -1,0 +1,21 @@
+scripts/deploy-company-os.sh
+  s_7236fe8a19f823::t_cefa84fc179e71 488-489,845-846
+tests/test_release_recovery_docker.py
+  s_7236fe8a19f823::t_ca5aff99bab952 52-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "788b8577f2d71e67786a1cfe284b30d159a182b0",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

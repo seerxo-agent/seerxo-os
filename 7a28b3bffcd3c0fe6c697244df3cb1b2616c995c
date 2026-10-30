@@ -1,0 +1,32 @@
+docs/PERMANENT_FACTS.md
+  s_8a75dc5299d15b::t_ddb1914d92f7d5 1-17
+docs/operations/DECISIONS.md
+  s_8a75dc5299d15b::t_d69e6ab01b95e6 1-114
+docs/operations/ACTIVE_WORK.md
+  s_8a75dc5299d15b::t_f5769ef4b26a1c 3
+  s_8a75dc5299d15b::t_d69e6ab01b95e6 1-2,4-12
+START_HERE.md
+  s_8a75dc5299d15b::t_84c308a348884b 3-20
+docs/README.md
+  s_8a75dc5299d15b::t_d69e6ab01b95e6 1-15
+docs/runbooks/deploy-authorization.md
+  s_8a75dc5299d15b::t_6af29fe56780e2 17-20
+docs/GIT_WORKFLOW.md
+  s_8a75dc5299d15b::t_6d1769a05a20ea 1,3-11,32-37,41-49,84-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7a28b3bffcd3c0fe6c697244df3cb1b2616c995c",
+  "prompts": {},
+  "sessions": {
+    "s_8a75dc5299d15b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18cd9-c538-77b3-ab87-b428bb03fd69",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

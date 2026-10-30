@@ -1,0 +1,24 @@
+app/release_host.py
+  s_7236fe8a19f823::t_662e7de0a67161 316-319,764-765
+tests/test_release_host.py
+  s_7236fe8a19f823::t_3c8075f4cd0b2c 14,1680-1707
+  s_7236fe8a19f823::t_8679040f842d35 144-147
+tests/release_host_sim.py
+  s_7236fe8a19f823::t_8679040f842d35 151-152,157,159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b12cbc69f6608d9a894ac81d8eebf7ab967081f6",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

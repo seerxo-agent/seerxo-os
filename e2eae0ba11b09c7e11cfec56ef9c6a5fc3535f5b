@@ -1,0 +1,43 @@
+app/stage_c_ci.py
+  s_559925a9845184::t_d4b6a0276149cc 15-16,42-43,382,385-394
+docs/security/RELEASE_GATEWAY.md
+  s_559925a9845184::t_246500d45c7fcb 377-386
+docs/CODER_RUNTIME.md
+  s_559925a9845184::t_aad5720e5fc470 265,268-286
+  s_559925a9845184::t_232e8cb48d411b 287
+tests/test_release_recovery_docker.py
+  s_559925a9845184::t_6a30fc5a20793e 112-155
+  s_559925a9845184::t_488905fbb2c4e5 59,97,103-109
+  s_559925a9845184::t_70c664b577fad4 10,13,181-184,302-362,370-382,398,400,422
+  s_559925a9845184::t_429e743787e3f8 289-292,295-300,363-369,399
+  s_559925a9845184::t_ac41d125a4e0a4 40
+  s_559925a9845184::t_02ad6cc7f7c403 110-111
+tests/test_compose_bound.py
+  s_559925a9845184::t_14bc392b8066f4 60-62,64-65,71,80-82,105,121-201
+  s_559925a9845184::t_3eb8864b3a25c7 16-18,36-47,56-59
+scripts/compose-bound.sh
+  s_559925a9845184::t_6ef7775d9688a9 46-64,93-97
+tests/test_stage_c_ci.py
+  s_559925a9845184::t_fe7443d474ceea 198-242
+tests/test_host_cli_release_sync.py
+  s_559925a9845184::t_fb9ba3db4974db 173
+scripts/deploy-company-os.sh
+  s_559925a9845184::t_5c7a4d3cbe86c6 1366-1367,1383
+  s_559925a9845184::t_303b88c3f86924 488-497
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2eae0ba11b09c7e11cfec56ef9c6a5fc3535f5b",
+  "prompts": {},
+  "sessions": {
+    "s_559925a9845184": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a189bb-c994-7f10-8587-48df9fbb7795",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

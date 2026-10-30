@@ -1,0 +1,26 @@
+tests/test_stage_c_ci.py
+  s_7236fe8a19f823::t_db516af318dfa9 199-201,204-212
+  s_7236fe8a19f823::t_f4fbc2d6acfa5c 198,202-203,213-220
+app/stage_c_ci.py
+  s_7236fe8a19f823::t_04487c9c9c89e4 44
+  s_7236fe8a19f823::t_84cc98801e1b2a 24
+  s_7236fe8a19f823::t_3765684f45d306 381-383,390
+  s_7236fe8a19f823::t_841b9e8e3948eb 384-389
+  s_7236fe8a19f823::t_f586aea8e0c1a9 41-43,45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "23f22fa30bca9b0d8b3e6b148f60839707c36d5d",
+  "prompts": {},
+  "sessions": {
+    "s_7236fe8a19f823": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "69ef6012-c0fd-4ec5-92e7-6d6df8e3e572",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "seerxo-agent <info@seerxo.com>"
+    }
+  }
+}

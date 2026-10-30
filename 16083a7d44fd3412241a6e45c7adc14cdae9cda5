@@ -1,0 +1,921 @@
+.agents/skills/ci-debug
+  s_38a0c0cab419cb::t_e4b47aee47c963 1
+.agents/skills/git
+  s_38a0c0cab419cb::t_3223613a4288df 1
+.agents/skills/repo-inspect
+  s_38a0c0cab419cb::t_3e72c5ee955ae7 1
+.agents/skills/verify-change
+  s_38a0c0cab419cb::t_28faff8414a77c 1
+.env.example
+  s_38a0c0cab419cb::t_0d85add27bc135 1-88
+.github/CODEOWNERS
+  s_38a0c0cab419cb::t_145d99bed38141 1-18
+.github/ISSUE_TEMPLATE/bug_report.yml
+  s_38a0c0cab419cb::t_5d07a54824495d 1-31
+.github/ISSUE_TEMPLATE/config.yml
+  s_38a0c0cab419cb::t_68763f1b9f1eb9 1-5
+.github/ISSUE_TEMPLATE/feature_request.yml
+  s_38a0c0cab419cb::t_2de5bcf7bd8eae 1-19
+.github/PULL_REQUEST_TEMPLATE.md
+  s_38a0c0cab419cb::t_5ecd2fabfc678c 1-18
+.github/workflows/ci.yml
+  s_38a0c0cab419cb::t_f166804d299e6c 1-129
+.github/workflows/dependency-scan.yml
+  s_38a0c0cab419cb::t_e53be6b120ae2d 1-99
+.github/workflows/frontend.yml
+  s_38a0c0cab419cb::t_ac14a42638d7e8 1-45
+.github/workflows/prowler.yml
+  s_38a0c0cab419cb::t_c5eb4f80ff2b1c 1-40
+.github/workflows/python-tests.yml
+  s_38a0c0cab419cb::t_551f8646500529 1-91
+.github/workflows/secret-scan.yml
+  s_38a0c0cab419cb::t_9b21331425bc92 1-33
+.github/workflows/workflow-lint.yml
+  s_38a0c0cab419cb::t_eb0d7cf8c7282b 1-46
+.gitignore
+  s_38a0c0cab419cb::t_869134b99e2ed6 1-43
+AGENTS.md
+  s_38a0c0cab419cb::t_c8beef3a92bc56 1
+CLAUDE.md
+  s_38a0c0cab419cb::t_0b9545f8fcdb76 1-94
+CODE_OF_CONDUCT.md
+  s_38a0c0cab419cb::t_e568d9d96e4840 1-43
+CONTRIBUTING.md
+  s_38a0c0cab419cb::t_c6ada63427cd61 1-58
+Dockerfile
+  s_38a0c0cab419cb::t_d09b449df75010 1-101
+README.md
+  s_38a0c0cab419cb::t_9478032b805538 1-313
+SECURITY.md
+  s_38a0c0cab419cb::t_59f4279c9f7da8 1-47
+START_HERE.md
+  s_38a0c0cab419cb::t_df1a7976d6a2a8 1-15
+agents/ceo/AGENT.md
+  s_38a0c0cab419cb::t_7dde406e6740fc 1-8
+agents/ceo/prompts/v1.md
+  s_38a0c0cab419cb::t_3e5e2015dc786a 1-6
+agents/cost_policy.yaml
+  s_38a0c0cab419cb::t_9b8ae230527627 1-40
+agents/developer/AGENT.md
+  s_38a0c0cab419cb::t_c8397f5b92660c 1-7
+agents/developer/prompts/v1.md
+  s_38a0c0cab419cb::t_d0a6cdc24f27ad 1-6
+agents/registry.yaml
+  s_38a0c0cab419cb::t_4957b343cffe7a 1-169
+agents/release_policy.json
+  s_38a0c0cab419cb::t_dbeffb60d78edb 1-44
+agents/repository_guardian.yaml
+  s_38a0c0cab419cb::t_e49f6d3d4498d2 1-29
+agents/research/AGENT.md
+  s_38a0c0cab419cb::t_2f04355763c1a7 1-7
+agents/research/prompts/v1.md
+  s_38a0c0cab419cb::t_463a8ac5385a05 1-6
+agents/stage_c_profiles.yaml
+  s_38a0c0cab419cb::t_d7edabc8bc2ee2 1-25
+agents/supervisor/AGENT.md
+  s_38a0c0cab419cb::t_b3ff104eb8aaa5 1-7
+agents/supervisor/prompts/v1.md
+  s_38a0c0cab419cb::t_6ecdf602eddf24 1-6
+alembic.ini
+  s_38a0c0cab419cb::t_53dc63bf674b39 1-38
+app/api_auth.py
+  s_38a0c0cab419cb::t_4f7ecabd883812 1-166
+app/approval_identity.py
+  s_38a0c0cab419cb::t_49e019a290f55d 1-128
+app/audit.py
+  s_38a0c0cab419cb::t_edeb1b293ac537 1-41
+app/business_reconciler.py
+  s_38a0c0cab419cb::t_9c380ffb18d973 1-239
+app/ci_usage.py
+  s_38a0c0cab419cb::t_e70749b12e3dbb 1-328
+app/cloudflare_access.py
+  s_38a0c0cab419cb::t_fd5a07b584bc94 1-50
+app/coder_diff.py
+  s_38a0c0cab419cb::t_6aa668435af0bd 1-146
+app/coder_source.py
+  s_38a0c0cab419cb::t_75dfd0cfa4daca 1-98
+app/commit_statuses.py
+  s_38a0c0cab419cb::t_912c86fff5cad9 1-61
+app/config.py
+  s_38a0c0cab419cb::t_c13b28db4b902f 1-25
+app/context_builder.py
+  s_38a0c0cab419cb::t_1e45bf90a3589d 1-141
+app/control.py
+  s_38a0c0cab419cb::t_a89ced7f361891 1-367
+app/db.py
+  s_38a0c0cab419cb::t_db9a80eb224997 1-17
+app/desk.py
+  s_38a0c0cab419cb::t_df1321f8d73db6 1-742
+app/desk_stream.py
+  s_38a0c0cab419cb::t_e0905b2e6765a3 1-99
+app/dispatch.py
+  s_38a0c0cab419cb::t_2709098e2e1ecc 1-144
+app/enums.py
+  s_38a0c0cab419cb::t_22822de3b103a6 1-168
+app/event_router.py
+  s_38a0c0cab419cb::t_1339cd6ac9ddd1 1-224
+app/experiment_scheduler.py
+  s_38a0c0cab419cb::t_4a8245d7d72036 1-282
+app/experiments.py
+  s_38a0c0cab419cb::t_5ecf0573af57b0 1-461
+app/goal_evidence.py
+  s_38a0c0cab419cb::t_f66e3c305741e8 1-73
+app/goals.py
+  s_38a0c0cab419cb::t_f370785a9ae95b 1-152
+app/keys.py
+  s_38a0c0cab419cb::t_c79c027811477a 1-53
+app/liveness.py
+  s_38a0c0cab419cb::t_e5c50123c84019 1-40
+app/main.py
+  s_38a0c0cab419cb::t_5af97fb67103d0 1-1630
+app/main_guard.py
+  s_38a0c0cab419cb::t_75d2e3eafdf067 1-119
+app/merge_authorization.py
+  s_38a0c0cab419cb::t_b05a9c3b779f6b 1-119
+app/metric_sources.py
+  s_38a0c0cab419cb::t_a4949336e79fa8 1-38
+app/metrics_store.py
+  s_38a0c0cab419cb::t_8a4373ab4ed895 1-171
+app/models.py
+  s_38a0c0cab419cb::t_6a3d121d683241 1-505
+app/notebook.py
+  s_38a0c0cab419cb::t_bd9699a68040a9 1-186
+app/notify.py
+  s_38a0c0cab419cb::t_7f15f303d49f02 1-610
+app/packaging.py
+  s_38a0c0cab419cb::t_149ebd007f8720 1-112
+app/polar_metrics.py
+  s_38a0c0cab419cb::t_1fb3ed463ae02e 1-172
+app/project_profiles.py
+  s_38a0c0cab419cb::t_a4b3d521e4722a 1-118
+app/providers.py
+  s_38a0c0cab419cb::t_28e39bd977a528 1-362
+app/reasoner.py
+  s_38a0c0cab419cb::t_c42d37edf5f0ab 1-120
+app/reconciler_heartbeat.py
+  s_38a0c0cab419cb::t_87cb07ef3b10e3 1-196
+app/registry.py
+  s_38a0c0cab419cb::t_bcb1e8e6db2127 1-257
+app/release_gateway.py
+  s_38a0c0cab419cb::t_0788792b7e0289 1-1037
+app/release_gateway_service.py
+  s_38a0c0cab419cb::t_a6c14cb14950fb 1-326
+app/release_host.py
+  s_38a0c0cab419cb::t_44cedc1772c536 1-493
+app/repo_guardian.py
+  s_38a0c0cab419cb::t_cd7b4b45c6c3f9 1-231
+app/repo_guardian_github.py
+  s_38a0c0cab419cb::t_8620c02d57c132 1-192
+app/review_signer.py
+  s_38a0c0cab419cb::t_a277d9002f1352 1-156
+app/runreport.py
+  s_38a0c0cab419cb::t_519ba2a9146b47 1-108
+app/schemas.py
+  s_38a0c0cab419cb::t_0d9eb0108a2399 1-311
+app/seerxo_funnel.py
+  s_38a0c0cab419cb::t_d9bc92553aa73f 1-164
+app/stage_c.py
+  s_38a0c0cab419cb::t_3894aa742b6c44 1-145
+app/stage_c_ci.py
+  s_38a0c0cab419cb::t_5b61087611189f 1-421
+app/stage_c_cleanup.py
+  s_38a0c0cab419cb::t_9270586a809f62 1-245
+app/stage_c_credential_boundary.py
+  s_38a0c0cab419cb::t_5d9b31cf4eb737 1-132
+app/stage_c_merge_gate.py
+  s_38a0c0cab419cb::t_e38d50b03310c5 1-202
+app/stage_c_preflight.py
+  s_38a0c0cab419cb::t_1ff38208d08b4b 1-245
+app/stage_c_runner.py
+  s_38a0c0cab419cb::t_3a7dcd62667d61 1-654
+app/stage_c_verify.py
+  s_38a0c0cab419cb::t_ab33700fa18b90 1-152
+app/stage_c_worker.py
+  s_38a0c0cab419cb::t_ffcced01a12a4a 1-832
+app/static/desk.html
+  s_38a0c0cab419cb::t_9eca85b5825e61 1-126
+app/static/manifest.webmanifest
+  s_38a0c0cab419cb::t_3765bc45a73a3d 1-15
+app/static/sw.js
+  s_38a0c0cab419cb::t_c0e490730a749d 1-10
+app/task_materializer.py
+  s_38a0c0cab419cb::t_22ed155404be77 1-147
+app/task_policy.py
+  s_38a0c0cab419cb::t_c14413ac18d9fd 1-56
+app/watchdog.py
+  s_38a0c0cab419cb::t_f408b0a48a0c8b 1-1181
+app/worker.py
+  s_38a0c0cab419cb::t_aada462882c8f6 1-1384
+desk/.gitignore
+  s_38a0c0cab419cb::t_4558266e5647ba 1-24
+desk/.oxlintrc.json
+  s_38a0c0cab419cb::t_b2640a8e8092e8 1-8
+desk/README.md
+  s_38a0c0cab419cb::t_0fe81999983441 1-13
+desk/components.json
+  s_38a0c0cab419cb::t_15b888a3097b3d 1-25
+desk/index.html
+  s_38a0c0cab419cb::t_4f13c2ec13f4b5 1-29
+desk/package-lock.json
+  s_38a0c0cab419cb::t_3a67a4f3a3af6d 1-7891
+desk/package.json
+  s_38a0c0cab419cb::t_20fffe8c31b5f0 1-39
+desk/public/manifest.webmanifest
+  s_38a0c0cab419cb::t_d76c514f6bec39 1-15
+desk/public/sw.js
+  s_38a0c0cab419cb::t_fe8c8ff3549320 1-10
+desk/src/App.tsx
+  s_38a0c0cab419cb::t_a21da3824f2db3 1-579
+desk/src/components/charts.tsx
+  s_38a0c0cab419cb::t_1bb49f73a3b48d 1-130
+desk/src/components/command-composer.tsx
+  s_38a0c0cab419cb::t_cd7cb5a3a171e1 1-75
+desk/src/components/controls.tsx
+  s_38a0c0cab419cb::t_600f05e07fe71c 1-203
+desk/src/components/data-rows.tsx
+  s_38a0c0cab419cb::t_0c6b1fed811947 1-71
+desk/src/components/delivery.tsx
+  s_38a0c0cab419cb::t_f8228529279375 1-54
+desk/src/components/desk.tsx
+  s_38a0c0cab419cb::t_e448bb969dc4bb 1-329
+desk/src/components/detail.tsx
+  s_38a0c0cab419cb::t_9be3ad09ad5f3a 1-404
+desk/src/components/error-boundary.tsx
+  s_38a0c0cab419cb::t_c6ba6333f3e9dc 1-24
+desk/src/components/trend.tsx
+  s_38a0c0cab419cb::t_7834a80baf7848 1-73
+desk/src/components/ui/alert-dialog.tsx
+  s_38a0c0cab419cb::t_a0483c4984dbf5 1-197
+desk/src/components/ui/alert.tsx
+  s_38a0c0cab419cb::t_f085ec91c86913 1-75
+desk/src/components/ui/badge.tsx
+  s_38a0c0cab419cb::t_f6ea010929cb3f 1-48
+desk/src/components/ui/button.tsx
+  s_38a0c0cab419cb::t_9829cfe8cf99d9 1-66
+desk/src/components/ui/card.tsx
+  s_38a0c0cab419cb::t_9ec6c9d114fad2 1-102
+desk/src/components/ui/chart.tsx
+  s_38a0c0cab419cb::t_f446a76e117c50 1-372
+desk/src/components/ui/collapsible.tsx
+  s_38a0c0cab419cb::t_9b57c4ad346d40 1-33
+desk/src/components/ui/command.tsx
+  s_38a0c0cab419cb::t_ccf39af9ee5ab2 1-188
+desk/src/components/ui/dialog.tsx
+  s_38a0c0cab419cb::t_1dd6298cc602ae 1-166
+desk/src/components/ui/empty.tsx
+  s_38a0c0cab419cb::t_4c8fab653e7331 1-103
+desk/src/components/ui/input-group.tsx
+  s_38a0c0cab419cb::t_09f91431a68406 1-156
+desk/src/components/ui/input.tsx
+  s_38a0c0cab419cb::t_62cd2b58b8aff2 1-18
+desk/src/components/ui/item.tsx
+  s_38a0c0cab419cb::t_3a6ece11ef5a8c 1-196
+desk/src/components/ui/kbd.tsx
+  s_38a0c0cab419cb::t_591bffc3ce306f 1-26
+desk/src/components/ui/progress.tsx
+  s_38a0c0cab419cb::t_4e1fdef2c88ed6 1-30
+desk/src/components/ui/scroll-area.tsx
+  s_38a0c0cab419cb::t_60895cf6e8eb87 1-52
+desk/src/components/ui/select.tsx
+  s_38a0c0cab419cb::t_de1019ecddea61 1-191
+desk/src/components/ui/separator.tsx
+  s_38a0c0cab419cb::t_72156d2407b46d 1-25
+desk/src/components/ui/sheet.tsx
+  s_38a0c0cab419cb::t_c6c33f27e9e153 1-147
+desk/src/components/ui/sidebar.tsx
+  s_38a0c0cab419cb::t_45019ed0f727ae 1-702
+desk/src/components/ui/skeleton.tsx
+  s_38a0c0cab419cb::t_4c956dc8347e1b 1-13
+desk/src/components/ui/sonner.tsx
+  s_38a0c0cab419cb::t_7a2e9e9767120f 1-47
+desk/src/components/ui/table.tsx
+  s_38a0c0cab419cb::t_d78678c75ed6fc 1-113
+desk/src/components/ui/tabs.tsx
+  s_38a0c0cab419cb::t_526949e15a5786 1-89
+desk/src/components/ui/textarea.tsx
+  s_38a0c0cab419cb::t_21fbfe9da74de3 1-17
+desk/src/components/ui/tooltip.tsx
+  s_38a0c0cab419cb::t_63d9291b65e070 1-54
+desk/src/hooks/use-mobile.ts
+  s_38a0c0cab419cb::t_d88237da98b684 1-20
+desk/src/index.css
+  s_38a0c0cab419cb::t_084811579b86d8 1-234
+desk/src/lib/agent-state.test.ts
+  s_38a0c0cab419cb::t_9ce41a2c13954f 1-35
+desk/src/lib/agent-state.ts
+  s_38a0c0cab419cb::t_246bdc9e0d7e9d 1-28
+desk/src/lib/api-auth-expiry.test.ts
+  s_38a0c0cab419cb::t_66b139d73eb8f0 1-14
+desk/src/lib/api.ts
+  s_38a0c0cab419cb::t_1d6cc2b4ff9595 1-215
+desk/src/lib/approvals.test.ts
+  s_38a0c0cab419cb::t_bdba05b9286fbc 1-48
+desk/src/lib/approvals.ts
+  s_38a0c0cab419cb::t_771fd2805c3e3e 1-44
+desk/src/lib/changes.test.ts
+  s_38a0c0cab419cb::t_e08be07e4c9f21 1-21
+desk/src/lib/changes.ts
+  s_38a0c0cab419cb::t_e6c714548b166a 1-26
+desk/src/lib/clock.test.ts
+  s_38a0c0cab419cb::t_cbcad943b355b9 1-24
+desk/src/lib/deliverable.test.ts
+  s_38a0c0cab419cb::t_a13220460c0dc0 1-18
+desk/src/lib/deliverable.ts
+  s_38a0c0cab419cb::t_23179c00ce442e 1-7
+desk/src/lib/delivery.test.ts
+  s_38a0c0cab419cb::t_b7c5cf1262b72e 1-25
+desk/src/lib/delivery.ts
+  s_38a0c0cab419cb::t_f35e43f68fa3cc 1-33
+desk/src/lib/draft.test.ts
+  s_38a0c0cab419cb::t_748787e758460d 1-192
+desk/src/lib/draft.ts
+  s_38a0c0cab419cb::t_2397a4b3b5c65b 1-49
+desk/src/lib/event-groups.test.ts
+  s_38a0c0cab419cb::t_cfe1f379c4dd43 1-29
+desk/src/lib/event-groups.ts
+  s_38a0c0cab419cb::t_821242a46ecfab 1-25
+desk/src/lib/format.test.ts
+  s_38a0c0cab419cb::t_52b8df56230020 1-16
+desk/src/lib/format.ts
+  s_38a0c0cab419cb::t_77a2483fd88ebd 1-105
+desk/src/lib/freshness.test.ts
+  s_38a0c0cab419cb::t_5327184316bcfa 1-59
+desk/src/lib/freshness.ts
+  s_38a0c0cab419cb::t_49dbdc7267352b 1-47
+desk/src/lib/lifecycle.test.ts
+  s_38a0c0cab419cb::t_02dd7af02cacde 1-49
+desk/src/lib/lifecycle.ts
+  s_38a0c0cab419cb::t_580f2bc31ff658 1-41
+desk/src/lib/live.test.ts
+  s_38a0c0cab419cb::t_cbda3877c5d700 1-79
+desk/src/lib/live.ts
+  s_38a0c0cab419cb::t_1c41000c913734 1-62
+desk/src/lib/nav.test.ts
+  s_38a0c0cab419cb::t_b27c3728953f49 1-31
+desk/src/lib/nav.ts
+  s_38a0c0cab419cb::t_228f7885b61aaf 1-47
+desk/src/lib/needs-pure.ts
+  s_38a0c0cab419cb::t_fd95fecee2b1fe 1-10
+desk/src/lib/needs.test.ts
+  s_38a0c0cab419cb::t_0511d1a1967567 1-15
+desk/src/lib/needs.ts
+  s_38a0c0cab419cb::t_879cf1a7b28b1f 1-17
+desk/src/lib/operating.test.ts
+  s_38a0c0cab419cb::t_9efd7e385d112d 1-118
+desk/src/lib/operating.ts
+  s_38a0c0cab419cb::t_cf17f23d308523 1-197
+desk/src/lib/pipeline.test.ts
+  s_38a0c0cab419cb::t_42eba688ebc5ae 1-66
+desk/src/lib/pipeline.ts
+  s_38a0c0cab419cb::t_9d846f446cbbca 1-77
+desk/src/lib/pwa-sw.test.ts
+  s_38a0c0cab419cb::t_60d2721795e417 1-27
+desk/src/lib/pwa.ts
+  s_38a0c0cab419cb::t_7694948f9f4f56 1-15
+desk/src/lib/ready.test.ts
+  s_38a0c0cab419cb::t_19ff49b4fc187b 1-22
+desk/src/lib/ready.ts
+  s_38a0c0cab419cb::t_1c605e780d63e3 1-23
+desk/src/lib/reconciler.contract.json
+  s_38a0c0cab419cb::t_f1b9adf6d90d9f 1-193
+desk/src/lib/reconciler.contract.test.ts
+  s_38a0c0cab419cb::t_a79add9945c46d 1-56
+desk/src/lib/reconciler.test.ts
+  s_38a0c0cab419cb::t_627969efa2daae 1-167
+desk/src/lib/reconciler.ts
+  s_38a0c0cab419cb::t_7ab5e66c287b5b 1-93
+desk/src/lib/refresh.test.ts
+  s_38a0c0cab419cb::t_5628dcb5cd1038 1-20
+desk/src/lib/refresh.ts
+  s_38a0c0cab419cb::t_e5dabebeac26f1 1-21
+desk/src/lib/return-focus.ts
+  s_38a0c0cab419cb::t_7602d9bf1e8074 1-14
+desk/src/lib/rows.test.ts
+  s_38a0c0cab419cb::t_2829a51c8fdf93 1-248
+desk/src/lib/rows.ts
+  s_38a0c0cab419cb::t_c1758d6a0ed9ae 1-18
+desk/src/lib/simplify.test.ts
+  s_38a0c0cab419cb::t_cd01b214b13c2e 1-77
+desk/src/lib/task-story.test.ts
+  s_38a0c0cab419cb::t_ad0042586282f0 1-54
+desk/src/lib/task-story.ts
+  s_38a0c0cab419cb::t_1fb066157c493f 1-111
+desk/src/lib/theme.ts
+  s_38a0c0cab419cb::t_d41d82b6b27438 1-41
+desk/src/lib/trend-access.test.ts
+  s_38a0c0cab419cb::t_98c47f235f282a 1-19
+desk/src/lib/trend-access.ts
+  s_38a0c0cab419cb::t_7cbad9ade4aa33 1-24
+desk/src/lib/use-reasons.ts
+  s_38a0c0cab419cb::t_2485e3c3dc0f4b 1-35
+desk/src/lib/utils.ts
+  s_38a0c0cab419cb::t_0cccea36a43df0 1
+desk/src/lib/validate.test.ts
+  s_38a0c0cab419cb::t_361324c5c55034 1-90
+desk/src/lib/validate.ts
+  s_38a0c0cab419cb::t_070fd07ad8fb8b 1-73
+desk/src/lib/watchdog.test.ts
+  s_38a0c0cab419cb::t_1e091fe88ff7be 1-16
+desk/src/lib/watchdog.ts
+  s_38a0c0cab419cb::t_874c630e668ab8 1-13
+desk/src/lib/work-groups.test.ts
+  s_38a0c0cab419cb::t_8f50232e8e2a7c 1-28
+desk/src/lib/work-groups.ts
+  s_38a0c0cab419cb::t_da8e656540dc9d 1-28
+desk/src/main.tsx
+  s_38a0c0cab419cb::t_18009e7bb911a5 1-14
+desk/src/pages/agents.tsx
+  s_38a0c0cab419cb::t_5c9505a934281e 1-155
+desk/src/pages/approvals.tsx
+  s_38a0c0cab419cb::t_4fdb20b2e38640 1-96
+desk/src/pages/automation.tsx
+  s_38a0c0cab419cb::t_3069335ccdf71b 1-234
+desk/src/pages/control.tsx
+  s_38a0c0cab419cb::t_bdbec919b8cd7c 1-37
+desk/src/pages/finance.tsx
+  s_38a0c0cab419cb::t_3f5fad66645ac7 1-121
+desk/src/pages/growth.tsx
+  s_38a0c0cab419cb::t_4435aa5d74c6be 1-157
+desk/src/pages/memory.tsx
+  s_38a0c0cab419cb::t_f51ff02efdd19c 1-110
+desk/src/pages/overview.tsx
+  s_38a0c0cab419cb::t_2ca32359f162b6 1-151
+desk/src/pages/projects.tsx
+  s_38a0c0cab419cb::t_9105c56dc6b16a 1-274
+desk/src/pages/system.tsx
+  s_38a0c0cab419cb::t_bb32aae663962b 1-283
+desk/src/pages/tasks.tsx
+  s_38a0c0cab419cb::t_7755e120504d54 1-277
+desk/src/state.tsx
+  s_38a0c0cab419cb::t_d725482bb20004 1-340
+desk/tsconfig.app.json
+  s_38a0c0cab419cb::t_c0b4a72f810ba5 1-28
+desk/tsconfig.json
+  s_38a0c0cab419cb::t_f26c049ccdb209 1-18
+desk/tsconfig.node.json
+  s_38a0c0cab419cb::t_5d70bbce5958c8 1-23
+desk/vite.config.ts
+  s_38a0c0cab419cb::t_5483d2244121c8 1-31
+docker-compose.yml
+  s_38a0c0cab419cb::t_d03ce95ebdda42 1-337
+docs/AGENT_EXECUTION.md
+  s_38a0c0cab419cb::t_df60b7d9e13923 1-398
+docs/APPROVAL_IDENTITY.md
+  s_38a0c0cab419cb::t_3a025888d89408 1-147
+docs/AUTONOMOUS_AGENT_ARCHITECTURE.md
+  s_38a0c0cab419cb::t_3518681e5261cf 1-306
+docs/CODER_DIFF_IMPORT.md
+  s_38a0c0cab419cb::t_c378812754002a 1-55
+docs/CODER_RUNTIME.md
+  s_38a0c0cab419cb::t_8b35aa12be911a 1-401
+docs/CODER_SANDBOX_PROOF.md
+  s_38a0c0cab419cb::t_b8e0291649996e 1-65
+docs/CODER_SOURCE_EXPORT.md
+  s_38a0c0cab419cb::t_32d6a035e30ca5 1-75
+docs/CONSTITUTION_REFERENCE.md
+  s_38a0c0cab419cb::t_71e77b8c6ebc5e 1-1459
+docs/EXPERIMENT_ENGINE.md
+  s_38a0c0cab419cb::t_a7354c445aa09a 1-134
+docs/EXPERIMENT_SCHEDULER.md
+  s_38a0c0cab419cb::t_84d2a2cf2c2e24 1-173
+docs/GIT_WORKFLOW.md
+  s_38a0c0cab419cb::t_b940cef0dff42e 1-89
+docs/GOAL_EVIDENCE_CONTRACT.md
+  s_38a0c0cab419cb::t_e6c0a0423f19d5 1-91
+docs/PERMANENT_FACTS.md
+  s_38a0c0cab419cb::t_25ec4198418825 1-22
+docs/REPOSITORY_GUARDIAN.md
+  s_38a0c0cab419cb::t_ba42360dfd991b 1-161
+docs/runbooks/deploy-authorization.md
+  s_38a0c0cab419cb::t_6b6c9dbc725eeb 1-104
+docs/security/RELEASE_GATEWAY.md
+  s_38a0c0cab419cb::t_8fe2d910085506 1-300
+docs/security/THREAT_MODEL.md
+  s_38a0c0cab419cb::t_9e79b80ed6faf3 1-82
+evals/conftest.py
+  s_38a0c0cab419cb::t_95a2fdea9cf352 1-5
+evals/live/injection_eval.py
+  s_38a0c0cab419cb::t_4310f29f058ef9 1-55
+evals/test_ceo_router_evals.py
+  s_38a0c0cab419cb::t_4f7bd8147962ab 1-47
+evals/test_stage_c_runner_evals.py
+  s_38a0c0cab419cb::t_69b24f02f636c6 1-527
+evals/test_supervisor_evals.py
+  s_38a0c0cab419cb::t_c1132f7dbbab7c 1-43
+evals/test_trust_evals.py
+  s_38a0c0cab419cb::t_4d409d84fdeb97 1-51
+evals/test_worker_gate_evals.py
+  s_38a0c0cab419cb::t_defd4cc0014bd1 1-62
+migrations/env.py
+  s_38a0c0cab419cb::t_7024a37212dde7 1-43
+migrations/script.py.mako
+  s_38a0c0cab419cb::t_078f65a77bd3aa 1-24
+migrations/versions/a3c9e1f4b6d8_metric_observation_history.py
+  s_38a0c0cab419cb::t_983932e118d9c7 1-37
+migrations/versions/a7654d27f2e0_foundation_company_state_tasks_events_.py
+  s_38a0c0cab419cb::t_5115583d7f0ec8 1-390
+migrations/versions/b4f8a2d6c1e9_experiments.py
+  s_38a0c0cab419cb::t_08582c31697504 1-91
+migrations/versions/b8e41d0c7a52_open_work_unique_indexes.py
+  s_38a0c0cab419cb::t_7f06a70a0728ca 1-40
+migrations/versions/c304f9d92b7a_agent_execution_control_state.py
+  s_38a0c0cab419cb::t_51d7969fdb10e6 1-31
+migrations/versions/c7d2e8a4f1b3_learning_status.py
+  s_38a0c0cab419cb::t_f5012040fab0c5 1-32
+migrations/versions/d2f7a91c4e30_metric_observations.py
+  s_38a0c0cab419cb::t_ea614f9e6eaf02 1-46
+migrations/versions/d4e8c2a7b9f1_learning_default_candidate.py
+  s_38a0c0cab419cb::t_88f018fb9201ca 1-27
+migrations/versions/e5a1c3b7d9f2_goal_metric_selector.py
+  s_38a0c0cab419cb::t_49361db983e324 1-24
+migrations/versions/e7c3a54d21b0_notification_state.py
+  s_38a0c0cab419cb::t_44f52cb9147889 1-34
+migrations/versions/f1b2e6514e1e_notebook_memory_agent_notes.py
+  s_38a0c0cab419cb::t_3e34028fc48534 1-53
+migrations/versions/f6c8a2d9e410_backup_size_bigint.py
+  s_38a0c0cab419cb::t_80740460dcbd5f 1-28
+ops/company-coder-pause.compose.yml
+  s_38a0c0cab419cb::t_2c195901963564 1-13
+requirements.txt
+  s_38a0c0cab419cb::t_8060cfb1e3abb2 1-14
+scripts/api-auth-setup.sh
+  s_38a0c0cab419cb::t_f6ef03bc96cfad 1-64
+scripts/backup.sh
+  s_38a0c0cab419cb::t_2745fa4dfcd3e2 1-430
+scripts/check-coder-sandbox.py
+  s_38a0c0cab419cb::t_c52ddd25a522e1 1-143
+scripts/check_branch_policy.py
+  s_38a0c0cab419cb::t_51c1d154296bdf 1-51
+scripts/check_docs.py
+  s_38a0c0cab419cb::t_b627b8609f020c 1-132
+scripts/ci-status-gate.py
+  s_38a0c0cab419cb::t_4083220902a33b 1-117
+scripts/coder/allowlist
+  s_38a0c0cab419cb::t_e2814d7ff285e5 1-3
+scripts/coder/tinyproxy.conf
+  s_38a0c0cab419cb::t_9faac026f59e97 1-13
+scripts/company-coder-launch
+  s_38a0c0cab419cb::t_8e4e3a1c74148c 1-503
+scripts/company-dispatch
+  s_38a0c0cab419cb::t_97bb51fa1f97ef 1-124
+scripts/company-os.cron
+  s_38a0c0cab419cb::t_629a9a230c38a0 1-51
+scripts/company-report
+  s_38a0c0cab419cb::t_a1718b10331a45 1-88
+scripts/companyctl
+  s_38a0c0cab419cb::t_cd15531f9fec9a 1-374
+scripts/deploy-authorization.py
+  s_38a0c0cab419cb::t_fb92a9d3db1891 1-45
+scripts/deploy-company-os.sh
+  s_38a0c0cab419cb::t_b3956330835876 1-911
+scripts/deploy-health-gate.sh
+  s_38a0c0cab419cb::t_f5fa84457ed518 1-42
+scripts/deploy-provenance.py
+  s_38a0c0cab419cb::t_4b6340559498b2 1-57
+scripts/deploy-stage-bootstrap.sh
+  s_38a0c0cab419cb::t_45de236d743c06 1-94
+scripts/install-host-cli.sh
+  s_38a0c0cab419cb::t_160448c68e3f05 1-160
+scripts/merge-pr
+  s_38a0c0cab419cb::t_908f3f12af256c 1-346
+scripts/notification-audit.sql
+  s_38a0c0cab419cb::t_3e26164d5fd705 1-45
+scripts/notify.sh
+  s_38a0c0cab419cb::t_0b69ba73427780 1-63
+scripts/r2.py
+  s_38a0c0cab419cb::t_7ec7aa8f1120c3 1-459
+scripts/restore-drill-encrypted.sh
+  s_38a0c0cab419cb::t_11c2ba1c13737f 1-123
+scripts/restore-test.sh
+  s_38a0c0cab419cb::t_c83e6976e2e521 1-186
+scripts/rotate-postgres-password.sh
+  s_38a0c0cab419cb::t_9e10f5139eaec7 1-103
+scripts/seed.py
+  s_38a0c0cab419cb::t_b5a099085335da 1-76
+scripts/stage-c-host-facts.py
+  s_38a0c0cab419cb::t_3b469f69900c0a 1-143
+scripts/stage-c-host-wizard.sh
+  s_38a0c0cab419cb::t_29eb42c91658aa 1-564
+scripts/systemd/company-coder-launch.service
+  s_38a0c0cab419cb::t_efdf8bf38d060f 1-11
+scripts/systemd/company-coder-launch.timer
+  s_38a0c0cab419cb::t_f20317e0c65284 1-15
+scripts/verify-release-permissions.py
+  s_38a0c0cab419cb::t_10dfc5dd2902a3 1-104
+scripts/watchdog.sh
+  s_38a0c0cab419cb::t_636e2462d1de2e 1-155
+skills/ci-debug/SKILL.md
+  s_38a0c0cab419cb::t_a4a917b198584f 1-28
+skills/company-state/SKILL.md
+  s_38a0c0cab419cb::t_c31761c2f411a9 1-17
+skills/git/SKILL.md
+  s_38a0c0cab419cb::t_297ed855c80616 1-26
+skills/market-research/SKILL.md
+  s_38a0c0cab419cb::t_061eea80af3b6a 1-16
+skills/postgres-backup/SKILL.md
+  s_38a0c0cab419cb::t_97525bc955297f 1-21
+skills/repo-inspect/SKILL.md
+  s_38a0c0cab419cb::t_1e753bb03fafa6 1-21
+skills/server-health/SKILL.md
+  s_38a0c0cab419cb::t_087c6ded2aecb8 1-16
+skills/verify-change/SKILL.md
+  s_38a0c0cab419cb::t_8233f80cc17d1b 1-22
+tests/conftest.py
+  s_38a0c0cab419cb::t_11c41e5846b425 1-36
+tests/fixtures/claude-session-limit.txt
+  s_38a0c0cab419cb::t_519efe008927d6 1
+tests/release_host_sim.py
+  s_38a0c0cab419cb::t_572030b5b17a12 1-440
+tests/stage_c_crash_child.py
+  s_38a0c0cab419cb::t_65497b7b7c9d1b 1-203
+tests/test_agent_lifecycle_postgres.py
+  s_38a0c0cab419cb::t_116985d476dc78 1-386
+tests/test_api_auth.py
+  s_38a0c0cab419cb::t_11bab9d6ce3f2a 1-204
+tests/test_api_auth_setup.py
+  s_38a0c0cab419cb::t_03d341332d6172 1-55
+tests/test_approval_identity.py
+  s_38a0c0cab419cb::t_faa83c0b4738dc 1-226
+tests/test_backup_disk_guard.py
+  s_38a0c0cab419cb::t_0ee1f3a76f4240 1-139
+tests/test_backup_encryption.py
+  s_38a0c0cab419cb::t_47b0d410c9eaec 1-128
+tests/test_backup_events.py
+  s_38a0c0cab419cb::t_63217b51f911b6 1-101
+tests/test_backup_prune_local.py
+  s_38a0c0cab419cb::t_4bc5985a03d0f1 1-77
+tests/test_backup_prune_r2.py
+  s_38a0c0cab419cb::t_fc7e27efd53cd3 1-61
+tests/test_backup_size_bigint.py
+  s_38a0c0cab419cb::t_3e9e2ac05455f8 1-99
+tests/test_backup_state.py
+  s_38a0c0cab419cb::t_cc2b91b8465b4b 1-59
+tests/test_branch_policy.py
+  s_38a0c0cab419cb::t_eed7f46a752a6e 1-36
+tests/test_business_reconciler.py
+  s_38a0c0cab419cb::t_6d5eef92315f41 1-482
+tests/test_ci_status_gate.py
+  s_38a0c0cab419cb::t_62d5582970e51b 1-217
+tests/test_ci_usage.py
+  s_38a0c0cab419cb::t_5ddeb44f08d336 1-292
+tests/test_cloudflare_access.py
+  s_38a0c0cab419cb::t_92af3cfb7ad8bd 1-141
+tests/test_coder_diff.py
+  s_38a0c0cab419cb::t_a121804637d095 1-98
+tests/test_coder_launch.py
+  s_38a0c0cab419cb::t_8a093832e2305a 1-574
+tests/test_coder_launch_crash.py
+  s_38a0c0cab419cb::t_6fa7862346d09a 1-94
+tests/test_coder_launch_pause.py
+  s_38a0c0cab419cb::t_77ce984f2f6a86 1-206
+tests/test_coder_launch_pause_postgres.py
+  s_38a0c0cab419cb::t_f3399ac69e0d92 1-81
+tests/test_coder_pause_fence.py
+  s_38a0c0cab419cb::t_2372e01a1775c1 1-113
+tests/test_coder_sandbox_probe.py
+  s_38a0c0cab419cb::t_f236a0d60c7fd7 1-49
+tests/test_coder_source.py
+  s_38a0c0cab419cb::t_ca2643b1f01765 1-147
+tests/test_company_dispatch_script.py
+  s_38a0c0cab419cb::t_bd50affb528d44 1-42
+tests/test_companyctl_snapshot.py
+  s_38a0c0cab419cb::t_14aea61a1aae77 1-37
+tests/test_context_builder.py
+  s_38a0c0cab419cb::t_8b7094a7241072 1-148
+tests/test_dependency_release.py
+  s_38a0c0cab419cb::t_63b7ac40238acb 1-89
+tests/test_deploy_authorization.py
+  s_38a0c0cab419cb::t_5f4103969b5b45 1-881
+tests/test_deploy_fence_and_rollback_anchor.py
+  s_38a0c0cab419cb::t_d93f09b32da5b4 1-415
+tests/test_deploy_health_gate.py
+  s_38a0c0cab419cb::t_820a74f3cce8a9 1-55
+tests/test_deploy_interlock.py
+  s_38a0c0cab419cb::t_b47b2e1d1ca642 1-47
+tests/test_deploy_provenance.py
+  s_38a0c0cab419cb::t_0f77b7ab37de14 1-50
+tests/test_desk_overview.py
+  s_38a0c0cab419cb::t_e921dcd7baadb8 1-138
+tests/test_desk_stream.py
+  s_38a0c0cab419cb::t_47c634d7f6e5bb 1-114
+tests/test_desk_stream_postgres.py
+  s_38a0c0cab419cb::t_42c6e331e7dc79 1-63
+tests/test_dispatch.py
+  s_38a0c0cab419cb::t_f431b71c1d0a2e 1-220
+tests/test_docs_checks.py
+  s_38a0c0cab419cb::t_f3563dd9381533 1-88
+tests/test_enums.py
+  s_38a0c0cab419cb::t_9326e14f6f1311 1-26
+tests/test_event_router.py
+  s_38a0c0cab419cb::t_4faceab6fa5a7c 1-274
+tests/test_experiment_integrity.py
+  s_38a0c0cab419cb::t_1ca4d52dd9a9cd 1-439
+tests/test_experiment_scheduler.py
+  s_38a0c0cab419cb::t_b4fbb5b7d560ac 1-706
+tests/test_experiment_scheduler_postgres.py
+  s_38a0c0cab419cb::t_247e4edde15c5f 1-515
+tests/test_experiments.py
+  s_38a0c0cab419cb::t_c3204ff47d0bc9 1-291
+tests/test_experiments_postgres.py
+  s_38a0c0cab419cb::t_26fa425b37726f 1-193
+tests/test_external_release.py
+  s_38a0c0cab419cb::t_fdd3066d4c6276 1-286
+tests/test_external_release_postgres.py
+  s_38a0c0cab419cb::t_fe9eb93de0d2a4 1-679
+tests/test_founder_authorization.py
+  s_38a0c0cab419cb::t_889e9c70788259 1-479
+tests/test_founder_desk.py
+  s_38a0c0cab419cb::t_573d8a91e1d95a 1-692
+tests/test_founder_gates.py
+  s_38a0c0cab419cb::t_60a9b105bc9fff 1-195
+tests/test_goal_evidence.py
+  s_38a0c0cab419cb::t_faa4107174e070 1-165
+tests/test_goals.py
+  s_38a0c0cab419cb::t_cad1314b7b5e50 1-225
+tests/test_host_cli_release_sync.py
+  s_38a0c0cab419cb::t_14cd65d9176bcf 1-458
+tests/test_host_notify.py
+  s_38a0c0cab419cb::t_1a635444228f37 1-88
+tests/test_keys.py
+  s_38a0c0cab419cb::t_5714e7b944bacb 1-99
+tests/test_learning_status.py
+  s_38a0c0cab419cb::t_36bb98cf42aa0c 1-84
+tests/test_liveness.py
+  s_38a0c0cab419cb::t_cc57328213bd71 1-136
+tests/test_main_guard.py
+  s_38a0c0cab419cb::t_183ada19549094 1-102
+tests/test_merge_authorization.py
+  s_38a0c0cab419cb::t_ee1adcb5c91871 1-244
+tests/test_merge_pr.py
+  s_38a0c0cab419cb::t_88160765f50471 1-738
+tests/test_metrics.py
+  s_38a0c0cab419cb::t_2ece5a2639658f 1-299
+tests/test_needs_you.py
+  s_38a0c0cab419cb::t_0a09b876297014 1-100
+tests/test_notebook.py
+  s_38a0c0cab419cb::t_0f09f402e7defb 1-175
+tests/test_notify.py
+  s_38a0c0cab419cb::t_d8cefff3b1a290 1-1057
+tests/test_open_work_postgres.py
+  s_38a0c0cab419cb::t_a18e647c7ca80c 1-444
+tests/test_ops_acceptance_restore_alerting.py
+  s_38a0c0cab419cb::t_f0db448b9f9436 1-108
+tests/test_outer_loop.py
+  s_38a0c0cab419cb::t_9d2e28548c832d 1-58
+tests/test_packaging.py
+  s_38a0c0cab419cb::t_99fedd07a0bda4 1-136
+tests/test_polar_metrics.py
+  s_38a0c0cab419cb::t_cc14a07270439f 1-306
+tests/test_project_profiles.py
+  s_38a0c0cab419cb::t_a70c31458b6261 1-104
+tests/test_prowler_workflow.py
+  s_38a0c0cab419cb::t_1a0f63594d48bc 1-23
+tests/test_pwa_assets.py
+  s_38a0c0cab419cb::t_71d8d97ad2dcd0 1-54
+tests/test_r2_prune.py
+  s_38a0c0cab419cb::t_48a9b677258c4b 1-44
+tests/test_r2_stream_tar.py
+  s_38a0c0cab419cb::t_0bd6278a9d7394 1-189
+tests/test_r2_verify_restore.py
+  s_38a0c0cab419cb::t_355e742142bc1e 1-140
+tests/test_r2_verify_stream.py
+  s_38a0c0cab419cb::t_f61587c2fc96e4 1-155
+tests/test_ready_guard_findings_postgres.py
+  s_38a0c0cab419cb::t_01fedf48d26088 1-210
+tests/test_reasoner.py
+  s_38a0c0cab419cb::t_aff7553429a034 1-136
+tests/test_reconciler_heartbeat.py
+  s_38a0c0cab419cb::t_adfc145656641a 1-565
+tests/test_registry.py
+  s_38a0c0cab419cb::t_03c09b4ce48c68 1-173
+tests/test_release_acceptance.py
+  s_38a0c0cab419cb::t_dadbf8905f0c72 1-647
+tests/test_release_archive_permissions.py
+  s_38a0c0cab419cb::t_d14f385be2e6b2 1-173
+tests/test_release_gateway.py
+  s_38a0c0cab419cb::t_b0dfd1d8d01034 1-1153
+tests/test_release_gateway_service.py
+  s_38a0c0cab419cb::t_04893ed2181f66 1-416
+tests/test_release_host.py
+  s_38a0c0cab419cb::t_e083dff1383817 1-1252
+tests/test_release_host_hardening.py
+  s_38a0c0cab419cb::t_ce913b34e76886 1-508
+tests/test_release_review_diff_limit.py
+  s_38a0c0cab419cb::t_668f3fa38a0f9e 1-23
+tests/test_repo_guardian.py
+  s_38a0c0cab419cb::t_0b1bd84573f02e 1-212
+tests/test_repo_guardian_github.py
+  s_38a0c0cab419cb::t_c42fb6c3e6e69d 1-256
+tests/test_restore_drill.py
+  s_38a0c0cab419cb::t_161bb28323c279 1-163
+tests/test_restore_test.py
+  s_38a0c0cab419cb::t_cc44092a6dfe63 1-235
+tests/test_review_signer.py
+  s_38a0c0cab419cb::t_5fc52e579839c0 1-292
+tests/test_run_report_terminal_guard.py
+  s_38a0c0cab419cb::t_03e167d33e5e5f 1-197
+tests/test_runreport.py
+  s_38a0c0cab419cb::t_dd944b9a358b4c 1-135
+tests/test_secret_scan_workflow.py
+  s_38a0c0cab419cb::t_a7d5999eb422df 1-20
+tests/test_security_scan_workflows.py
+  s_38a0c0cab419cb::t_06b8ed90d1a611 1-93
+tests/test_seerxo_funnel.py
+  s_38a0c0cab419cb::t_78547ea2a77cb6 1-325
+tests/test_stage_c.py
+  s_38a0c0cab419cb::t_1f487f47c308b4 1-135
+tests/test_stage_c_authorize_cli.py
+  s_38a0c0cab419cb::t_e996aaeb379e28 1-144
+tests/test_stage_c_ci.py
+  s_38a0c0cab419cb::t_218e46581da87e 1-819
+tests/test_stage_c_ci_postgres.py
+  s_38a0c0cab419cb::t_5159ab5abe0db3 1-86
+tests/test_stage_c_cleanup.py
+  s_38a0c0cab419cb::t_eb096acb6a6165 1-487
+tests/test_stage_c_crash_recovery_postgres.py
+  s_38a0c0cab419cb::t_86f405035ed15e 1-224
+tests/test_stage_c_deploy_interlock.py
+  s_38a0c0cab419cb::t_03c7b192a5c36a 1-57
+tests/test_stage_c_founder_boundary.py
+  s_38a0c0cab419cb::t_f9e9931b7c92f9 1-304
+tests/test_stage_c_host_wizard.py
+  s_38a0c0cab419cb::t_a9733bd5785b07 1-129
+tests/test_stage_c_merge_gate.py
+  s_38a0c0cab419cb::t_90162c7213b69f 1-200
+tests/test_stage_c_merge_gate_postgres.py
+  s_38a0c0cab419cb::t_ec1fce6ca57f87 1-108
+tests/test_stage_c_pr_delivery.py
+  s_38a0c0cab419cb::t_5f01334b75c6eb 1-128
+tests/test_stage_c_preflight.py
+  s_38a0c0cab419cb::t_13d821b6c6b084 1-602
+tests/test_stage_c_publication_reconcile.py
+  s_38a0c0cab419cb::t_93b02461c92842 1-232
+tests/test_stage_c_standing.py
+  s_38a0c0cab419cb::t_6aa1b4b78c7d0a 1-248
+tests/test_stage_c_verify.py
+  s_38a0c0cab419cb::t_7ad9047f9e97a9 1-300
+tests/test_stage_c_worker.py
+  s_38a0c0cab419cb::t_6fc211ab23ac68 1-1988
+tests/test_stage_c_worker_postgres.py
+  s_38a0c0cab419cb::t_283b801e1d3284 1-290
+tests/test_staged_transport.py
+  s_38a0c0cab419cb::t_7eab567dc826ac 1-309
+tests/test_task_materializer.py
+  s_38a0c0cab419cb::t_c3d5e36f311189 1-379
+tests/test_task_policy.py
+  s_38a0c0cab419cb::t_f49fc58dab59c2 1-53
+tests/test_task_ready_guard.py
+  s_38a0c0cab419cb::t_a0ddb9175ea799 1-313
+tests/test_task_review_transition.py
+  s_38a0c0cab419cb::t_84af97de6ed6d2 1-71
+tests/test_task_terminal_reopen.py
+  s_38a0c0cab419cb::t_bad5705428be6e 1-117
+tests/test_trust_boundary.py
+  s_38a0c0cab419cb::t_ff824a832339b5 1-205
+tests/test_watchdog.py
+  s_38a0c0cab419cb::t_99775d3930975d 1-952
+tests/test_watchdog_exit_code.py
+  s_38a0c0cab419cb::t_4be99955a124ec 1-40
+tests/test_watchdog_publish_age.py
+  s_38a0c0cab419cb::t_754109b3a847ae 1-48
+tests/test_webhook_mapping.py
+  s_38a0c0cab419cb::t_89908614dcb220 1-32
+tests/test_worker.py
+  s_38a0c0cab419cb::t_3d4e0f4bb7292a 1-691
+tests/test_worker_claim_recovery.py
+  s_38a0c0cab419cb::t_e019e1b5f1fddf 1-106
+tests/test_worker_crash_recovery_postgres.py
+  s_38a0c0cab419cb::t_215fb775c1a154 1-289
+tests/test_worker_owner_change.py
+  s_38a0c0cab419cb::t_fbca2352aa6d85 1-143
+tests/test_worker_owner_change_postgres.py
+  s_38a0c0cab419cb::t_ad49872dcf7f56 1-96
+tests/test_worker_ownership_closeout.py
+  s_38a0c0cab419cb::t_597a56b5cad4de 1-103
+tests/test_worker_ownership_postgres.py
+  s_38a0c0cab419cb::t_1993aee6e1790e 1-311
+tests/test_worker_project_scope.py
+  s_38a0c0cab419cb::t_5617ec8bb638fd 1-93
+tests/test_worker_queue_capacity.py
+  s_38a0c0cab419cb::t_efc4f09d6550e8 1-143
+tests/test_worker_result_recovery.py
+  s_38a0c0cab419cb::t_70dc480f0bbcd5 1-268
+tests/worker_crash_child.py
+  s_38a0c0cab419cb::t_8c8210f69ed455 1-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "16083a7d44fd3412241a6e45c7adc14cdae9cda5",
+  "prompts": {},
+  "sessions": {
+    "s_38a0c0cab419cb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1755d-8ff8-7501-8d22-3aef42f808cc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Seerxo <noreply@seerxo.invalid>"
+    }
+  }
+}
