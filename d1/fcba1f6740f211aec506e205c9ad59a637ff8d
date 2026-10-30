@@ -1,0 +1,24 @@
+docs/security/RELEASE_GATEWAY.md
+  s_07d53edd702b05::t_6c930e50b56c0c 322-324
+app/release_gateway.py
+  s_07d53edd702b05::t_67cb258e7e771b 647-649
+  s_07d53edd702b05::t_d9719a086a10da 616-617
+tests/test_release_gateway.py
+  s_07d53edd702b05::t_6c930e50b56c0c 1176-1177
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d1fcba1f6740f211aec506e205c9ad59a637ff8d",
+  "prompts": {},
+  "sessions": {
+    "s_07d53edd702b05": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a18e28-c85a-7833-8833-f2639310dc4b",
+        "model": "gpt-6-luna"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
