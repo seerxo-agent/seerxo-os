@@ -1,0 +1,41 @@
+docs/GIT_WORKFLOW.md
+  s_49f980f26e310f::t_b161270d8737b3 5-6
+docs/PERMANENT_FACTS.md
+  s_49f980f26e310f::t_60ebbb7a44568c 12-15
+docs/operations/DECISIONS.md
+  s_49f980f26e310f::t_df8d1427a31200 14-16
+tests/fixtures/ci_snapshot/README.md
+  s_49f980f26e310f::t_d7324f49f27414 1-4
+tests/fixtures/ci_snapshot/ci.yml
+  s_49f980f26e310f::t_c874e9a41f7549 1-129
+tests/fixtures/ci_snapshot/dependency-scan.yml
+  s_49f980f26e310f::t_39e7eeea68af87 1-99
+tests/fixtures/ci_snapshot/frontend.yml
+  s_49f980f26e310f::t_cc05abbb179d12 1-45
+tests/fixtures/ci_snapshot/prowler.yml
+  s_49f980f26e310f::t_0c0d431d079d16 1-40
+tests/fixtures/ci_snapshot/python-tests.yml
+  s_49f980f26e310f::t_bcf0852f781703 1-98
+tests/fixtures/ci_snapshot/secret-scan.yml
+  s_49f980f26e310f::t_5164c49f2a860c 1-33
+tests/fixtures/ci_snapshot/workflow-lint.yml
+  s_49f980f26e310f::t_8d2215fb6c61cb 1-46
+tests/test_ci_snapshot.py
+  s_49f980f26e310f::t_7a948dfbed9724 1-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "268030834f8464757d3b1adcdb27956038b3741d",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
