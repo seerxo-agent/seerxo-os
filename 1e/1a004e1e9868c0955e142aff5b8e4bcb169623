@@ -1,0 +1,19 @@
+docker-compose.yml
+  s_49f980f26e310f::t_0817047eab6e13 341
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1e1a004e1e9868c0955e142aff5b8e4bcb169623",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
