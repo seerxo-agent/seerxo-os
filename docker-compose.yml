@@ -338,4 +338,3 @@ networks:
   review-net:
     name: company-review-net
     internal: true
-x-bound-images: {inputs_sha256: '722990ff943dd2bd7eb0481d44fa24023420e7a4668c990be72c5df6c034e990', api: 'sha256:b0fefd77e5a23f4cfcaae8d1d0020b0ae75b52991da01cee577583952d2a4c16', worker: 'sha256:3b2caac866fa48a6bdb89469633c7cb3fd7113c130d994c11038d7ddd39f6d78', reasoner: 'sha256:2d12778e8c3e3ea01e728af3798bd5a9106500cb75eb23e75a08ddaa518c141a', egress: 'sha256:6fbeb8e75911e22184d8f25c852f3d7e822bf3616a1ab54db957aee29fa54ba2'}
