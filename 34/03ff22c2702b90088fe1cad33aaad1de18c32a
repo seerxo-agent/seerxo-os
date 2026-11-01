@@ -1,0 +1,21 @@
+docs/PERMANENT_FACTS.md
+  s_35bbcce842599b::t_5e8396eed63dc3 19-39
+scripts/HOST_CONTROLS.md
+  s_35bbcce842599b::t_09181e6b67b86a 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3403ff22c2702b90088fe1cad33aaad1de18c32a",
+  "prompts": {},
+  "sessions": {
+    "s_35bbcce842599b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8fd155db-07a7-4b35-bf5d-af1e4378b17c",
+        "model": "unknown"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
