@@ -1,0 +1,21 @@
+app/review_signer.py
+  s_49f980f26e310f::t_0f38f4dab62519 24,57,153-156,161
+tests/test_review_signer.py
+  s_49f980f26e310f::t_a684832e4bd340 9,399-433
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "39b78933c88482f09f1eb7569ee31b12b5538366",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
