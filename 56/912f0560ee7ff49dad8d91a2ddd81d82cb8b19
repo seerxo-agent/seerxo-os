@@ -1,0 +1,61 @@
+tests/test_release_host.py
+  s_49f980f26e310f::t_e128d65cc44aad 1594-1595,1597-1598
+  s_49f980f26e310f::t_dfd5ca395b4ae2 1591-1593
+  s_35bbcce842599b::t_17db430b9eeca5 1420,1430,1434,1447,1477,1538,1588-1590,1605,1607,1609
+.bundle-test-8gwiuubx/clone/app/release_gateway.py
+  s_35bbcce842599b::t_2e14b80e057a2e 1-1322
+.bundle-test-8gwiuubx/clone/app/release_gateway_service.py
+  s_35bbcce842599b::t_17a95fff231f79 1-402
+.bundle-test-8gwiuubx/clone/app/release_host.py
+  s_35bbcce842599b::t_f047e652d59f66 1-1033
+.bundle-test-8gwiuubx/clone/app/release_identity.py
+  s_35bbcce842599b::t_aed505eaedba07 1-171
+.bundle-test-8gwiuubx/clone/scripts/deploy-company-os.sh
+  s_35bbcce842599b::t_a20eb609919705 1-1427
+.bundle-test-8gwiuubx/host/app/old.py
+  s_35bbcce842599b::t_31f026ad1169ad 1
+.bundle-test-8gwiuubx/state/ledger/ledger.json
+  s_35bbcce842599b::t_c20c24562d4d6c 1
+README.md
+  s_49f980f26e310f::t_7839d6df5162df 15-16
+docs/GIT_WORKFLOW.md
+  s_49f980f26e310f::t_9a99d33d69f2d9 4
+docs/PERMANENT_FACTS.md
+  s_49f980f26e310f::t_6dc21aaf739536 12-19
+docs/operations/ACTIVE_WORK.md
+  s_49f980f26e310f::t_a5d344d4cee0d7 3-9
+scripts/merge-pr
+  s_49f980f26e310f::t_6ea1ed4e20898d 75-91,250
+tests/test_merge_pr.py
+  s_49f980f26e310f::t_73d8949ec9348a 60-66,355-374
+tests/test_release_gateway.py
+  s_49f980f26e310f::t_6d7d4caf92a829 1193
+tests/test_repository_identity.py
+  s_49f980f26e310f::t_20307edfe04158 9,40-44,48,50-62
+tests/test_stage_c_preflight.py
+  s_49f980f26e310f::t_c3a29753acb9a2 612
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "56912f0560ee7ff49dad8d91a2ddd81d82cb8b19",
+  "prompts": {},
+  "sessions": {
+    "s_35bbcce842599b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8fd155db-07a7-4b35-bf5d-af1e4378b17c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
