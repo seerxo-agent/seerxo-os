@@ -1,0 +1,23 @@
+scripts/compose-bound.sh
+  s_35bbcce842599b::t_8d79170dff505c 161-165
+tests/conftest.py
+  s_35bbcce842599b::t_71bc70adf18b7e 10-12
+tests/test_compose_bound.py
+  s_35bbcce842599b::t_1431c60ccd7c99 338-348
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "69147c001beb10f73ddc7e6cdef5fd44b0959ced",
+  "prompts": {},
+  "sessions": {
+    "s_35bbcce842599b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8fd155db-07a7-4b35-bf5d-af1e4378b17c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
