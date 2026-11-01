@@ -1,69 +1,69 @@
-tests/test_repository_identity.py
-  s_49f980f26e310f::t_366a797b421c97 1-79
-docs/PERMANENT_FACTS.md
-  s_49f980f26e310f::t_286d22801b59b0 12-19
 .github/workflows/python-tests.yml
-  s_49f980f26e310f::t_585d755a5168c9 2
+  s_49f980f26e310f::t_505a30a3bc8cc3 2
 agents/repository_guardian.yaml
-  s_49f980f26e310f::t_50d98e68d844ff 4,9,18,29
+  s_49f980f26e310f::t_cdca36140f822a 4,9,18,29
 agents/stage_c_profiles.yaml
-  s_49f980f26e310f::t_646dacaf7815ff 7
+  s_49f980f26e310f::t_7f273dbe39f67a 7
 app/ci_usage.py
-  s_49f980f26e310f::t_a2b3d79997e0f2 17,30
+  s_49f980f26e310f::t_f57bad22392dbd 17,30
 app/control.py
-  s_49f980f26e310f::t_8610fd7c599443 93
+  s_49f980f26e310f::t_e15739d309cd68 93
 app/main_guard.py
-  s_49f980f26e310f::t_90ff631ca5aab6 1,19,77,82,109
+  s_49f980f26e310f::t_c21836d66a3d8a 1,19,77,82,109
 app/stage_c_ci.py
-  s_49f980f26e310f::t_d1e90ae3820f60 483
+  s_49f980f26e310f::t_249d9806e3e48f 483
 app/stage_c_credential_boundary.py
-  s_49f980f26e310f::t_7d6c0a85d5b225 18
+  s_49f980f26e310f::t_b19d42e80c1df0 18
 app/stage_c_merge_gate.py
-  s_49f980f26e310f::t_8525b97beff286 14
+  s_49f980f26e310f::t_a26fe14771967d 14
 app/stage_c_runner.py
-  s_49f980f26e310f::t_ca10a5d37a5209 50
+  s_49f980f26e310f::t_94a01a183fb047 50
 app/stage_c_worker.py
-  s_49f980f26e310f::t_cbb484ac401c46 19
+  s_49f980f26e310f::t_49504b56af09c7 19
 docker-compose.yml
-  s_49f980f26e310f::t_efc6710cb81ff7 76
+  s_49f980f26e310f::t_c5aabae84dc9d4 76
 scripts/company-os.cron
-  s_49f980f26e310f::t_108768dd453621 39
+  s_49f980f26e310f::t_a4b43137734464 39
 scripts/merge-pr
-  s_49f980f26e310f::t_62115c7dee8c8e 75,234
+  s_49f980f26e310f::t_037327e8d27f92 75,234
 scripts/stage-c-host-wizard.sh
-  s_49f980f26e310f::t_b1f98b8e08d359 330
+  s_49f980f26e310f::t_c834ff31543469 330
 tests/fixtures/ci_snapshot/python-tests.yml
-  s_49f980f26e310f::t_b5d5fcc05b72e8 2
+  s_49f980f26e310f::t_facc4dddbf56fc 2
 tests/stage_c_crash_child.py
-  s_49f980f26e310f::t_fa095e429c7845 30,193
+  s_49f980f26e310f::t_01dcabc0764d96 30,193
 tests/test_ci_usage.py
-  s_49f980f26e310f::t_d05118a32cff86 200
+  s_49f980f26e310f::t_78f6a212d3f6b1 200
 tests/test_merge_pr.py
-  s_49f980f26e310f::t_803c09e374df65 20,23,57,339,342,457,468,477,485,499,507,515,523,531,572,574,637-638,650,720,726,728,730-732
+  s_49f980f26e310f::t_a638e6bf323f5b 20,23,57,339,342,457,468,477,485,499,507,515,523,531,572,574,637-638,650,720,726,728,730-732
 tests/test_project_profiles.py
-  s_49f980f26e310f::t_e4eaa38a54032e 9
+  s_49f980f26e310f::t_2412cf4bf28053 9
 tests/test_release_gateway.py
-  s_49f980f26e310f::t_a02e04bf7292b1 1193
+  s_49f980f26e310f::t_2dd08845bf4cae 1193
 tests/test_release_host.py
-  s_49f980f26e310f::t_94e5105130a07f 1420,1430,1434,1447,1477,1538,1588-1591,1597,1599,1601
+  s_49f980f26e310f::t_b8ce815619eb66 1420,1430,1434,1447,1477,1538,1588-1591,1597,1599,1601
 tests/test_repo_guardian_github.py
-  s_49f980f26e310f::t_26266e35c0f1d6 8,111,137,227-228,230-234,243,247-248
+  s_49f980f26e310f::t_a0028d57508127 8,111,137,227-228,230-234,243,247-248
 tests/test_stage_c_authorize_cli.py
-  s_49f980f26e310f::t_1c2f7adff4b99b 101
+  s_49f980f26e310f::t_33426a05364781 101
 tests/test_stage_c_founder_boundary.py
-  s_49f980f26e310f::t_9da12911d5cf71 241,243,248,264,271,273-274,276,294
+  s_49f980f26e310f::t_f181fa4dd77419 241,243,248,264,271,273-274,276,294
 tests/test_stage_c_preflight.py
-  s_49f980f26e310f::t_0b178f295c7de4 33,55-56,64,97-98,263,267,270,523,529,543,546,610,612-613
+  s_49f980f26e310f::t_851e11a827c25e 33,55-56,64,97-98,263,267,270,523,529,543,546,610,612-613
 tests/test_stage_c_publication_reconcile.py
-  s_49f980f26e310f::t_3bc1bf274bb2b3 15,36,57,77,84,181,208,220
+  s_49f980f26e310f::t_4811226c98e33a 15,36,57,77,84,181,208,220
 tests/test_stage_c_standing.py
-  s_49f980f26e310f::t_8a05740b25ddf1 88
+  s_49f980f26e310f::t_8d2c50553dfbbd 88
 tests/test_stage_c_worker.py
-  s_49f980f26e310f::t_3eaf526da3a29f 18,39,208,275,314,380,396,417,746,887,979,1149,1475,1597,1974,1979,1987-1988,1995-1999,2036,2049-2050
+  s_49f980f26e310f::t_e65438b4fb0e2a 18,39,208,275,314,380,396,417,746,887,979,1149,1475,1597,1974,1979,1987-1988,1995-1999,2036,2049-2050
 tests/test_task_materializer.py
-  s_49f980f26e310f::t_d303077e480041 115,121
+  s_49f980f26e310f::t_59c3284d4a5a32 115,121
 tests/test_task_ready_guard.py
-  s_49f980f26e310f::t_76389cb88f6632 28,134,200-201
+  s_49f980f26e310f::t_28d7415857ac60 28,134,200-201
+tests/test_repository_identity.py
+  s_49f980f26e310f::t_7f714eaaea9168 1-79
+docs/PERMANENT_FACTS.md
+  s_49f980f26e310f::t_353827e11c2ec1 12-19
 ---
 {
   "schema_version": "authorship/3.0.0",
