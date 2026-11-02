@@ -1,0 +1,23 @@
+app/stage_c_runner.py
+  s_49f980f26e310f::t_dd3891020b464a 402-403,436-439,469-479,508,557-576
+app/stage_c_worker.py
+  s_49f980f26e310f::t_f3fa86d587733c 416-417
+tests/test_stage_c_pr_token.py
+  s_49f980f26e310f::t_cf6ca8272dfb17 67-134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "db0cd6ded34e0376ced7d11e9aef27e77440acce",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
