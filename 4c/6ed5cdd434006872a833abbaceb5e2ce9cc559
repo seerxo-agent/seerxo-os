@@ -1,0 +1,25 @@
+docs/APPROVAL_IDENTITY.md
+  s_49f980f26e310f::t_21776f44a5e189 94-96,142-143
+docs/CODER_RUNTIME.md
+  s_49f980f26e310f::t_ea255927e96080 246-249
+tests/test_stage_c_acceptance.py
+  s_49f980f26e310f::t_8b4c4baa12924b 41,44-46,94-105
+tests/test_stage_c_worker.py
+  s_49f980f26e310f::t_771f21797f67ea 889
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4c6ed5cdd434006872a833abbaceb5e2ce9cc559",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
