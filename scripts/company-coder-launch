@@ -19,6 +19,7 @@ exactly these values (load_config refuses anything else; verify_network checks t
 Claude token (root-only, 0600): /etc/company-coder/claude.env, exactly one line
   CLAUDE_CODE_OAUTH_TOKEN=…   (a `claude setup-token` token used by nothing else)
 """
+import base64
 import json
 from contextlib import ExitStack, contextmanager
 import fcntl
@@ -299,18 +300,28 @@ def stage(job: Path, staged: Path, source: str) -> None:
 MAX_STDOUT, MAX_STDERR = 1024 * 1024, 64 * 1024   # bytes kept while draining: the stdout tail, the stderr head
 
 
+class Tail(bytes):
+    """Retained stdout; `dropped` says whether older bytes were discarded (a run of exactly the bound is whole)."""
+    def __new__(cls, data, dropped=False):
+        obj = super().__new__(cls, data)
+        obj.dropped = dropped
+        return obj
+
+
 def bounded_communicate(proc: subprocess.Popen, prompt: bytes, timeout_s: float) -> tuple[bytes, bytes]:
     """Popen.communicate in bounded memory: a test printing forever cannot exhaust the host as root. stdout keeps
     its last MAX_STDOUT bytes (the pytest summary is at the end), stderr its first MAX_STDERR; both drain in chunks
     to EOF. Raises TimeoutExpired like communicate; the caller kills, and EOF then ends the drains."""
-    out, err = bytearray(), bytearray()
+    out, err, dropped = bytearray(), bytearray(), [False]
 
     def drain(stream, buf: bytearray, cap: int, tail: bool) -> None:
         with stream:
             for chunk in iter(lambda: stream.read1(65536), b""):
                 if tail:
                     buf += chunk
-                    del buf[:-cap]
+                    if len(buf) > cap:
+                        dropped[0] = True   # bytes really left the buffer: the output is no longer whole
+                        del buf[:-cap]
                 elif len(buf) < cap:
                     buf += chunk[:cap - len(buf)]
 
@@ -332,7 +343,7 @@ def bounded_communicate(proc: subprocess.Popen, prompt: bytes, timeout_s: float)
         if thread.is_alive():
             raise subprocess.TimeoutExpired(proc.args, timeout_s)
     proc.wait(max(0, deadline - time.monotonic()))
-    return bytes(out), bytes(err)
+    return (Tail(out, dropped[0]), bytes(err))
 
 
 def run_container(argv: list[str], prompt: bytes, timeout_s: int, name: str,
@@ -398,11 +409,97 @@ def run_container(argv: list[str], prompt: bytes, timeout_s: int, name: str,
         stdout, _stderr = streams["output"]
     # Model or test output is untrusted and may be large: only the last line, bounded.
     text = stdout.decode(errors="replace")
-    if len(stdout) >= MAX_STDOUT:
-        text = text.partition("\n")[2]   # the retained tail starts mid-line
-    tail = text.strip().splitlines()[-1:] or [""]
-    return {"exit": proc.returncode, "timed_out": False, "summary": tail[0][:300], "failures": failure_lines(text),
-            "passed_files": passed_files(text)}
+    # Before any line is clipped or filtered: a JWT header anywhere in the retained output withholds the summary and
+    # every failure line, since a wrapped token's payload and signature can survive on lines the clipping keeps.
+    if getattr(stdout, "dropped", len(stdout) > MAX_STDOUT):
+        # Older output was dropped unscanned: nothing from a run that overflowed the bound is returned, and without a
+        # pytest summary the checks fail closed.
+        return {"exit": proc.returncode, "timed_out": False, "summary": OVERFLOWED, "failures": [OVERFLOWED],
+                "passed_files": []}
+    # Also glued (whitespace and pytest `E   ` prefixes removed), so a header wrapped inside its segment reads whole.
+    glued = GLUE.sub("", text)
+    withheld = (has_jose_header(text, token=True) or has_jose_header(glued, token=True)
+                or bool(PRIVATE_KEY.search(text)))
+    masked = mask(text)   # before lines are clipped, so a credential straddling a clip is masked whole
+    tail = (masked.strip().splitlines()[-1:] or [""])[0][:300]
+    failures = failure_lines(masked)
+    if withheld:
+        # A wrapped token or key body could sit on any failure line: they go whole. pytest's own summary line and the
+        # PASSED node ids cannot carry one, so passing evidence survives a printed public header or key marker.
+        failures = [WITHHELD] if failures else []
+        tail = tail if PYTEST_SUMMARY.fullmatch(tail) else WITHHELD
+    return {"exit": proc.returncode, "timed_out": False, "summary": tail, "failures": failures,
+            # Node ids from the unmasked text (key=value masking would hit `tests/test_token_refresh.py`); only a path
+            # that itself carries a credential shape is dropped.
+            "passed_files": [f for f in passed_files(text) if not SHAPES.search(f)]}
+
+
+# pytest's final line: counts of words (passed, failed, subtests passed, ...) and the duration. Spaces between count
+# and words mean no base64 token fragment can read as one.
+PYTEST_SUMMARY = re.compile(r"=* ?(?:\d+ [a-z]{1,20}(?: [a-z]{1,20})?(?:, )?){1,12}(?: in [\d.]+s(?: \([\d:]+\))?)? ?=*")
+
+
+WITHHELD = "[withheld: credential-shaped content]"
+OVERFLOWED = "[withheld: check output exceeded the stdout bound; it could not be scanned whole]"
+PRIVATE_KEY = re.compile(r"PRIVATE KEY(?: BLOCK)?-----|PuTTY-User-Key-File-\d|Private-Lines: \d")   # a PEM/PGP key's body spans lines: withhold all of it
+# The same JWT test as app/stage_c_runner._has_jose_header (this root script imports nothing from the app): a whole
+# base64url segment, anchored and possessive (linear), that decodes to a JSON object with "alg" (RFC 7515).
+JOSE_CANDIDATE = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{8,16384}+=*+(?=\.)")
+# Same string as app/stage_c_runner._CREDENTIAL_SHAPES (kept equal by a test): recognised credentials are masked
+# before the result is written to done/result.json, which the runner's later masking cannot reach.
+CREDENTIAL_SHAPES = '(?-i:(?:(?<![a-z]{2})|(?=sk-ant-[a-z]{3,5}\\d{2}-(?:[a-z0-9_-]{0,40}+[A-Z]){6}))sk-ant-(?:oat|api|ort|sid|admin)\\d{2}-[\\w-]{40,}+)|(?<!\\w)(?:sk-ant-[\\w-]{8,}|github_pat_\\w{8,}|gh[pousr]_\\w{16,}|sk-[\\w-]{16,}|xox[abprs]-[\\w-]{8,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)'
+KV_BASE = '|(?:bearer|token|authorization)\\s*+(?:[:=]\\s*+)?[\\w.~+/=-]{12,}|(?:api[_-]?key|secret|password|passwd|token)[\'\\"]?\\s*+[:=]\\s*+[\'\\"]?[^\\s\'\\"]{6,}'
+ENV_ASSIGN = (
+    r"\b[A-Za-z0-9_]{0,60}?(?i:secret|password|passwd|private_key|api_key|access_key|token)[A-Za-z0-9_]{0,40}+['\"]?+"
+    r"\s*+[:=]\s*+(?!['\"]?+(?i:fixture|example|dummy|placeholder|changeme|fake|xxx|redacted)\b)"
+    r"(?:\"[^\"\n]{4,}+\"|'[^'\n]{4,}+'|[^\s'\",;]{8,}+)"
+    r"|(?i:\b[a-z][a-z0-9+.-]{0,30}+)://[^@/\s:{}$<>%?#]*+:[^@/\s{}$<>%?#]++@")
+# As in the runner: the base masking first (leftmost, whole values), then the credential-word second pass.
+SECRETS = re.compile(r"(?i)(?:" + CREDENTIAL_SHAPES + KV_BASE + ")")
+SHAPES = re.compile(CREDENTIAL_SHAPES)
+GLUE = re.compile(r"(?m)^E {1,4}+|\s++")
+ENV = re.compile(ENV_ASSIGN)
+
+
+def mask(line: str) -> str:
+    # The runner's order: URL userinfo first, so a password holding "token=" is masked as userinfo, whole.
+    return ENV.sub("***", SECRETS.sub("***", re.sub(r"://[^@/\s]+@", "://***@", line)))
+
+
+# After a header's dot, a payload character on the same line or (wrapped) at the start of the next: a public header
+# printed by a test (`eyJ...9.`) is not a token, and passing output is not withheld for it.
+TOKEN_REST = re.compile(r"\.(?:\r?\n(?:E {1,4}+)?[ \t]*+)?[A-Za-z0-9_-]")
+
+
+def has_jose_header(text: str, token: bool = False) -> bool:
+    seen = set()
+    for match in JOSE_CANDIDATE.finditer(text):
+        if token and not TOKEN_REST.match(text, match.end()):
+            continue
+        whole = match.group(0).rstrip("=")
+        # `{` encodes to `e`: characters glued before the header (`log_eyJ...`) are skipped by retrying at each of the
+        # first 8 `e` within 64 characters (bounded, as in the runner).
+        for i in [0] + [i for i in range(1, min(64, len(whole))) if whole[i] == "e"][:8]:
+            if decodes_to_jose(whole[i:], seen):
+                return True
+    return False
+
+
+def decodes_to_jose(segment: str, seen: set) -> bool:
+    if segment in seen:
+        return False
+    seen.add(segment)
+    try:
+        raw = base64.urlsafe_b64decode(segment + "=" * (-len(segment) % 4))
+    except ValueError:
+        return False
+    if not raw.lstrip(b" \t\r\n").startswith(b"{"):
+        return False
+    try:
+        header = json.loads(raw)
+    except (ValueError, UnicodeDecodeError):
+        return False
+    return isinstance(header, dict) and "alg" in header   # parsed, so an escaped key (\\u0061lg) counts too
 
 
 PASSED_LINE = re.compile(r"PASSED ([\w./-]+\.py)::")

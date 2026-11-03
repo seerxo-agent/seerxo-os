@@ -66,7 +66,7 @@ def test_reviewer_findings_are_stored_masked(monkeypatch, tmp_path):
     out = worker.run_once(db, _providers(Rejecting), SPECS)
     findings = task.context["improvement"]["history"][-1]["evidence"]["findings"]
     assert out["verdict"] == "REJECTED", out
-    assert len(findings) == 2 and all("***" in f for f in findings)
+    assert findings == [stage_c_runner._WITHHELD]   # a JWT anywhere withholds the whole list
     stored = json.dumps(task.context)
     assert JWT not in stored and "r" * 24 not in stored
 
@@ -154,7 +154,8 @@ def test_a_credential_shaped_added_line_stops_publication(monkeypatch, tmp_path)
     db = _db()
     task = write_task(db)
     out = worker.run_once(db, _providers(), SPECS)
-    assert out["verdict"] == "DRIFT" and task.status == enums.TaskStatus.BLOCKED, out
+    # Stopped before review now (the reviewer never sees it); publish() keeps its own scan as the second line.
+    assert out["verdict"] == "REJECTED", out
     assert hooks["opened"] == []
     assert subprocess.run(["git", "--git-dir", str(remote), "rev-parse", "--verify", "-q", "task/TASK-0100"],
                           capture_output=True).returncode != 0   # nothing pushed
@@ -265,3 +266,247 @@ def test_jwt_scanning_stays_linear_on_hostile_megabyte_inputs(text):
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, previous)
+
+
+@pytest.mark.parametrize("literal", ['(r"{h}."\n+ r"{r}")', '(b"{h}."\n+ b"{r}")', '(f"{h}."\n+ f"{r}")',
+                                     '("{h}." + "{r}")', "'{h}=.' \\\n+ '{r}'"])
+def test_a_jwt_written_as_any_split_literal_is_caught(literal):
+    head, rest = ODD_JWTS[0].split(".", 1)
+    diff = ("diff --git a/t.py b/t.py\n+VALUE = " + literal.format(h=head, r=rest) + "\n").encode()
+    assert stage_c_runner._outgoing_credentials(diff) == ["t.py"]
+
+
+def test_text_holding_a_jwt_header_is_withheld_whole():
+    head, rest = ODD_JWTS[0].split(".", 1)
+    out = stage_c_runner._redact_secrets(f"token={head}.\n{rest}")
+    assert head not in out and rest not in out
+
+
+@pytest.mark.parametrize("name", ["task-repository-guardian", "task-notification-worker-abcdef", "disk-usage-report-abc"])
+def test_ordinary_names_do_not_block_publication(name):
+    diff = f'diff --git a/t.py b/t.py\n+branch = "{name}"\n'.encode()
+    assert stage_c_runner._outgoing_credentials(diff) == []
+
+
+@pytest.mark.parametrize("text", ['" #' * (1 << 18), '"\n"' * (1 << 18), "ghp_" * (1 << 18),
+                                  " " * (1 << 20), "\t \n" * (1 << 18), "token" + " " * (1 << 20), "token:" * (1 << 17),
+                                  "'" + " " * (1 << 20) + "'", "A" * (1 << 20), ("abcdefgh " * (1 << 17))])
+def test_scanning_stays_linear_on_hostile_blank_and_word_runs(text):
+    import time
+    started = time.monotonic()
+    stage_c_runner._redact_secrets(text)
+    stage_c_runner._outgoing_credentials(("diff --git a/t.py b/t.py\n+" + text + "\n").encode())
+    assert time.monotonic() - started < 5
+
+
+def test_a_jwt_wrapped_across_failure_lines_or_findings_is_withheld_whole():
+    head, rest = ODD_JWTS[0].split(".", 1)
+    lines = ["E   AssertionError: bad token " + head + ".", "E   " + rest, "FAILED tests/test_x.py::test_y"]
+    out = stage_c_runner._bounded_failures(lines)
+    assert out == [stage_c_runner._WITHHELD] and rest not in json.dumps(out)
+    assert stage_c_runner._redact_items([f"see {head}.", rest]) == [stage_c_runner._WITHHELD]
+    assert stage_c_runner._redact_items(["plain finding", "token=abcdefghijklmnop"]) == ["plain finding", "***"]
+
+
+def test_a_private_key_body_never_survives_redaction():
+    body = ["MIIEvQIBADANBgkqhkiG9w0BAQEFAASC" + str(i) * 32 for i in range(5)]
+    mark = "RSA " + "PRIVATE" + " KEY-----"   # built, so no key-shaped literal sits in the public repo
+    pem = ["-----BEGIN " + mark, *body, "-----END " + mark]
+    assert stage_c_runner._bounded_failures(["E   ValueError: bad key"] + ["E   " + l for l in pem]) == [stage_c_runner._WITHHELD]
+    assert stage_c_runner._bounded_failures(["E   " + l for l in body[2:] + pem[-1:]]) == [stage_c_runner._WITHHELD]
+    assert stage_c_runner._redact_secrets("\n".join(pem)) == stage_c_runner._WITHHELD
+    diff = ("diff --git a/k.py b/k.py\n+" + "\n+".join(["-----BEGIN OPENSSH " + "PRIVATE" + " KEY-----"] + body) + "\n").encode()
+    assert stage_c_runner._outgoing_credentials(diff) == ["k.py"]   # the base scanner blocks the BEGIN marker
+
+
+def _scan(*lines):
+    return stage_c_runner._outgoing_credentials(("diff --git a/t.py b/t.py\n" + "".join("+" + l + "\n" for l in lines)).encode())
+
+
+def test_a_putty_key_is_withheld_from_kept_text_but_publication_keeps_the_base_precision():
+    lines = ["PuTTY-User-" + "Key-File-3: ssh-ed25519", "Private-" + "Lines: 1", "AAAA"]
+    assert stage_c_runner._redact_items(lines) == [stage_c_runner._WITHHELD]
+    assert _scan('assert header.startswith("PuTTY-User-' + 'Key-File-3:")') == []   # a format check is not a key
+
+
+@pytest.mark.parametrize("lines", [
+    ['TOKEN = "fixture-only-token-value"'], ["token = acquire(db)"], ['API_KEY = os.environ["API_KEY"]'],
+    ['url = "ssh://git@github.com/org/repo"'], ['PASSWORD_FIELD = "password"'],
+    ['DB_API_KEY = os.environ.get("DB_API_KEY")'], ['DB_PASSWORD_FIELD = "database_password"'],
+    ["AWS_SECRET_" + "ACCESS_KEY=" + "wJalrXUt" + "nFEMIK7MDENGbPxRfiCYzz9q8a7b6c5d"],   # masked, never a blocker
+])
+def test_ordinary_code_still_publishes(lines):
+    assert _scan(*lines) == []
+
+
+def test_a_large_x5c_jwt_header_is_detected():
+    import base64
+    big = base64.urlsafe_b64encode(json.dumps({"alg": "RS256", "x5c": ["A" * 1700]}).encode()).decode().rstrip("=")
+    assert len(big) > 2048 and stage_c_runner._redact_secrets("X = '" + big + ".e30.c2ln'") == stage_c_runner._WITHHELD
+
+
+@pytest.mark.parametrize("text", ['PASSWORD="myStrong@Password#2026"', '"DB_PASSWORD": "' + "abcdefgh" + "ijklmnopqrstuvwx" + '"',
+                                  "AWS_SECRET_" + "ACCESS_KEY=" + "wJalrXUt" + "nFEMIK7MDENGbPxRfiCYzz9q8a7b6c5d",
+                                  "API_" + "KEY=" + "abcdefgh" + "ijklmnop", "TOKEN=testingProduction2026"])
+def test_credential_assignments_are_masked_with_their_whole_value(text):
+    value = text.split("=", 1)[1] if "=" in text and ":" not in text.split("=", 1)[0] else text.split(":", 1)[1]
+    assert value.strip(' "') not in stage_c_runner._redact_secrets(text)
+
+
+PG = "postgresql" + "://"   # built, so no URL-shaped literal sits in the public repo
+
+
+@pytest.mark.parametrize("line", ['url = f"' + PG + '{user}:{password}@{host}/{db}"',
+                                  'url = "' + PG + '$USER:$PASSWORD@db/app"', 'url = "redis://%(user)s:%(pw)s@h"',
+                                  'url = "' + PG + '<user>:<password>@db/app"'])
+def test_url_templates_publish(line):
+    assert _scan(line) == []
+
+
+def test_a_credential_in_the_change_never_reaches_the_reviewer(monkeypatch, tmp_path):
+    seen = []
+
+    class Capturing(Reviewer):
+        def _run(self, prompt, schema, **kw):
+            seen.append(prompt)
+            return super()._run(prompt, schema, **kw)
+    pipeline(monkeypatch, tmp_path, publish_repository=FORK)
+    _coder(monkeypatch, "# key " + "sk-ant-" + "oat01-" + "A1b2C3d4" * 6 + "\n\n\ndef test_metric():\n    assert 1 == 1\n")
+    db = _db()
+    task = write_task(db)
+    worker.run_once(db, _providers(Capturing), SPECS)
+    assert not any("sk-ant-" in str(p) for p in seen)
+    assert any("credential-shaped content" in f for h in task.context["improvement"]["history"]
+               for f in (h.get("evidence") or {}).get("findings", []))
+
+
+def test_feedback_for_a_credential_in_the_change_never_repeats_it():
+    pat = "github_pat_" + "A1b2C3" * 6
+    diff = f"diff --git a/tests/{pat}.py b/tests/{pat}.py\n+X = '{pat}'\n".encode()
+    leaked = stage_c_runner._outgoing_credentials(diff)
+    assert leaked and pat not in stage_c_runner._redact(f"credential-shaped content in {', '.join(leaked)}")
+
+
+def test_an_underscore_before_a_token_does_not_hide_it():
+    token = "sk-ant-" + "oat01-" + "A1b2C3d4" * 6
+    assert _scan(f"# diagnostic _{token}") == ["t.py"]
+    assert token not in stage_c_runner._redact_secrets(f"diagnostic _{token}")
+
+
+def test_a_bare_public_jose_header_publishes():
+    header = _b64({"alg": "HS256"})
+    assert _scan(f'assert encode_header({{"alg": "HS256"}}) == "{header}"') == []
+    assert _scan(f'X = "{header}." + "{_b64({"sub": "x"})}.c2ln"') == ["t.py"]   # a header opening a token still counts
+
+
+@pytest.mark.parametrize("prefix", ["x", "0", "_", "-"])
+def test_no_prefix_hides_the_coder_token_or_a_jwt(prefix):
+    token = "sk-ant-" + "oat01-" + "A1b2C3d4" * 6
+    assert _scan(f"# note {prefix}{token}") == ["t.py"]
+    assert token not in stage_c_runner._redact_secrets(f"note {prefix}{token}")
+    jwt = ODD_JWTS[0]   # the coder never holds a JWT; kept text still withholds a glued one
+    assert stage_c_runner._redact_secrets(f"X = '{prefix}{jwt}'") == stage_c_runner._WITHHELD
+
+
+@pytest.mark.parametrize("line", ['u = "http://localhost:8000?email=user@example.com"',
+                                  'u = "https://example.com:443/#contact=a@b.c"'])
+def test_query_and_fragment_urls_publish(line):
+    assert _scan(line) == []
+
+
+def test_a_token_assembled_from_adjacent_literals_is_caught():
+    rest = "oat01-" + "A1b2C3d4" * 4
+    assert _scan('KEY = "sk-" "ant-' + rest + '"') == ["t.py"]
+    assert _scan("KEY = 'sk-' + 'ant-" + rest + "'") == ["t.py"]
+    assert ("ant-" + rest) not in stage_c_runner._redact_secrets('KEY = "sk-" "ant-' + rest + '"')
+
+
+@pytest.mark.parametrize("line", ["def validate_github_pat_permissions(token):", "ghp_settings_cache = {}",
+                                  'assert token.startswith("' + _b64({"alg": "HS256"}) + '.")'])
+def test_names_and_public_headers_publish(line):
+    assert _scan(line) == []
+
+
+@pytest.mark.parametrize("line", ["def validate_github_pat_permissions_for_v2(token):",
+                                  'assert token.startswith("' + _b64({"alg": "HS256"}) + '.eyJ")',
+                                  'URL = "postgresql+psycopg://company:company@company-postgres:5432/company"'])
+def test_base_scanner_accepted_code_still_publishes(line):
+    assert _scan(line) == []
+
+
+def test_url_userinfo_is_masked_not_blocked():
+    url = "postgresql://app:" + "s3cr3tvalue@db.internal/app"
+    assert _scan(f'DATABASE_URL = "{url}"') == []
+    assert "s3cr3tvalue" not in stage_c_runner._redact_secrets(f"connect {url} failed")
+
+
+def test_a_jwt_glued_after_a_word_is_withheld_from_findings():
+    jwt = ODD_JWTS[0]
+    assert stage_c_runner._redact_items([f"diagnostic log_{jwt}"]) == [stage_c_runner._WITHHELD]
+
+
+def test_an_escaped_alg_key_still_reads_as_a_jose_header():
+    import base64
+    head = base64.urlsafe_b64encode(b'{"\\u0061lg":"RS256"}').decode().rstrip("=")
+    jwt = head + "." + _b64({"sub": "x"}) + ".c2ln"
+    assert stage_c_runner._redact_secrets(f"token {jwt}") == stage_c_runner._WITHHELD
+    assert _scan(f"X = '{jwt}'") == ["t.py"]
+
+
+def test_a_branch_name_shaped_like_the_token_prefix_publishes():
+    assert _scan('BRANCH = "task-ant-job01-notification-worker"') == []
+
+
+def test_credential_rejection_is_recorded_as_a_worker_actor():
+    import inspect
+    src = inspect.getsource(stage_c_runner.review)
+    assert '"stage-c-runner"' in src and '"control-plane"' not in src
+    from app import stage_c_worker
+    assert "stage-c-runner" in stage_c_worker.NOT_AN_OWNER_CHANGE
+
+
+@pytest.mark.parametrize("name", ["task-ant-job01-build-Linux-amd64", "task-ant-oat01-short"])
+def test_job_names_shaped_like_the_token_prefix_publish(name):
+    assert _scan(f'BRANCH = "{name}"') == []
+
+
+def test_a_descriptive_branch_with_a_real_token_kind_publishes():
+    assert _scan('BRANCH = "task-ant-api01-build-Linux-amd64-release-production-candidate"') == []
+
+
+@pytest.mark.parametrize("text", ["DB_PASSWORD=hunter2hunter2,Tr0ub4dor3xyz", "my_token: val1234567,second987",
+                                  "(db_password:abcdefgh;qrstuvwxyz"])
+def test_masking_keeps_the_base_scanners_whole_value(text):
+    tail = text.replace(";", ",").split(",")[-1]
+    assert tail not in stage_c_runner._redact_secrets(text)
+
+
+def test_a_token_glued_after_a_word_tail_is_caught():
+    token = "sk-ant-" + "oat01-" + "AbCdEfGh" * 6
+    assert _scan(f"v = 'ab{token}'") == ["t.py"]
+    assert token not in stage_c_runner._redact_secrets(f"E   ab{token}")
+
+
+def _rs256_like():
+    import base64, os
+    b = lambda raw: base64.urlsafe_b64encode(raw).decode().rstrip("=")
+    head = _b64({"alg": "RS256", "typ": "JWT", "kid": "k" * 40})
+    return head, b(os.urandom(280)), b(os.urandom(256))
+
+
+@pytest.mark.parametrize("cut", [40, 76])
+def test_a_jwt_split_across_findings_cannot_be_rebuilt(cut):
+    head, pay, sig = _rs256_like()
+    jwt = f"{head}.{pay}.{sig}"
+    first, rest = jwt[:cut], jwt[cut:]
+    items = [f"see {first}"] + [rest[i:i + 280] for i in range(0, len(rest), 280)]
+    out = stage_c_runner._redact_items(items)
+    glued = "".join(out)
+    assert out == [stage_c_runner._WITHHELD] and pay not in glued and sig not in glued
+
+
+def test_a_jwt_wrapped_in_pytest_lines_is_withheld_from_failures():
+    head, pay, sig = _rs256_like()
+    jwt = f"{head}.{pay}.{sig}"
+    lines = ["E   AssertionError: token"] + ["E   " + jwt[i:i + 76] for i in range(0, len(jwt), 76)]
+    assert stage_c_runner._bounded_failures(lines) == [stage_c_runner._WITHHELD]

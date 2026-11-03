@@ -90,10 +90,27 @@ def _failed_tests(failures: list) -> list[str]:
                    if isinstance(f, str) and f.startswith(("FAILED ", "ERROR ")) and len(f.split(" ")) > 1})
 
 
+_GLUE = re.compile(r"(?m)^E {1,4}+|\s++")   # pytest continuation prefixes and all whitespace
+
+
+def _list_must_withhold(items: list) -> bool:
+    """A JWT or key anywhere in a list of strings, also when split across items or wrapped inside a segment: the list
+    is judged joined by newlines, glued with nothing, and glued with whitespace and `E   ` prefixes removed."""
+    joined = "\n".join(items)
+    return any(_must_withhold(form) or _jwts(form) for form in (joined, "".join(items), _GLUE.sub("", joined)))
+
+
+def _redact_items(items: list) -> list[str]:
+    """Each item redacted; but a JWT header anywhere in the list withholds all of it, since its payload and signature
+    can sit on the next line or item (a wrapped message, a token split across findings) and per-item masking would
+    keep them."""
+    items = [str(item) for item in items]
+    return [_WITHHELD] if _list_must_withhold(items) else [_redact(item) for item in items]
+
+
 def _bounded_failures(raw) -> list[str]:
     out, total = [], 0
-    for line in raw if isinstance(raw, list) else []:
-        line = _redact(str(line))
+    for line in _redact_items(raw if isinstance(raw, list) else []):
         if total + len(line) > MAX_FAILURE_CHARS or len(out) >= MAX_FAILURE_LINES:
             break
         out.append(line)
@@ -332,6 +349,17 @@ def review(db: Session, task: models.Task, diff: bytes, reviewer: Reviewer,
                 "detail": f"coder {coder!r} and reviewer {reviewer_provider!r} must be two known providers"}
     if not fingerprint or stage_c.diff_fingerprint(diff) != fingerprint:
         return {"outcome": "TAMPERED", "detail": "diff is not the tested fingerprint"}
+    if leaked := _outgoing_credentials(diff):
+        # A credential in the change never reaches the reviewer's prompt (nor, later, the public repo): the change
+        # goes back to the coder unreviewed, like a rejection, and counts against the same attempt budget.
+        if before_write:
+            before_write()
+        # Only file names go back, themselves masked: the credential is never repeated to the coder.
+        findings = [_redact(f"credential-shaped content in {', '.join(leaked)}: remove it; never write credentials")]
+        stage_c.advance(db, task, "IMPLEMENTING", "stage-c-runner",   # a worker actor: never an owner change
+                        {"review": "REJECTED", "fingerprint": fingerprint, "findings": findings})
+        db.commit()
+        return {"outcome": "REJECTED", "findings": findings}
     packet = {"objective": task.objective or task.title, "success_criteria": task.success_criteria,
               "fingerprint": fingerprint, "checks": tested.get("checks", ""),
               "diff": diff.decode("utf-8", errors="replace")}
@@ -347,7 +375,7 @@ def review(db: Session, task: models.Task, diff: bytes, reviewer: Reviewer,
     if before_write:
         before_write()
     # Model output persisted to the history and fed back to the next coder: masked like every other output.
-    findings = [_redact(str(f)) for f in (verdict.get("findings") or [])][:20]
+    findings = _redact_items(list(verdict.get("findings") or [])[:20])
     if verdict["verdict"] == "REJECT":
         stage_c.advance(db, task, "IMPLEMENTING", reviewer_provider,
                         {"review": "REJECTED", "fingerprint": fingerprint, "findings": findings})
@@ -399,7 +427,13 @@ def _git(repo: Path, *args: str, stdin: bytes | None = None, index: str | None =
 
 
 # Credential shapes: specific enough to refuse a publication on. JWTs are recognised by decoding (_jwts), not by shape.
-_CREDENTIAL_SHAPES = (r"(?<!\w)(?:sk-ant-[\w-]{8,}|github_pat_\w{8,}|gh[pousr]_\w{16,}|sk-[\w-]{16,}|xox[abprs]-[\w-]{8,}"
+# The coder's exact Claude token format (known kind and version, long body) after anything but the tail of a word
+# (`task-`, `desk-`, `risk-` end in two lowercase letters) unless its body is random-looking (6+ uppercase letters,
+# as a real token's base64 body has): `ab<token>`, `xsk-ant-...`, `_sk-ant-...` match, `task-ant-api01-build-...`
+# does not.
+_CREDENTIAL_SHAPES = (r"(?-i:(?:(?<![a-z]{2})|(?=sk-ant-[a-z]{3,5}\d{2}-(?:[a-z0-9_-]{0,40}+[A-Z]){6}))"   # case-sensitive
+                      r"sk-ant-(?:oat|api|ort|sid|admin)\d{2}-[\w-]{40,}+)|"
+                      r"(?<!\w)(?:sk-ant-[\w-]{8,}|github_pat_\w{8,}|gh[pousr]_\w{16,}|sk-[\w-]{16,}|xox[abprs]-[\w-]{8,}"
                       r"|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)")
 _CREDENTIAL = re.compile(_CREDENTIAL_SHAPES)
 # A dotted base64url run, matched only at its start and possessively: linear time on any input (an unanchored
@@ -463,20 +497,72 @@ def _has_credential(text: str) -> bool:
     return any(_CREDENTIAL.search(t) or _jwts(t) for t in {text, *_joined_forms(text)})
 
 
+
+# Additions to the base scanner above (redaction only; publication keeps the base precision): text holding a JWT
+# header followed by  or a private-key marker is withheld whole, and credential-word assignments are masked.
+_ENV_ASSIGN = (
+    r"\b[A-Za-z0-9_]{0,60}?(?i:secret|password|passwd|private_key|api_key|access_key|token)[A-Za-z0-9_]{0,40}+['\"]?+"
+    r"\s*+[:=]\s*+(?!['\"]?+(?i:fixture|example|dummy|placeholder|changeme|fake|xxx|redacted)\b)"
+    r"(?:\"[^\"\n]{4,}+\"|'[^'\n]{4,}+'|[^\s'\",;]{8,}+)"
+    r"|(?i:\b[a-z][a-z0-9+.-]{0,30}+)://[^@/\s:{}$<>%?#]*+:[^@/\s{}$<>%?#]++@")
+# Multi-line secrets whose marker is one line and whose body is many: masking the marker would keep the body.
+_PRIVATE_KEY = re.compile(r"PRIVATE KEY(?: BLOCK)?-----|PuTTY-User-Key-File-\d|Private-Lines: \d")
+# A whole base64url segment followed by , up to 16 KiB (x5c headers run to a few KiB). Anchored and possessive.
+_HEADER_CANDIDATE = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{8,16384}+=*+(?=\.)")
+_WITHHELD = "[withheld: credential-shaped content]"
+
+
+def _is_jose_header(segment: str) -> bool:
+    # `{` encodes to `e`: characters glued before the header (`log_eyJ...`) are skipped by retrying at each of the
+    # first 8 `e` within 64 characters. Bounded, so a hostile run costs at most 9 decodes.
+    segment = segment.rstrip("=")
+    starts = [0] + [i for i in range(1, min(64, len(segment))) if segment[i] == "e"][:8]
+    return any(_decodes_to_jose(segment[i:]) for i in starts)
+
+
+@functools.lru_cache(maxsize=4096)
+def _decodes_to_jose(segment: str) -> bool:
+    try:
+        raw = base64.urlsafe_b64decode(segment + "=" * (-len(segment) % 4))
+    except ValueError:
+        return False
+    if not raw.lstrip(b" \t\r\n").startswith(b"{"):   # not a JSON object: rejected before parsing
+        return False
+    try:
+        header = json.loads(raw)
+    except (ValueError, UnicodeDecodeError):
+        return False
+    return isinstance(header, dict) and "alg" in header   # parsed, so an escaped key (\u0061lg) counts too
+
+
+def _has_jose_header(text: str) -> bool:
+    """A JWT/JWS header (RFC 7515: a JSON object with "alg") followed by `.`: enough to withhold text, since a token's
+    payload and signature can sit on the next line or after a split."""
+    return any(_is_jose_header(m.group(0)) for m in _HEADER_CANDIDATE.finditer(text))
+
+
+def _must_withhold(text: str) -> bool:
+    """A secret spread over lines (JWT, PEM/OpenSSH/PGP/PuTTY key): only withholding the whole text keeps it out."""
+    return bool(_PRIVATE_KEY.search(text)) or _has_jose_header(text)
+
 # Masking also takes key=value heuristics; they over-match ordinary code (`token = acquire(...)`), so they mask only.
 # `['"]?` after the key covers JSON ("refresh_token": "...") as well as `token=...`.
-_SECRETS = re.compile(
-    r"(?i)(?:" + _CREDENTIAL_SHAPES +
-    r"|(?:bearer|token|authorization)\s*+(?:[:=]\s*+)?[\w.~+/=-]{12,}"
-    r"|(?:api[_-]?key|secret|password|passwd|token)['\"]?\s*+[:=]\s*+['\"]?[^\s'\"]{6,})")
+_KV_BASE = (r"|(?:bearer|token|authorization)\s*+(?:[:=]\s*+)?[\w.~+/=-]{12,}"
+            r"|(?:api[_-]?key|secret|password|passwd|token)['\"]?\s*+[:=]\s*+['\"]?[^\s'\"]{6,}")
+_SECRETS = re.compile(r"(?i)(?:" + _CREDENTIAL_SHAPES + _KV_BASE + ")")
+# Second pass after the base masking (which keeps its leftmost, whole-value matches): credential-word assignments
+# the base misses, e.g. a quoted value with spaces.
+_ENV = re.compile(_ENV_ASSIGN)
 
 
 def _redact_secrets(text: str) -> str:
     """URL userinfo and well-known credential shapes, masked. Output that reaches task history or a prompt passes here."""
+    if _must_withhold(text):
+        return _WITHHELD
     # Check joined fragments before masking can erase their header and leave claims/signatures behind.
     if any(joined != text and (_CREDENTIAL.search(joined) or _jwts(joined)) for joined in _joined_forms(text)):
-        return "[withheld: credential-shaped content]"
-    masked = _SECRETS.sub("***", re.sub(r"://[^@/\s]+@", "://***@", _mask_jwts(text)))
+        return _WITHHELD
+    masked = _ENV.sub("***", _SECRETS.sub("***", re.sub(r"://[^@/\s]+@", "://***@", _mask_jwts(text))))
     return masked
 
 
@@ -519,6 +605,8 @@ def _outgoing_credentials(diff: bytes) -> list[str]:
         if any(_CREDENTIAL.search(line) or _jwts(line) for line in lines) or _has_credential("\n".join(lines)):
             leaked.append(path)
     return leaked
+
+
 
 
 def publish(db: Session, task: models.Task, job: Job, diff: bytes, worktree: Path, remote: str,
@@ -924,7 +1012,11 @@ def launcher_checks(repo: str, timeout_s: int = 1200, poll_s: float = 5.0, sleep
             # Exit 0 alone is not a result: an import-time os._exit(0) ends the run before any test.
             passed, summary = False, "checks did not report a pytest result"
         files = result.get("passed_files") if isinstance(result.get("passed_files"), list) else []
+        failures = result.get("failures") if isinstance(result.get("failures"), list) else []
+        if _list_must_withhold([summary, *map(str, failures)]):
+            # Summary and failure lines are one stdout: a JWT wrapped across them is withheld everywhere.
+            summary, failures = _WITHHELD, [_WITHHELD]
         return {"passed": passed, "summary": summary, "refused": bool(result.get("refused")),
-                "failures": _bounded_failures(result.get("failures")),
+                "failures": _bounded_failures(failures),
                 "passed_files": [f for f in files if isinstance(f, str)][:MAX_PASSED_FILES]}
     return call

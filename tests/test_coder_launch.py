@@ -431,9 +431,9 @@ def test_a_flood_of_output_keeps_only_the_tail_and_the_real_summary(L, monkeypat
     monkeypatch.setattr(L, "bounded_communicate", lambda *a: seen.append(real(*a)) or seen[-1])
     result = L.run_container(["docker"], b"", 5, "checks")
     assert len(seen[0][0]) == 4096 and seen[0][0].endswith(summary)
-    assert result["summary"] == "1 failed, 1 passed in 0.1s"
-    assert result["failures"] == ["FAILED tests/test_a.py::test_one - assert 0"]
-    assert result["passed_files"] == ["tests/test_b.py"]
+    # The dropped head was never scanned: nothing of an overflowing run is returned, and the checks fail closed.
+    assert result["summary"] == L.OVERFLOWED and result["failures"] == [L.OVERFLOWED]
+    assert result["passed_files"] == []
 
 
 PYTEST_OUTPUT = """.....F..
@@ -648,3 +648,109 @@ def test_checks_budget_fits_the_full_suite_and_the_stage_c_stale_window():
     coder = inspect.signature(stage_c_runner.launcher_coder).parameters["timeout_s"].default
     assert checks >= 2 * 493 and default == checks
     assert mod.LIMITS["code"] + checks + 600 < 3600 and coder <= mod.LIMITS["code"]
+
+
+def test_a_jwt_wrapped_past_the_line_clip_withholds_summary_and_failures(L, monkeypatch):
+    """Break caught: failure lines were clipped to 300 chars before any check, so a JWT header beyond the clip was
+    dropped while the next `E` line kept its payload and signature."""
+    import base64
+    b64 = lambda o: base64.urlsafe_b64encode(json.dumps(o).encode()).decode().rstrip("=")
+    head, rest = b64({"alg": "HS256"}), b64({"sub": "synthetic"}) + ".c2ln"
+    out = (b"FAILED tests/test_a.py::test_one - AssertionError\nE   AssertionError: " + b"x" * 400 + b" "
+           + head.encode() + b".\nE   " + rest.encode() + b"\n1 failed in 0.1s\n")
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert result["summary"] == "1 failed in 0.1s" and result["failures"] == [L.WITHHELD]   # pytest's own line stays
+    assert rest not in json.dumps(result) and head not in json.dumps(result)
+    assert not L.has_jose_header("FAILED tests/test_a.py::test_one - assert os.path.join('a', 'b') == 1")
+
+
+def test_a_private_key_in_check_output_withholds_summary_and_failures(L, monkeypatch):
+    mark = b"PRIVATE" + b" KEY-----"   # built, so no key-shaped literal sits in the public repo
+    out = (b"FAILED tests/test_a.py::test_one - ValueError\nE   -----BEGIN " + mark + b"\nE   " + b"A" * 64
+           + b"\nE   -----END " + mark + b"\n1 failed in 0.1s\n")
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert result["summary"] == "1 failed in 0.1s" and result["failures"] == [L.WITHHELD]   # pytest's own line stays
+
+
+def test_launcher_and_runner_share_one_credential_pattern(L):
+    assert (L.CREDENTIAL_SHAPES, L.KV_BASE, L.ENV_ASSIGN) == (stage_c_runner._CREDENTIAL_SHAPES, stage_c_runner._KV_BASE,
+                                                          stage_c_runner._ENV_ASSIGN)
+
+
+def test_passed_files_never_carry_a_credential_or_withheld_output(L, monkeypatch):
+    pat = "ghp_" + "A1b2C3" * 6
+    out = b"PASSED tests/" + pat.encode() + b".py::test_one\nPASSED tests/test_b.py::test_two\n2 passed in 0.1s\n"
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert pat not in json.dumps(result) and result["passed_files"] == ["tests/test_b.py"]
+
+
+def test_recognised_credentials_are_masked_before_the_result_is_written(L, monkeypatch):
+    pat = "github_pat_" + "A1b2C3" * 6
+    out = (b"FAILED tests/test_a.py::test_one - AssertionError: " + pat.encode() + b"\nE   assert '" + pat.encode()
+           + b"' == ''\n1 failed in 0.1s\n")
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert pat not in json.dumps(result) and result["failures"]
+
+
+def test_exactly_the_stdout_bound_is_whole_and_a_public_header_does_not_withhold(L, monkeypatch):
+    import base64
+    monkeypatch.setattr(L, "MAX_STDOUT", 4096)
+    header = base64.urlsafe_b64encode(b'{"alg":"RS256"}').decode().rstrip("=")
+    tail = ("log " + header + ". done\nPASSED tests/test_b.py::test_two\n1 passed in 0.1s\n").encode()
+    out = b"x" * (4096 - len(tail) - 1) + b"\n" + tail
+    assert len(out) == 4096
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert result["summary"] == "1 passed in 0.1s" and result["passed_files"] == ["tests/test_b.py"]
+
+
+@pytest.mark.parametrize("noise", ["{header}.", "checking format -----BEGIN " + "PRIVATE" + " KEY-----"])
+def test_a_printed_public_header_or_key_marker_keeps_passing_evidence(L, monkeypatch, noise):
+    import base64
+    header = base64.urlsafe_b64encode(b'{"alg":"RS256"}').decode().rstrip("=")
+    out = (noise.format(header=header) + "\nPASSED tests/test_b.py::test_two\n1 passed in 0.1s\n").encode()
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert result["summary"] == "1 passed in 0.1s" and result["passed_files"] == ["tests/test_b.py"]
+    assert result["failures"] == []
+
+
+def test_subtest_summaries_count_as_pytest_results(L, monkeypatch):
+    out = ("format -----BEGIN " + "PRIVATE" + " KEY-----\nPASSED tests/test_sub.py::test_sub\n"
+           "1 passed, 1 subtests passed in 0.01s\n").encode()
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    assert L.run_container(["docker"], b"", 5, "checks")["summary"] == "1 passed, 1 subtests passed in 0.01s"
+
+
+def test_launcher_masking_keeps_the_base_whole_value(L):
+    assert "Tr0ub4dor3xyz" not in L.mask("E   AssertionError: DB_PASSWORD=hunter2hunter2,Tr0ub4dor3xyz")
+
+
+@pytest.mark.parametrize("url", ["https" + "://bob:" + "Pw9_token=abcdefgh@hostname",   # built: no URL-shaped
+                                 "https" + "://refresh_token:" + "abcdefgh@hostname"])   # literal in the public repo
+def test_launcher_masks_url_userinfo_before_key_value_rules(L, url):
+    out = stage_c_runner._redact_secrets(L.mask("E   " + url))
+    assert out == "E   https://***@hostname"
+
+
+@pytest.mark.parametrize("path", ["tests/test_token_refresh_flow.py", "tests/tokens/test_cache.py",
+                                  "tests/test_bearer_token_parsing.py"])
+def test_token_named_test_files_still_count_as_passed(L, monkeypatch, path):
+    out = f"PASSED {path}::test_a\n1 passed in 0.1s\n".encode()
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    assert L.run_container(["docker"], b"", 5, "checks")["passed_files"] == [path]
+
+
+def test_a_jwt_wrapped_inside_its_header_in_check_output_is_withheld(L, monkeypatch):
+    import base64, os
+    b = lambda raw: base64.urlsafe_b64encode(raw).decode().rstrip("=")
+    jwt = b(json.dumps({"alg": "RS256", "typ": "JWT", "kid": "k" * 40}).encode()) + "." + b(os.urandom(280)) + "." + b(os.urandom(256))
+    out = ("FAILED tests/test_a.py::test_one - AssertionError\n" + "".join("E   " + jwt[i:i + 76] + "\n" for i in range(0, len(jwt), 76))
+           + "1 failed in 0.1s\n").encode()
+    monkeypatch.setattr(L.subprocess, "Popen", lambda *a, **k: FakeProcess(out))
+    result = L.run_container(["docker"], b"", 5, "checks")
+    assert result["failures"] == [L.WITHHELD] and jwt[80:160] not in json.dumps(result)
