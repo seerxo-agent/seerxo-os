@@ -1,11 +1,11 @@
 app/providers.py
-  s_49f980f26e310f::t_6a425b1e6e2b2f 251-261,270,280-299,301-302,307,317-323,344-345
+  s_49f980f26e310f::t_e6e77f6fd4ba4a 251-261,270,280-299,301-302,307,317-323,344-345
 app/stage_c_runner.py
-  s_49f980f26e310f::t_a4b7da734f3eee 549-550,552-553
+  s_49f980f26e310f::t_101ad1ae5523c2 549-550,552-553
 scripts/company-coder-launch
-  s_49f980f26e310f::t_fad27aa48edc84 451
+  s_49f980f26e310f::t_fce00496fea60e 451
 tests/test_stage_c_hardening.py
-  s_49f980f26e310f::t_7770736f4ab860 513-560
+  s_49f980f26e310f::t_82f0e4559977c1 513-560
 ---
 {
   "schema_version": "authorship/3.0.0",
