@@ -1,0 +1,25 @@
+app/stage_c_runner.py
+  s_49f980f26e310f::t_c2b57138836a6f 93-102,105-106,108,1016
+scripts/company-coder-launch
+  s_49f980f26e310f::t_0831a88de12689 419-422,432-434,459-460
+tests/test_coder_launch.py
+  s_49f980f26e310f::t_8c1e6d8033cd7a 738-756
+tests/test_stage_c_hardening.py
+  s_49f980f26e310f::t_7b9c1c08798356 488-512
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1524144998fa9af1c5f138752522ec980c25f360",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "unknown"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
