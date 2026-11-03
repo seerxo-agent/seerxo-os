@@ -1,0 +1,37 @@
+tests/test_stage_c_acceptance.py
+  s_49f980f26e310f::t_5ded0ef86b4dd6 1-94
+app/api_auth.py
+  s_49f980f26e310f::t_a909c6c88a784a 57,118
+app/control.py
+  s_49f980f26e310f::t_25d0319c16c4cc 368-440
+app/main.py
+  s_49f980f26e310f::t_ff381282fd6305 1045-1061
+app/stage_c_preflight.py
+  s_49f980f26e310f::t_692c47a8c1fd93 26,105-106
+app/stage_c_worker.py
+  s_49f980f26e310f::t_1a4d302d39a8e6 159-160
+scripts/stage-c-host-wizard.sh
+  s_49f980f26e310f::t_3026813e180fa5 538,544-547,550,552,554-559
+tests/test_stage_c_preflight.py
+  s_49f980f26e310f::t_d0154075169ae1 36-38
+tests/test_stage_c_worker.py
+  s_49f980f26e310f::t_3e3439ec825239 805-813,821,873-877,879,883,886-888
+tests/test_task_ready_guard.py
+  s_49f980f26e310f::t_15ea7c2fe8cbcd 74-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "44bab65093ac7042ea61584b59f3d775fb09d31c",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

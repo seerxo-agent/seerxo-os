@@ -1,0 +1,65 @@
+app/release_gateway.py
+  s_49f980f26e310f::t_6024bd7fe8b11b 614-620,623-624
+app/release_host.py
+  s_feb0e3329b9a5a::t_214f2ec300163b 437-438
+app/static/desk.html
+  s_49f980f26e310f::t_6b913f7490d877 114,121
+desk/src/pages/automation.tsx
+  s_feb0e3329b9a5a::t_eb3a4d55a96543 119,138,210
+docs/security/RELEASE_GATEWAY.md
+  s_49f980f26e310f::t_66da5af8b5e4a3 389-407
+scripts/check_docs.py
+  s_49f980f26e310f::t_d6cb2a3ae5bb79 9-12,22-23,106,112-113,127,129
+scripts/deploy-company-os.sh
+  s_49f980f26e310f::t_487b707783a353 136-139,149,152-153,156-164,166,930
+scripts/seed.py
+  s_49f980f26e310f::t_6f2e74df353aac 6-8,10,12,15,35-43,46-49,86,92
+tests/fixtures/legacy_release_builder.py
+  s_feb0e3329b9a5a::t_71f278e68a7bf2 1-22
+tests/test_bound_image_identity.py
+  s_feb0e3329b9a5a::t_407d4a37551719 1-123
+tests/test_deploy_fence_and_rollback_anchor.py
+  s_feb0e3329b9a5a::t_35027796283101 9,11,107,112,142-146,171-225
+tests/test_docs_checks.py
+  s_49f980f26e310f::t_1e63b7bfb01cc0 34-35,45,49-63
+tests/test_release_acceptance.py
+  s_feb0e3329b9a5a::t_719ca522e533e6 759-816
+tests/test_release_gateway.py
+  s_8cc18d56f3187b::t_12c1a46091d163 1152-1154,1156-1165,1177
+tests/test_release_host.py
+  s_49f980f26e310f::t_0d6737f468088f 557-600,1033,1043-1044,1046,1048-1049,1052
+tests/test_seed_guard.py
+  s_49f980f26e310f::t_f7b7f76b0ce8c1 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "175ec4c7b1eb3854620465c1bf78baad226a6052",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_8cc18d56f3187b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d03bb745-7335-459c-98a7-b0ad99e2e3d8",
+        "model": "unknown"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_feb0e3329b9a5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c36b0a23-98c9-4870-9ba5-be0da272263b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

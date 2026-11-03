@@ -1,0 +1,29 @@
+app/stage_c_runner.py
+  s_49f980f26e310f::t_ffa6869c684eb6 109-113,151-152,180,188-192,702-704,725
+app/stage_c_worker.py
+  s_49f980f26e310f::t_3180de3ac2b28d 111,421-426,434-442
+scripts/company-coder-launch
+  s_49f980f26e310f::t_d124328943672b 48,132-133
+scripts/companyctl
+  s_49f980f26e310f::t_f98088e7fdd711 91-92,364-381
+tests/test_stage_c_authorize_cli.py
+  s_49f980f26e310f::t_05ca616ab5e005 145-161
+tests/test_stage_c_repair_feedback.py
+  s_49f980f26e310f::t_001ee2c46af435 147-203
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a593d4fa43a1f5eba6a8e79e8489de5eee886c9",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
