@@ -1,0 +1,53 @@
+tests/test_desk_state_bounded.py
+  s_b262a64127e469::t_3176cd0be9527f 4-5,9,26-38,66-67,81,86-88,93,95-137
+  s_49f980f26e310f::t_6f56e0a31acada 1-3,6-8,10-25,39-65,68-80,82-85,89-92,94
+app/static/desk.html
+  s_b262a64127e469::t_6eb740b7acd574 73,75-76,79-82,89,93,96,99,103,106,108,114,117,121
+desk/src/App.tsx
+  s_b262a64127e469::t_835459bce14799 209
+desk/src/pages/tasks.tsx
+  s_49f980f26e310f::t_65a9b9be6a5ad5 196-201
+  s_49f980f26e310f::t_b946eeb31cf159 11,210,268,277
+desk/src/lib/api.ts
+  s_49f980f26e310f::t_9eb748d082fd9c 126-127
+  s_b262a64127e469::t_076885cc78f04a 19
+app/desk.py
+  s_b262a64127e469::t_398bf1981e7b40 411,416-420,422,425,428,430-431
+  s_49f980f26e310f::t_0a93e38f0a6ce6 32,432-435,522-525,540-541,576-580,586
+  s_b262a64127e469::t_61e70d2ef5de48 412-415,421,423-424,426-427,429
+  s_b262a64127e469::t_dec8c876fcb47f 3,8,28-31
+  s_49f980f26e310f::t_680cb46ee96970 33-35,339-341,587-589,617-618
+desk/src/components/charts.tsx
+  s_49f980f26e310f::t_c4a67830ae72e8 54
+  s_b262a64127e469::t_835459bce14799 89
+desk/src/pages/agents.tsx
+  s_b262a64127e469::t_835459bce14799 18,23,32
+desk/src/lib/work-groups.test.ts
+  s_49f980f26e310f::t_143fd601b84771 3,29-35
+desk/src/lib/work-groups.ts
+  s_49f980f26e310f::t_7837de979236c2 29-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "708a115dbbd6934c99ba7c64339de6c6ced18ee5",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_b262a64127e469": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19e89-a4ef-7e83-bf66-ae0589cda371",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
