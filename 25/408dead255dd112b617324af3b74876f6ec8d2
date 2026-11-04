@@ -1,0 +1,45 @@
+tests/test_desk_data_exposure.py
+  s_49f980f26e310f::t_a7af9929f3b667 1-133,137-141,143-226
+  s_49f980f26e310f::t_960a2e0794a383 134-136,142
+  s_49f980f26e310f::t_66965f86bf000d 227
+tests/test_founder_desk.py
+  s_49f980f26e310f::t_d73244f972542f 474-475
+Dockerfile
+  s_49f980f26e310f::t_0841cad697b34d 75
+app/api_auth.py
+  s_49f980f26e310f::t_f24da68897a299 127-137,188-189
+app/desk.py
+  s_49f980f26e310f::t_5701607d57dc8c 18,48-53,55,60-61,63,67-101,192,399-403,670,675,708,773,775,778,784,786,815,823,825
+app/desk_stream.py
+  s_49f980f26e310f::t_0c8c325eb4dca1 99
+app/main.py
+  s_49f980f26e310f::t_59ecc9277a8a74 7,11,29,51-77,889,891-892,1284
+app/notebook.py
+  s_49f980f26e310f::t_8325eb7c89c268 24,60
+app/providers.py
+  s_49f980f26e310f::t_4d528767382a9f 27-28,135-144,194-195,250-251,253-254,263-266,644,650-653,708
+app/redact.py
+  s_49f980f26e310f::t_f192a150985d0c 1-151
+app/stage_c_runner.py
+  s_49f980f26e310f::t_5bdef237bcd40c 42-43
+app/worker.py
+  s_49f980f26e310f::t_8dc8675f7d000c 35,874,1114-1115
+tests/test_reasoner.py
+  s_49f980f26e310f::t_89c462ad34d15e 117,122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25408dead255dd112b617324af3b74876f6ec8d2",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
