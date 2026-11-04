@@ -1,0 +1,22 @@
+app/release_gateway.py
+  h_97f930f93c2fe3 1-1322
+app/release_gateway_service.py
+  h_97f930f93c2fe3 1-402
+app/release_host.py
+  h_97f930f93c2fe3 1-1033
+app/release_identity.py
+  h_97f930f93c2fe3 1-171
+scripts/deploy-company-os.sh
+  h_97f930f93c2fe3 1-1427
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "df6ceb6baccc605b15dd563ee4278e73040c723f",
+  "prompts": {},
+  "humans": {
+    "h_97f930f93c2fe3": {
+      "author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
