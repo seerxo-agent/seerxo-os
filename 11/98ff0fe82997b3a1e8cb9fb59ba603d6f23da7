@@ -1,0 +1,41 @@
+app/api_auth.py
+  s_49f980f26e310f::t_0ee459f7fdbe19 58-60
+app/business_reconciler.py
+  s_49f980f26e310f::t_91e11dd34dc650 37,217-218,220,222,227-229
+app/control.py
+  s_49f980f26e310f::t_36c517b822d688 3,16-17,67-85
+app/experiment_scheduler.py
+  s_49f980f26e310f::t_14ae895369e0a3 39,90,101,227-231
+app/main.py
+  s_49f980f26e310f::t_f048de611f6160 552-554,560,569-573,580
+app/reconciler_heartbeat.py
+  s_49f980f26e310f::t_13dfae80350553 152
+app/watchdog.py
+  s_49f980f26e310f::t_184a1e114bd86b 1090,1125-1127
+docs/APPROVAL_IDENTITY.md
+  s_49f980f26e310f::t_c0702d5b75db2e 66-67
+tests/test_business_reconciler.py
+  s_49f980f26e310f::t_7df7fbebebd896 483-530
+tests/test_experiment_scheduler.py
+  s_49f980f26e310f::t_7b4f25472af9a2 707-763
+tests/test_founder_authorization.py
+  s_49f980f26e310f::t_3513c51668be7b 430,433-493
+tests/test_goals.py
+  s_49f980f26e310f::t_32283a890a2b1d 3,10,14-15,36,149,153,177,259-265
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1198ff0fe82997b3a1e8cb9fb59ba603d6f23da7",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
