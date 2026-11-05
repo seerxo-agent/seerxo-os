@@ -1,0 +1,43 @@
+app/worker.py
+  s_c39c941111b2df::t_5d90dfebf3400f 1059-1061
+  s_c39c941111b2df::t_cb7a8278ae3426 35,861,980,983,1001,1006-1008,1058,1069,1077,1082-1087,1106-1110
+app/main.py
+  s_c39c941111b2df::t_cb7a8278ae3426 408,754,768,804,806
+tests/test_context_builder.py
+  s_c39c941111b2df::t_adfbb9f4e169a7 5,13-27,29-35,37
+  s_c39c941111b2df::t_0759e9bda70cb7 28,36
+  s_c39c941111b2df::t_cccf157246dff0 38-39
+app/redact.py
+  s_c39c941111b2df::t_a9334161e72033 157
+  s_c39c941111b2df::t_cb7a8278ae3426 156,167
+app/api_auth.py
+  s_c39c941111b2df::t_cb7a8278ae3426 193-198
+tests/test_desk_data_exposure.py
+  s_c39c941111b2df::t_e47e942ef5bfa2 408-482
+  s_c39c941111b2df::t_1c965dd2e526c1 168-170,337
+tests/test_supervisor_redaction.py
+  s_c39c941111b2df::t_e47e942ef5bfa2 1-7,12-34
+  s_c39c941111b2df::t_a9334161e72033 8-11
+tests/test_worker_result_recovery.py
+  s_c39c941111b2df::t_adfbb9f4e169a7 3,13-58
+  s_c39c941111b2df::t_5d90dfebf3400f 259-269
+  s_c39c941111b2df::t_77ef6abe637bfe 59-60
+tests/test_api_auth.py
+  s_c39c941111b2df::t_1c965dd2e526c1 173-188
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc12bb7179b7f6c89702fc726ed4c12473c4f881",
+  "prompts": {},
+  "sessions": {
+    "s_c39c941111b2df": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ab9d-68e1-76e3-aad1-a1dfc498349a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
