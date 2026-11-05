@@ -1,0 +1,22 @@
+tests/test_stage_c_privacy_gate.py
+  s_bbd8242fd1eab0::t_5e38e72aa99116 265-276,421-424,512-513
+  s_bbd8242fd1eab0::t_b3856d6b7c1fe6 408,410
+app/stage_c_runner.py
+  s_bbd8242fd1eab0::t_5e38e72aa99116 638-641,805-806,899-900,955-956
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f0bb2b9bac55a83eeb83729c8f9b954ee254b204",
+  "prompts": {},
+  "sessions": {
+    "s_bbd8242fd1eab0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ad25-99fe-7352-b5ab-7e616d415ca2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
