@@ -1,0 +1,22 @@
+tests/test_desk_data_exposure.py
+  s_49f980f26e310f::t_afe7ca5ca32e3c 245,248-252
+app/main.py
+  s_49f980f26e310f::t_96153a6b227ed3 67
+  s_49f980f26e310f::t_475d47cf973c90 56-58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19f38e9ec394ec5cfa76eaa8284a377330370284",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
