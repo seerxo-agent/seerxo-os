@@ -1,0 +1,35 @@
+tests/test_providers_capacity.py
+  s_0cdc46f6f8d5f0::t_b98672e117de79 39-41
+  s_0cdc46f6f8d5f0::t_569eb73a7d170a 5,23-38,42-54
+scripts/company-coder-launch
+  s_0cdc46f6f8d5f0::t_4fa98198628af6 305-307,429-431,433-442
+  s_0cdc46f6f8d5f0::t_b98672e117de79 432
+app/stage_c_runner.py
+  s_0cdc46f6f8d5f0::t_4fa98198628af6 190-191
+tests/test_stage_c_standing.py
+  s_0cdc46f6f8d5f0::t_569eb73a7d170a 316
+  s_0cdc46f6f8d5f0::t_35ac39077641da 255-283,293-295,311-315,317-320,339-399
+  s_0cdc46f6f8d5f0::t_b98672e117de79 291-292
+app/stage_c_worker.py
+  s_0cdc46f6f8d5f0::t_4fa98198628af6 455-464,609
+app/providers.py
+  s_0cdc46f6f8d5f0::t_4fa98198628af6 110-112
+tests/test_stage_c_worker.py
+  s_0cdc46f6f8d5f0::t_569eb73a7d170a 685-760
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "327f93aea434af93882a41c22f75f6667ba86736",
+  "prompts": {},
+  "sessions": {
+    "s_0cdc46f6f8d5f0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ad1a-f806-7e43-b832-62e177fce8a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
