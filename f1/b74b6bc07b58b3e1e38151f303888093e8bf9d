@@ -1,0 +1,66 @@
+app/api_auth.py
+  s_2814845368813a::t_9898b94948f18e 59,122-123
+tests/test_stage_c_ci.py
+  s_2814845368813a::t_3659abcee563bb 575-576
+app/main.py
+  s_2814845368813a::t_9898b94948f18e 1118-1130
+  s_49f980f26e310f::t_2a427ee0c4bda6 1116-1117
+app/coder_diff.py
+  s_2814845368813a::t_8bf917919f7521 76-101,103-114,121,124-128,130-133,170
+  s_2814845368813a::t_24a8bafc0e8ab6 102,115-120,122-123,129
+app/merge_authorization.py
+  s_2814845368813a::t_53fd72cfb86855 40-41,94-99
+app/stage_c_runner.py
+  s_2814845368813a::t_4812ffd7da69ce 509-518,523-569
+  s_2814845368813a::t_8e4820bd2deb4b 519-522
+app/stage_c_worker.py
+  s_2814845368813a::t_0dce4802a02232 9,929-939
+  s_2814845368813a::t_0abe1f7cc0427c 917-919
+  s_2814845368813a::t_3bfcf20dad1a1a 872-875,898-916,920-928,940-952
+app/stage_c_ci.py
+  s_2814845368813a::t_1f9ca99b782478 311-313
+  s_2814845368813a::t_ba19b4f02e03f7 266-279,285-301,304-307,310,315-344,346-362
+  s_2814845368813a::t_15736d57fc8cc6 308-309,345,601-604,606-608,624
+  s_2814845368813a::t_38aa2458fbfe84 605
+  s_2814845368813a::t_9c48573a709291 31,282
+  s_2814845368813a::t_20f471dcf6b0a6 280-281,283-284,314,583
+  s_2814845368813a::t_24a8bafc0e8ab6 302-303
+  s_49f980f26e310f::t_4acde14b59602b 363-365
+tests/test_stage_c_refresh_reconcile.py
+  s_2814845368813a::t_3198c61feab50e 119-138,140-174
+  s_2814845368813a::t_98ab7ba1c3343e 139
+  s_2814845368813a::t_2add41a2e076d1 235,243-246,249,255-261
+  s_2814845368813a::t_10476a01823c32 193-220
+  s_2814845368813a::t_b6e1d92b980ffe 5,13,270-277,319-329
+  s_2814845368813a::t_d3e2f6369129e4 1-4,6-12,14-118,175-176,221-234,236-242,247-248,250-254,262-269,278-307,309,311-313,317-318
+  s_2814845368813a::t_ffca3a139571aa 308,310,314-316
+  s_2814845368813a::t_afc49f22db6633 177-192
+tests/test_stage_c_ci_postgres.py
+  s_2814845368813a::t_3f283ccb62caff 13-14,88-120
+app/schemas.py
+  s_2814845368813a::t_9898b94948f18e 303-309
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f1b74b6bc07b58b3e1e38151f303888093e8bf9d",
+  "prompts": {},
+  "sessions": {
+    "s_2814845368813a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b115-0972-7cd3-86fe-6a4509d2c290",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
