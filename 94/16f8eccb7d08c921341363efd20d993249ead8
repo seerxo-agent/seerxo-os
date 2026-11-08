@@ -1,0 +1,24 @@
+.env.example
+  s_178e4d77c0c0a5::t_46bb4cbbcf1b78 58-59
+docker-compose.yml
+  s_178e4d77c0c0a5::t_46bb4cbbcf1b78 133
+tests/test_bound_image_identity.py
+  s_178e4d77c0c0a5::t_46bb4cbbcf1b78 83-86,89-92
+  s_178e4d77c0c0a5::t_621db0f4448e7b 87-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9416f8eccb7d08c921341363efd20d993249ead8",
+  "prompts": {},
+  "sessions": {
+    "s_178e4d77c0c0a5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bc37-d7ca-7e00-b144-a6a250666f53",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
