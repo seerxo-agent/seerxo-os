@@ -1,0 +1,27 @@
+desk/src/lib/operating.test.ts
+  s_49f980f26e310f::t_b5714e3f1838a2 6,120-144
+desk/src/lib/operating.ts
+  s_49f980f26e310f::t_e278c37a4d3a50 61-64,66-67,89-90,97,99-100,120-123
+desk/src/lib/rows.test.ts
+  s_49f980f26e310f::t_361b7d1a844f22 179,189-190
+desk/src/pages/overview.tsx
+  s_49f980f26e310f::t_e170802113515f 93,96
+desk/src/pages/tasks.tsx
+  s_49f980f26e310f::t_5f0ed417b2234e 7,220
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2cbf5d65bb1d30bcecd2a08be3031378846eeb4e",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
