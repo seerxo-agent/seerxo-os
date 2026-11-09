@@ -1,0 +1,45 @@
+desk/src/lib/stage-c.test.ts
+  s_2b9019ee5895e5::t_714fc4a44749ea 397,403-407
+  s_49f980f26e310f::t_46f5a90f942588 408-409
+tests/test_desk_data_exposure.py
+  s_2b9019ee5895e5::t_54f4786471401e 146-147,169-172,175-178,180-182,184-217,219-225,275
+  s_2b9019ee5895e5::t_0c07756bf17b66 173-174,179,218
+  s_2b9019ee5895e5::t_72501f5380b362 183
+desk/src/lib/stage-c.ts
+  s_2b9019ee5895e5::t_714fc4a44749ea 13-23
+  s_2b9019ee5895e5::t_574a5dd4a19d7f 162-163
+app/desk.py
+  s_2b9019ee5895e5::t_31ea6b335bed2b 5,110,115-127,428-431,434-436,439
+app/stage_c_state.py
+  s_2b9019ee5895e5::t_31ea6b335bed2b 57-64,159
+tests/test_desk_code_task.py
+  s_2b9019ee5895e5::t_d2a94dd811208c 78
+tests/test_stage_c_state.py
+  s_2b9019ee5895e5::t_54f4786471401e 80-95
+desk/src/lib/task-lanes.test.ts
+  s_2b9019ee5895e5::t_54f4786471401e 27-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71dc09da3ddd49c14e56249430d60d8678ea1016",
+  "prompts": {},
+  "sessions": {
+    "s_2b9019ee5895e5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c10a-adaf-7be2-918a-3932678ae10c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
