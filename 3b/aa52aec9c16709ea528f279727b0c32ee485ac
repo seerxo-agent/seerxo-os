@@ -1,0 +1,49 @@
+desk/src/pages/overview.tsx
+  s_49f980f26e310f::t_9b9117c303d6e4 1-7,10,12-14,19-20,23-24,29-30,34,48-85,88,95-96,99,101,104-122,127-128,131-132,134-139,141-148,150
+  s_49f980f26e310f::t_0ad3d98c776b9c 9,36-37,40,42,100,102-103,129-130,133,140
+  s_49f980f26e310f::t_c79e4eb194735d 149,152
+desk/src/App.tsx
+  s_49f980f26e310f::t_25279112c8f401 3-4,18,29,44,47,51,72,75-76,81,84,91-92,94-96,100-101,105,110-111,114-115,120-121,123-124,128,142,144,175,183,186,293,385-386,407,414,420,458,523,528,531,556,590-591,594-595
+desk/src/components/command-composer.tsx
+  s_49f980f26e310f::t_e97405ac653655 5,19-21,43-54,65
+desk/src/components/dashboard/home.tsx
+  s_49f980f26e310f::t_a340ecc6a2e855 5,9-10,26-29,32-33,41-45,51,65,77,127,138-139,142,144-146,247,254,261,283,285-286
+desk/src/components/desk.tsx
+  s_49f980f26e310f::t_9832ce1bc6c7e1 3-5,23,25-27,60,86,178,180-182,184-188,191,218,285,287-288,295
+desk/src/components/ui/badge.tsx
+  s_49f980f26e310f::t_66c1c6c400596f 7,13,22-24
+desk/src/components/ui/button.tsx
+  s_49f980f26e310f::t_a17236d5bf95f6 11-13,15,19,26,28-30,34-35
+desk/src/components/ui/input.tsx
+  s_49f980f26e310f::t_b2d84aa87e5ba5 10
+desk/src/components/ui/table.tsx
+  s_49f980f26e310f::t_79350fc1c13f76 8,57,70,83
+desk/src/components/ui/textarea.tsx
+  s_49f980f26e310f::t_96de55a67d6527 9
+desk/src/index.css
+  s_49f980f26e310f::t_81c6be1e70d6fc 13,54,59,63-69,71-102,106-115,119-150,152-159,175,183,185,193,195-201,205,207-211,226
+desk/src/lib/lifecycle.test.ts
+  s_49f980f26e310f::t_e9ca91e3bbece7 47
+desk/src/lib/nav.test.ts
+  s_49f980f26e310f::t_7851587f214b9f 1,7,25-26,37
+desk/src/lib/nav.ts
+  s_49f980f26e310f::t_202ca54cfdbe96 2,6,13,21,31,46
+desk/src/lib/rows.test.ts
+  s_49f980f26e310f::t_98bd6712f2beb2 127,208-210
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3baa52aec9c16709ea528f279727b0c32ee485ac",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
