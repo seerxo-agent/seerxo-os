@@ -1,0 +1,37 @@
+desk/src/components/controls.tsx
+  s_49f980f26e310f::t_4c077e53a6d33e 7,43,59,97,112,128,139-140,144,150,152,160-162,176-179,187,223,243
+desk/src/components/detail.tsx
+  s_49f980f26e310f::t_52f4e44c1b60fd 4,23,79,111,113-114,139,147,193,203,250-251,253-256,264-265,271,279,282-283,289,309
+desk/src/lib/api-auth-expiry.test.ts
+  s_49f980f26e310f::t_d7f2db2bda7be7 3,15-28
+desk/src/lib/api.ts
+  s_49f980f26e310f::t_195567072e6ed0 222-227
+desk/src/lib/ready.test.ts
+  s_49f980f26e310f::t_6d6b054d3aef64 3,31-36
+desk/src/lib/ready.ts
+  s_49f980f26e310f::t_078e1ac73a5a27 32-41
+desk/src/lib/rows.test.ts
+  s_49f980f26e310f::t_7d44ad1d1a1bac 186-188,249-250
+desk/src/lib/stage-c.test.ts
+  s_49f980f26e310f::t_540f1ebac7456c 402-410
+desk/src/lib/stage-c.ts
+  s_49f980f26e310f::t_3c6d7819750e6a 218-231
+desk/src/pages/tasks.tsx
+  s_49f980f26e310f::t_06c18286ed1eec 83,220,230,243,325-338,341-344
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "32dd594af296abb5ff1187a53a08f94e875b495f",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
