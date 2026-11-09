@@ -1,0 +1,23 @@
+desk/src/App.tsx
+  s_49f980f26e310f::t_deb6b4cf14a029 11,501,503
+desk/src/lib/nav.test.ts
+  s_49f980f26e310f::t_14a8a840c8bdb9 4,49-54
+desk/src/lib/nav.ts
+  s_49f980f26e310f::t_4b1f12db6b2ec5 25-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6c2aeafb807de442f92278dbcb92c8caff6e8338",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
