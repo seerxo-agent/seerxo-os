@@ -1,0 +1,49 @@
+app/desk.py
+  s_49f980f26e310f::t_8afd269b46d989 16-17,106-122,847
+desk/src/components/controls.tsx
+  s_49f980f26e310f::t_71631ebd8edbb8 8,223-242
+desk/src/components/detail.tsx
+  s_49f980f26e310f::t_b452363adf414c 24-25,128,130-140,152-153,155-157,161,170,175
+desk/src/lib/accept.test.ts
+  s_49f980f26e310f::t_1e32fb218f3e9d 1-35
+desk/src/lib/accept.ts
+  s_49f980f26e310f::t_79077050510fb3 1-40
+desk/src/lib/api.ts
+  s_49f980f26e310f::t_7806f40c483721 155-157
+desk/src/lib/pipeline.test.ts
+  s_49f980f26e310f::t_fd0d99aa496cf2 46-47,52-56
+desk/src/lib/pipeline.ts
+  s_49f980f26e310f::t_dec2135e94f399 6,10,28,36-37,42-43
+desk/src/lib/rows.test.ts
+  s_49f980f26e310f::t_ed1bb5f367a4fd 244-245,247
+desk/src/lib/task-lanes.test.ts
+  s_49f980f26e310f::t_c571e953539d97 1-24
+desk/src/lib/task-lanes.ts
+  s_49f980f26e310f::t_0e5feacd5ff94f 1-32
+desk/src/lib/task-story.test.ts
+  s_49f980f26e310f::t_47d2a33f1514f0 55-62
+desk/src/lib/task-story.ts
+  s_49f980f26e310f::t_23d8fc93037f33 5,78-81,84
+desk/src/pages/tasks.tsx
+  s_49f980f26e310f::t_51946daddee0c8 1,15,208,228-233,253,269-270,317-318,325,327,333-334,337
+tests/test_desk_data_exposure.py
+  s_49f980f26e310f::t_dd777cb7c61b85 140-165
+tests/test_founder_authorization.py
+  s_49f980f26e310f::t_38c8a26a6da159 411-436
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "56bd8348915f7907b6dede24ae57f338469e39d6",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
