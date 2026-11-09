@@ -1,0 +1,23 @@
+app/static/desk.html
+  s_49f980f26e310f::t_ce6f7215385b2a 11,15,24,31-33,37,50,54,58,62,66-67,69,72-73,75-76,79-82,89,93,96,99,103,106,108,114,117,119,121
+app/static/manifest.webmanifest
+  s_49f980f26e310f::t_243b54433ef2cf 3-5
+app/static/sw.js
+  s_49f980f26e310f::t_60efb8a68a5ad2 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "95a03b9c44ccb14c9d25389a8af79b6cbeba9490",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
