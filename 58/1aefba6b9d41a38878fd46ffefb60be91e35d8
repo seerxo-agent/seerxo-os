@@ -1,0 +1,26 @@
+tests/test_stage_c_privacy_gate.py
+  s_7bebcfdabfcd4b::t_296ad249051ced 36,202-206,296,299,339-341,355-365,372-394,398-414,427-434
+  s_7bebcfdabfcd4b::t_6a37789f8c9d53 113,350,366-371,395-397,415-426,577
+  s_7bebcfdabfcd4b::t_c64a12a60686ed 536-542,554-576,578-579
+  s_7bebcfdabfcd4b::t_a67755eb274dbc 435-436
+app/stage_c_runner.py
+  s_7bebcfdabfcd4b::t_c61800cd33b13a 605-606,649-650
+  s_7bebcfdabfcd4b::t_5d2d70f81e6598 23,36,481-483,486,501,503,509,513,523-525
+  s_7bebcfdabfcd4b::t_9fb6a9271fe6b2 572,579,589,603-604,608-616,619,622,625,628,636-637,642-648,651-665,668-676,682-683,686,712,741,949-952,960
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "581aefba6b9d41a38878fd46ffefb60be91e35d8",
+  "prompts": {},
+  "sessions": {
+    "s_7bebcfdabfcd4b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aba1-df04-75b0-a015-d5171d88febe",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

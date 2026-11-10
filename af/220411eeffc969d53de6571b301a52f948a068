@@ -1,0 +1,34 @@
+desk/src/lib/dashboard.ts
+  s_49f980f26e310f::t_b239d7e9e0af05 1-156
+  s_49f980f26e310f::t_566a94c6663a6d 157-201
+desk/src/components/dashboard/home.tsx
+  s_49f980f26e310f::t_a22d2228521743 1-222,226-228,232-234,237,252-254
+  s_49f980f26e310f::t_bb0a8275cd89c5 223-225,229-231,235-236,238-251,255-283
+desk/src/lib/dashboard.test.ts
+  s_49f980f26e310f::t_7abbb3a9f07258 1-70
+  s_49f980f26e310f::t_7edd0a00570a1a 71-110
+desk/src/components/charts.tsx
+  s_49f980f26e310f::t_25b829ccc5812e 24,64
+desk/src/components/dashboard/use-stage-c.ts
+  s_49f980f26e310f::t_ef211c145c9323 1-33
+desk/src/lib/simplify.test.ts
+  s_49f980f26e310f::t_2fe34b8dec445e 10
+desk/src/pages/overview.tsx
+  s_49f980f26e310f::t_e409821f38911a 1-8,10,12-14,21,32-33,43-51,56-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "af220411eeffc969d53de6571b301a52f948a068",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

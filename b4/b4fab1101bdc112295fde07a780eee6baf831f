@@ -1,0 +1,30 @@
+app/stage_c_state.py
+  s_1cbbdf2cec5f8e::t_2bb5115d5b2708 23,55,66-69,108-111,129-137,170,189-191,202,268,286,292,300-303,411-417
+tests/test_stage_c_state.py
+  s_1cbbdf2cec5f8e::t_1fe45b425144c8 148-174,330-361,387-427
+  s_79dceef325c627::t_b7762862912a64 428-429
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b4b4fab1101bdc112295fde07a780eee6baf831f",
+  "prompts": {},
+  "sessions": {
+    "s_1cbbdf2cec5f8e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ab98-2a24-7e13-aee5-0eb1887d31ae",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_79dceef325c627": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ab93-f17e-7913-bce8-11d873ade8f7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

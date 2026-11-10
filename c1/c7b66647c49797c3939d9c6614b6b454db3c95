@@ -1,0 +1,41 @@
+desk/src/lib/shell-status.ts
+  s_49f980f26e310f::t_8894741072d0ce 1-29
+desk/index.html
+  s_49f980f26e310f::t_513e1a7992ab3b 11,15
+desk/public/manifest.webmanifest
+  s_49f980f26e310f::t_d5facfe63fa714 3-5
+desk/public/sw.js
+  s_49f980f26e310f::t_47150cbe88c7e6 7
+desk/src/App.tsx
+  s_49f980f26e310f::t_de174bdcfc4a97 3,10,18,29,46,76,82,84,86-88,95-96,100,105-141,145,149-150,154,161-187,434,540,550-551,554,557,562-563
+desk/src/components/desk.tsx
+  s_49f980f26e310f::t_0a50c6c9fec997 1
+desk/src/components/ui/badge.tsx
+  s_49f980f26e310f::t_90ecd374b26594 21-24
+desk/src/components/ui/card.tsx
+  s_49f980f26e310f::t_88b6009fa13485 14
+desk/src/components/ui/empty.tsx
+  s_49f980f26e310f::t_c3433cc208f292 9
+desk/src/index.css
+  s_49f980f26e310f::t_4bb2bebdb3e121 61,98-100,189-194,196-197
+desk/src/lib/rows.test.ts
+  s_49f980f26e310f::t_46b2bb8456a26b 127
+desk/src/lib/shell-status.test.ts
+  s_49f980f26e310f::t_a1c56c5db55902 1-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c1c7b66647c49797c3939d9c6614b6b454db3c95",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

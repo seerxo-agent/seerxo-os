@@ -1,0 +1,30 @@
+app/merge_authorization.py
+  s_b262a64127e469::t_4c76ce58850240 39-41,95-104
+app/stage_c_runner.py
+  s_b262a64127e469::t_c1245475269810 402-403,412-413,419-420,470-471,476,478,480
+  s_b262a64127e469::t_75d635233645b5 414,456-460,462-463,477
+tests/test_stage_c_ci.py
+  s_b262a64127e469::t_479b4a663977d5 955-976
+app/stage_c_ci.py
+  s_b262a64127e469::t_4c76ce58850240 376-385
+tests/test_stage_c_hardening.py
+  s_b262a64127e469::t_16f8b35c7b4738 225-232
+  s_b262a64127e469::t_3735497bb4523e 211-224,233-250,255-259,261-267
+  s_b262a64127e469::t_6146704cdce191 251-252
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "82d53f68d24eae9739baea78d2c225c7d1c60ccf",
+  "prompts": {},
+  "sessions": {
+    "s_b262a64127e469": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19e89-a4ef-7e83-bf66-ae0589cda371",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

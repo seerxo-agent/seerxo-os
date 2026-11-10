@@ -1,0 +1,37 @@
+tests/test_coder_launch.py
+  s_49f980f26e310f::t_365ef4ef5ac8f7 696-698,700-704,707,713,717
+  s_49f980f26e310f::t_626be49c6ebdce 434-436,651-695,699,705-706,712,715-716,724
+  s_49f980f26e310f::t_5defb8a62620fa 708-711,714,718
+  s_49f980f26e310f::t_5d54f6263b7d3c 719-723,725
+tests/test_stage_c_hardening.py
+  s_49f980f26e310f::t_7e4931b6e478ca 422-426
+  s_49f980f26e310f::t_694a3bec9587b5 446-448,450-453
+  s_49f980f26e310f::t_3f0bdae02d39a2 454-465
+  s_49f980f26e310f::t_f9fab58912b1b7 428-433,435-443,445
+  s_49f980f26e310f::t_10a2c8a57fcc4c 388-399,404
+  s_49f980f26e310f::t_774eca43843781 69,157-158,269-387,414,427,434,449
+  s_49f980f26e310f::t_c8c24fb3a8ca35 466-470
+  s_49f980f26e310f::t_5bcf2046d36c6d 400-403,405-413,415-421,444
+  s_49f980f26e310f::t_905ebefdab7ba1 471-474
+scripts/company-coder-launch
+  s_49f980f26e310f::t_1f2fdc314dd738 22,303-310,315,322-324,346,412-490
+  s_49f980f26e310f::t_e49c75f54acb7b 491
+app/stage_c_runner.py
+  s_49f980f26e310f::t_1899e3f5e14a04 93-99,102,341-351,367,419-423,487-534,540,545-546,549,595-596,1000-1003,1005
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9cf797a3013b10e0f37f2fcaf20e0f3c78e0b702",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

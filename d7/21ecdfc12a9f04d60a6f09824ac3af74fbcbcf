@@ -1,0 +1,23 @@
+tests/test_providers_capacity.py
+  s_18bacffa419e86::t_183f15b16dcb36 25-46,66-67
+app/providers.py
+  s_18bacffa419e86::t_0affee85706da2 112-114
+scripts/company-coder-launch
+  s_18bacffa419e86::t_0affee85706da2 305-307
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d721ecdfc12a9f04d60a6f09824ac3af74fbcbcf",
+  "prompts": {},
+  "sessions": {
+    "s_18bacffa419e86": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b033-b95b-7882-9e56-63bf38f658e9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

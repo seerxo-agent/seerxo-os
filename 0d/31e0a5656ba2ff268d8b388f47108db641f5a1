@@ -1,0 +1,35 @@
+app/api_auth.py
+  s_49f980f26e310f::t_f6a86aa0270a28 132,134-135,138,191
+app/desk.py
+  s_49f980f26e310f::t_cf7242bd51536b 18,48-50,54,546,710-711,826
+app/main.py
+  s_49f980f26e310f::t_7da739e69027e6 29,894,896,1289
+app/notebook.py
+  s_49f980f26e310f::t_a5c3f3d569fc07 24,60
+app/providers.py
+  s_49f980f26e310f::t_7fc76e97f65140 27,141,195
+app/redact.py
+  s_49f980f26e310f::t_ad7713144a2671 6,153-165
+app/worker.py
+  s_49f980f26e310f::t_43a360e4e3f635 35,874,1115,1119-1120,1129,1150
+scripts/company-coder-launch
+  s_49f980f26e310f::t_b4450791dcd642 445,448
+tests/test_desk_data_exposure.py
+  s_49f980f26e310f::t_f9797bf0839912 19-20,228-335
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0d31e0a5656ba2ff268d8b388f47108db641f5a1",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+CONTRIBUTING.md
+  s_ed598be039cb9f::t_d53bc24c9958b7 58,76-79,84-87
+README.md
+  s_ed598be039cb9f::t_5b40421a08c991 141,146-147,151-166,188-190,202-215,245-247,354-360,411,461-463
+  s_ed598be039cb9f::t_ca8b2e883fd08a 375-376
+docs/security/RELEASE_GATEWAY.md
+  s_ed598be039cb9f::t_d53bc24c9958b7 28-33
+  s_ed598be039cb9f::t_ca8b2e883fd08a 57
+SECURITY.md
+  s_ed598be039cb9f::t_d53bc24c9958b7 69-70,78-83,97,99-101,107-119,125
+docs/GIT_WORKFLOW.md
+  s_ed598be039cb9f::t_d53bc24c9958b7 60-61,99-104
+docs/security/THREAT_MODEL.md
+  s_ed598be039cb9f::t_b6adbd8ef13811 53,61-63
+  s_ed598be039cb9f::t_ca8b2e883fd08a 77-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa7bf361074b4a00da71004823b7d292c7bc5bd3",
+  "prompts": {},
+  "sessions": {
+    "s_ed598be039cb9f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b030-dd16-7442-854c-381b55fa445c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

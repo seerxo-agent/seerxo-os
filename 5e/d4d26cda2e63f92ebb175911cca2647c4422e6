@@ -1,0 +1,49 @@
+desk/src/components/command-composer.tsx
+  s_49f980f26e310f::t_8e5a62a28fbd39 52,54,64
+desk/src/components/delivery.tsx
+  s_49f980f26e310f::t_ffe0d198855cb1 50
+desk/src/lib/delivery.test.ts
+  s_49f980f26e310f::t_e822fcd31e6255 14,26-31
+desk/src/lib/delivery.ts
+  s_49f980f26e310f::t_26f3815a254cee 20-21,25
+desk/src/lib/qa-status.test.ts
+  s_49f980f26e310f::t_da9513205660cb 1-37
+desk/src/lib/qa-status.ts
+  s_49f980f26e310f::t_dc931944fd0d31 1-26
+desk/src/pages/agents.tsx
+  s_49f980f26e310f::t_d519278ea2b6d9 11,19-22,26-29,32,37,131,138
+desk/src/pages/approvals.tsx
+  s_49f980f26e310f::t_e7f56efbd89453 28-29
+desk/src/pages/automation.tsx
+  s_49f980f26e310f::t_7118b8f73b6e79 158-161,210,214-215,220,230
+desk/src/pages/control.tsx
+  s_49f980f26e310f::t_d5d35d4b21eb40 4,11-14,18,28,30,37-38
+desk/src/pages/finance.tsx
+  s_49f980f26e310f::t_ed475edbffce90 17,19-20
+desk/src/pages/growth.tsx
+  s_49f980f26e310f::t_6ef332c9a1fa62 139
+desk/src/pages/memory.tsx
+  s_49f980f26e310f::t_876e921396a83d 96
+desk/src/pages/projects.tsx
+  s_49f980f26e310f::t_3229db48c2b400 147,149,151,155-157,228,242,264,317
+desk/src/pages/stage-c.tsx
+  s_49f980f26e310f::t_2bed5b8a0fe534 15,97-102,120,153,181,206,218
+desk/src/pages/system.tsx
+  s_49f980f26e310f::t_212fefb01dd931 36,87,108,146,238,246,266,280
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5ed4d26cda2e63f92ebb175911cca2647c4422e6",
+  "prompts": {},
+  "sessions": {
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

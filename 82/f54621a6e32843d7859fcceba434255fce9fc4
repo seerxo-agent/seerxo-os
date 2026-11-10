@@ -1,0 +1,35 @@
+desk/src/components/controls.tsx
+  s_f847254e42f40a::t_165765318845af 7,188-189,196-198
+desk/src/pages/stage-c.tsx
+  s_f847254e42f40a::t_9566eb6508cf62 11,31,42,51,57-61,78,87-90,119-131,154
+desk/src/state.tsx
+  s_f847254e42f40a::t_165765318845af 43-44,215,218-219
+desk/src/components/detail.tsx
+  s_f847254e42f40a::t_165765318845af 42-43
+desk/src/lib/operating.ts
+  s_f847254e42f40a::t_165765318845af 162
+desk/src/lib/reconciler.ts
+  s_f847254e42f40a::t_165765318845af 55
+desk/src/lib/stage-c.test.ts
+  s_f847254e42f40a::t_9704beed2bcaad 13-14,32,34-35,40,57-71,251-262,342-350,376,378,380-381
+desk/src/lib/stage-c.ts
+  s_f847254e42f40a::t_165765318845af 189-191,208-212,222,246,263-264,326
+app/static/desk.html
+  s_f847254e42f40a::t_51fff24b1e9c87 32,72-73,75-76,79-82,89,93,96,99,103,106,108,114,117,121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "82f54621a6e32843d7859fcceba434255fce9fc4",
+  "prompts": {},
+  "sessions": {
+    "s_f847254e42f40a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ab9c-2eac-7652-a9ff-2f1c90765b9a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

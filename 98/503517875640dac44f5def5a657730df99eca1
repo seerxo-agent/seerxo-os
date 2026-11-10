@@ -1,0 +1,22 @@
+tests/test_stage_c_refresh_reconcile.py
+  s_34b9095c93b654::t_5eef9ae3175edc 402-403,415
+  s_34b9095c93b654::t_1865e7183084fc 397-401,404-405,416,426
+app/stage_c_worker.py
+  s_34b9095c93b654::t_1865e7183084fc 979
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "98503517875640dac44f5def5a657730df99eca1",
+  "prompts": {},
+  "sessions": {
+    "s_34b9095c93b654": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b2b8-4b8e-75d2-bb52-e278394782e9",
+        "model": "gpt-6-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}

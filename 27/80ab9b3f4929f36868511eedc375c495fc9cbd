@@ -1,0 +1,87 @@
+app/merge_authorization.py
+  s_b262a64127e469::t_4c76ce58850240 39-41,95-104
+tests/test_repo_guardian_github.py
+  s_49f980f26e310f::t_0aafc6351da99f 133,136-137
+tests/stage_c_crash_child.py
+  s_49f980f26e310f::t_68ceb8cc871748 14,126-129
+app/stage_c_runner.py
+  s_49f980f26e310f::t_cc9865d2ae768e 23
+  s_38a0c0cab419cb::t_3a7dcd62667d61 496,903
+  s_b262a64127e469::t_75d635233645b5 420,454-456
+  s_49f980f26e310f::t_0605d7a01ca64b 42-43,83-87,93-99,102,130,193-194,196-202,355-356,407,410-417,421-424,427-443,445-448,452-453,457,497,535-541,594,876-887,895,897-901
+  s_49f980f26e310f::t_26ab3b0345fed6 27
+  s_49f980f26e310f::t_8579b4badf334e 464-495,904-907
+  s_b262a64127e469::t_c1245475269810 408-409,418-419,425-426
+  s_49f980f26e310f::t_99c71763d62c62 902
+.github/workflows/secret-scan.yml
+  s_49f980f26e310f::t_e3bd0cab40ad0a 2-3
+tests/test_ci_status_gate.py
+  s_49f980f26e310f::t_c5ee0d75b53c9c 55-57
+app/stage_c_ci.py
+  s_49f980f26e310f::t_64d811f61ff250 141
+  s_49f980f26e310f::t_0975b78dd56c38 163-164,367-368,371-373,375,435-444,457-458
+  s_38a0c0cab419cb::t_5b61087611189f 142-148,152
+  s_b262a64127e469::t_4c76ce58850240 376-385
+tests/test_stage_c_ci.py
+  s_49f980f26e310f::t_8f7dd70c22d3d1 905-945,950,953-954
+  s_49f980f26e310f::t_6986be80e73fd9 946-949,951-952
+  s_b262a64127e469::t_479b4a663977d5 955-976
+tests/test_security_scan_workflows.py
+  s_49f980f26e310f::t_973c908bb0125c 1-2,25,29,51-58
+tests/test_stage_c_hardening.py
+  s_49f980f26e310f::t_30b14b149b2c0f 1-167
+  s_49f980f26e310f::t_608142b418a13f 199-204,206-210,253-254,260
+  s_b262a64127e469::t_16f8b35c7b4738 225-232
+  s_49f980f26e310f::t_beaba706cd30b5 168-198,205
+  s_49f980f26e310f::t_b39986a52b9034 268-297,301
+  s_b262a64127e469::t_3735497bb4523e 211-224,233-250,255-259,261-267
+  s_49f980f26e310f::t_ce780a6cd12bbc 298-300,302-306
+  s_b262a64127e469::t_6146704cdce191 251-252
+scripts/company-coder-launch
+  s_49f980f26e310f::t_c33f77ec40aaed 271-272,274,300-338,346,349,354,362,395,402-406,408-453,563
+  s_49f980f26e310f::t_f9c3a0843f788b 22
+agents/repository_guardian.yaml
+  s_49f980f26e310f::t_2fbf18c6e87251 12-13,18
+tests/test_coder_launch.py
+  s_49f980f26e310f::t_4e21986e2ae131 9,102-103,255-274,282-285,287,298,301,405-438,478-481,549-551,553,567,573,662
+  s_49f980f26e310f::t_c744d63fd1dc69 651-661,663-665
+tests/test_stage_c_worker.py
+  s_49f980f26e310f::t_8f6f2fb5a061c1 6,264-267
+  s_49f980f26e310f::t_9762a8ebb90fcd 275
+scripts/stage-c-host-wizard.sh
+  s_49f980f26e310f::t_3449992df0d216 512
+tests/fixtures/ci_snapshot/secret-scan.yml
+  s_49f980f26e310f::t_b2fe804b781bbc 2-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2780ab9b3f4929f36868511eedc375c495fc9cbd",
+  "prompts": {},
+  "sessions": {
+    "s_38a0c0cab419cb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1755d-8ff8-7501-8d22-3aef42f808cc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Seerxo <noreply@seerxo.invalid>"
+    },
+    "s_49f980f26e310f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "880549bc-f738-4c44-8804-96447dd3746c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    },
+    "s_b262a64127e469": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19e89-a4ef-7e83-bf66-ae0589cda371",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
