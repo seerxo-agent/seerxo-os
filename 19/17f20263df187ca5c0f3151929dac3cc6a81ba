@@ -1,0 +1,27 @@
+app/main.py
+  s_de87ccf88d98ee::t_b1599707cf651a 765
+app/stage_c_ci.py
+  s_de87ccf88d98ee::t_d762722eab671d 37-39,355-364
+app/stage_c_state.py
+  s_de87ccf88d98ee::t_1deb5f14be1d37 37-38
+tests/test_stage_c_ci_postgres.py
+  s_de87ccf88d98ee::t_eb1566c1af835f 115,118
+tests/test_stage_c_refresh_reconcile.py
+  s_de87ccf88d98ee::t_787a9b59b1643b 251,254,256-258,263-281,295,320,333-334,336-337
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1917f20263df187ca5c0f3151929dac3cc6a81ba",
+  "prompts": {},
+  "sessions": {
+    "s_de87ccf88d98ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dbc1d01a-b96b-47ef-97ea-d773ed933256",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
