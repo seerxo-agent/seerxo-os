@@ -1,0 +1,22 @@
+scripts/stage-c-arm
+  s_de87ccf88d98ee::t_3e840fc0df267e 185-186,192
+tests/test_stage_c_arm.py
+  s_de87ccf88d98ee::t_019c2872b2364e 125,154,162,346-350
+  s_de87ccf88d98ee::t_41a0b7cc357bc9 351-352
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f98a260b3b3e3351e0a9ff59fa8c8962ac23bba9",
+  "prompts": {},
+  "sessions": {
+    "s_de87ccf88d98ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dbc1d01a-b96b-47ef-97ea-d773ed933256",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
