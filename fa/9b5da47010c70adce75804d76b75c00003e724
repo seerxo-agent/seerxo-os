@@ -1,0 +1,19 @@
+tests/test_desk_build_docker.py
+  s_de87ccf88d98ee::t_c3ab7d11c9a725 48-52,55,57-58,60-64,67,72-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fa9b5da47010c70adce75804d76b75c00003e724",
+  "prompts": {},
+  "sessions": {
+    "s_de87ccf88d98ee": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dbc1d01a-b96b-47ef-97ea-d773ed933256",
+        "model": "unknown"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
